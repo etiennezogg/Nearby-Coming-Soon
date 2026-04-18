@@ -1,20 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-
-.font-syne {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        syne: ['Syne', 'sans-serif'],
+        dm: ['DM Sans', 'sans-serif'],
+      },
+      colors: {
+        green: { DEFAULT: '#22c55e', light: '#e0f5ee' },
+        ink: '#0d0d0d',
+      },
+    },
+  },
+  plugins: [],
 }
