@@ -1,19 +1,27 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        syne: ['Syne', 'sans-serif'],
-        dm: ['DM Sans', 'sans-serif'],
-      },
-      colors: {
-        green: { DEFAULT: '#22c55e', light: '#e0f5ee' },
-        ink: '#0d0d0d',
-      },
-    },
-  },
-  plugins: [],
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --green: #1a9e74;
+  --green-light: #e0f5ee;
+  --ink: #0d0d0d;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #fff;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.font-syne {
+  font-family: 'Syne', sans-serif;
 }
