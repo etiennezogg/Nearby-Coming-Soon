@@ -1,0 +1,19 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        syne: ['Plus Jakarta Sans', 'sans-serif'],
+        dm: ['DM Sans', 'sans-serif'],
+      },
+      colors: {
+        green: { DEFAULT: '#22c55e', light: '#e0f5ee' },
+        ink: '#0d0d0d',
+      },
+    },
+  },
+  plugins: [],
+}
