@@ -22,7 +22,6 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
     const { error } = await supabase.from('waitlist').insert({ email })
     setLoading(false)
     if (error && error.code === '23505') {
-      // Duplicate — treat as success anyway
       setSubmitted(true)
     } else if (error) {
       setError('Etwas ist schiefgelaufen. Bitte versuch es nochmals.')
@@ -40,9 +39,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: 'spring', stiffness: 280 }}
         className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full text-sm font-medium shadow-lg ${
-          isDark
-            ? 'bg-white/20 text-white border border-white/30 backdrop-blur-md'
-            : 'bg-green-light text-green'
+          isDark ? 'bg-white/20 text-white border border-white/30 backdrop-blur-md' : 'bg-green-light text-green'
         }`}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -97,12 +94,12 @@ const features = [
   {
     emoji: '💳',
     title: 'Digitale Wallet',
-    desc: 'Alle Treuekarten, Cumulus-Punkte und Gutscheine an einem Ort. Bezahle per QR-Code und spare automatisch.',
+    desc: 'Alle Treuekarten, Cumulus-Punkte und Gutscheine an einem Ort. Immer dabei, nie vergessen.',
   },
   {
-    emoji: '🌱',
-    title: 'Nachhaltig einkaufen',
-    desc: 'Jeder Einkauf über Nearby spart durchschnittlich 2,4 kg CO₂ gegenüber Online-Shopping. Kurze Wege, weniger Verpackung.',
+    emoji: '⚡',
+    title: 'Sofort verfügbar',
+    desc: 'Kein Warten auf die Lieferung. Was du heute brauchst, holst du heute — direkt um die Ecke.',
   },
 ]
 
@@ -116,10 +113,10 @@ const bizFeatures = [
 ]
 
 const stats = [
-  { value: '60+', label: 'Produktkategorien' },
-  { value: '26', label: 'Kantone abgedeckt' },
-  { value: '2,4 kg', label: 'CO₂ gespart pro Einkauf' },
-  { value: '< 12 km', label: 'Ø Distanz zum Produkt' },
+  { value: '6', label: 'Produktkategorien' },
+  { value: 'CH', label: 'Ganze Schweiz abgedeckt' },
+  { value: 'Ø 2 Tage', label: 'schneller als Online-Lieferung' },
+  { value: '< 5 km', label: 'Ø Distanz zum Produkt' },
 ]
 
 export default function ComingSoonPage() {
@@ -163,7 +160,7 @@ export default function ComingSoonPage() {
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }}
             className="text-white/65 text-base font-light leading-relaxed max-w-lg mx-auto">
-            Entdecke Produkte aus lokalen Geschäften direkt in deiner Nähe — frisch, nachhaltig, ohne Liefergebühren.
+            Entdecke Produkte aus lokalen Geschäften direkt in deiner Nähe — frisch, sofort verfügbar, ohne Liefergebühren.
           </motion.p>
         </motion.div>
 
@@ -175,7 +172,7 @@ export default function ComingSoonPage() {
         </motion.div>
       </section>
 
-      {/* WAS IST NEARBY */}
+      {/* WARUM NEARBY */}
       <section className="px-6 md:px-10 py-24 max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
           <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Die Vision</p>
@@ -183,10 +180,10 @@ export default function ComingSoonPage() {
             Warum Nearby?
           </h2>
           <div className="space-y-5 text-gray-600 font-light leading-relaxed text-base md:text-lg max-w-3xl">
-            <p>Täglich bestellen Millionen Menschen in der Schweiz Produkte online — oft von grossen, internationalen Plattformen. Dabei liegt das gleiche Produkt häufig nur wenige hundert Meter entfernt, in einem lokalen Geschäft. Frischer, günstiger und ohne tagelange Lieferzeit.</p>
-            <p><strong className="text-ink font-medium">Nearby</strong> verbindet Konsumenten mit lokalen Geschäften in ihrer Umgebung. Statt bei grossen Online-Händlern zu bestellen, findest du Produkte direkt um die Ecke — mit Echtzeit-Verfügbarkeit, Distanzanzeige und Öffnungszeiten.</p>
+            <p>Täglich bestellen Millionen Menschen in der Schweiz Produkte online — und warten dabei 2 bis 5 Tage auf die Lieferung. Dabei liegt das gleiche Produkt häufig nur wenige Hundert Meter entfernt, in einem lokalen Geschäft.</p>
+            <p><strong className="text-ink font-medium">Nearby</strong> verbindet Konsumenten mit lokalen Geschäften in ihrer Umgebung. Statt tagelang auf ein Paket zu warten, findest du Produkte direkt um die Ecke — mit Echtzeit-Verfügbarkeit, Distanzanzeige und Öffnungszeiten.</p>
             <p>Für lokale Geschäfte ist Nearby eine einfache Möglichkeit, ihr Sortiment digital sichtbar zu machen — ohne eigene Website, ohne technisches Know-how. Produkte hochladen wie einen Social-Media-Post, und sofort für Kunden in der Nähe sichtbar sein.</p>
-            <p>Unser Ziel: <strong className="text-ink font-medium">lokales Einkaufen so einfach machen wie Online-Shopping</strong> — aber nachhaltiger, persönlicher und mit echtem Mehrwert für die Nachbarschaft.</p>
+            <p>Unser Ziel: <strong className="text-ink font-medium">lokales Einkaufen so einfach machen wie Online-Shopping</strong> — aber schneller, persönlicher und mit echtem Mehrwert für die Nachbarschaft.</p>
           </div>
         </motion.div>
       </section>
@@ -291,7 +288,7 @@ export default function ComingSoonPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
               <div className="font-syne font-extrabold text-xl text-ink tracking-tight mb-1">Nearby</div>
-              <p className="text-xs text-gray-400">© 2025 Nearby · Zürich, Schweiz</p>
+              <p className="text-xs text-gray-400">© 2025 Nearby · Zug, Schweiz</p>
             </div>
             <div className="flex flex-col items-center md:items-end gap-2">
               <p className="text-xs uppercase tracking-widest text-gray-400">Kontakt</p>
