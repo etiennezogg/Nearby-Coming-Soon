@@ -180,10 +180,10 @@ export default function ComingSoonPage() {
             Warum Nearby?
           </h2>
           <div className="space-y-5 text-gray-600 font-light leading-relaxed text-base md:text-lg max-w-3xl">
-            <p><strong className="text-ink font-medium">89% der Schweizerinnen und Schweizer</strong> bevorzugen regionale Produkte beim Einkauf — und stellen dieses Kriterium sogar vor den Preis. Trotzdem sind Online-Auslandseinkäufe 2024 um 18% gestiegen. Der Grund: nicht fehlende Kaufbereitschaft, sondern fehlende digitale Auffindbarkeit lokaler Angebote.</p>
-            <p>Der Schweizer E-Commerce-Markt erreicht 2025 einen Umsatz von <strong className="text-ink font-medium">CHF 15.8 Milliarden</strong> — während über <strong className="text-ink font-medium">600'000 KMU</strong> (90% davon Kleinstbetriebe) mehrheitlich ohne strukturierte digitale Präsenz arbeiten. Bäckereien, Hofläden, Metzgereien, Boutiquen: das Angebot ist da — man findet es nur nicht.</p>
-            <p><strong className="text-ink font-medium">Nearby</strong> schliesst diese Lücke. Eine absichtsbasierte Produktsuche mit Kartenlogik, Echtzeit-Verfügbarkeit und Distanzanzeige — ohne Lieferverpflichtung. Diese Kombination existiert im Schweizer Markt noch nicht.</p>
-            <p>Unser Ziel: <strong className="text-ink font-medium">lokales Einkaufen so einfach machen wie Online-Shopping</strong> — aber schneller, persönlicher und mit echtem Mehrwert für Nachbarschaft und lokale Wirtschaft.</p>
+            <p className="text-xl md:text-2xl font-medium text-ink leading-snug">Das Produkt das du suchst liegt oft nur 500 Meter entfernt. Du weisst es bloss nicht.</p>
+            <p>89% der Schweizer:innen kaufen lieber lokal als online — aber sie finden die lokalen Angebote nicht. Also landen sie auf Amazon. Das ist das Problem das Nearby löst.</p>
+            <p>Über <strong className="text-ink font-medium">600'000 Läden, Hofläden und Bäckereien</strong> in der Schweiz haben kein digitales Schaufenster. Nearby gibt ihnen eines — und dir die Möglichkeit, ihr Angebot in Sekunden zu finden.</p>
+            <p>Kein Warten. Keine Liefergebühren. Einfach suchen, hingehen, kaufen.</p>
           </div>
         </motion.div>
       </section>
