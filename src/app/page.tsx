@@ -180,10 +180,10 @@ export default function ComingSoonPage() {
             Warum Nearby?
           </h2>
           <div className="space-y-5 text-gray-600 font-light leading-relaxed text-base md:text-lg max-w-3xl">
-            <p>Täglich bestellen Millionen Menschen in der Schweiz Produkte online — und warten dabei 2 bis 5 Tage auf die Lieferung. Dabei liegt das gleiche Produkt häufig nur wenige Hundert Meter entfernt, in einem lokalen Geschäft.</p>
-            <p><strong className="text-ink font-medium">Nearby</strong> verbindet Konsumenten mit lokalen Geschäften in ihrer Umgebung. Statt tagelang auf ein Paket zu warten, findest du Produkte direkt um die Ecke — mit Echtzeit-Verfügbarkeit, Distanzanzeige und Öffnungszeiten.</p>
-            <p>Für lokale Geschäfte ist Nearby eine einfache Möglichkeit, ihr Sortiment digital sichtbar zu machen — ohne eigene Website, ohne technisches Know-how. Produkte hochladen wie einen Social-Media-Post, und sofort für Kunden in der Nähe sichtbar sein.</p>
-            <p>Unser Ziel: <strong className="text-ink font-medium">lokales Einkaufen so einfach machen wie Online-Shopping</strong> — aber schneller, persönlicher und mit echtem Mehrwert für die Nachbarschaft.</p>
+            <p><strong className="text-ink font-medium">89% der Schweizerinnen und Schweizer</strong> bevorzugen regionale Produkte beim Einkauf — und stellen dieses Kriterium sogar vor den Preis. Trotzdem sind Online-Auslandseinkäufe 2024 um 18% gestiegen. Der Grund: nicht fehlende Kaufbereitschaft, sondern fehlende digitale Auffindbarkeit lokaler Angebote.</p>
+            <p>Der Schweizer E-Commerce-Markt erreicht 2025 einen Umsatz von <strong className="text-ink font-medium">CHF 15.8 Milliarden</strong> — während über <strong className="text-ink font-medium">600'000 KMU</strong> (90% davon Kleinstbetriebe) mehrheitlich ohne strukturierte digitale Präsenz arbeiten. Bäckereien, Hofläden, Metzgereien, Boutiquen: das Angebot ist da — man findet es nur nicht.</p>
+            <p><strong className="text-ink font-medium">Nearby</strong> schliesst diese Lücke. Eine absichtsbasierte Produktsuche mit Kartenlogik, Echtzeit-Verfügbarkeit und Distanzanzeige — ohne Lieferverpflichtung. Diese Kombination existiert im Schweizer Markt noch nicht.</p>
+            <p>Unser Ziel: <strong className="text-ink font-medium">lokales Einkaufen so einfach machen wie Online-Shopping</strong> — aber schneller, persönlicher und mit echtem Mehrwert für Nachbarschaft und lokale Wirtschaft.</p>
           </div>
         </motion.div>
       </section>
