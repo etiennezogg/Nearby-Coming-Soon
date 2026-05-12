@@ -9,17 +9,27 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
+const kantone = [
+  'Aargau','Appenzell Ausserrhoden','Appenzell Innerrhoden','Basel-Landschaft','Basel-Stadt',
+  'Bern','Fribourg','Genf','Glarus','Graubünden','Jura','Luzern','Neuenburg','Nidwalden',
+  'Obwalden','Schaffhausen','Schwyz','Solothurn','St. Gallen','Tessin','Thurgau','Uri',
+  'Waadt','Wallis','Zug','Zürich',
+]
+
 function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const [email, setEmail] = useState('')
+  const [kanton, setKanton] = useState('')
+  const [gemeinde, setGemeinde] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handleSubmit = async () => {
-    if (!email || !email.includes('@')) return
+    if (!email || !email.includes('@')) { setError('Bitte gültige E-Mail eingeben.'); return }
+    if (!kanton) { setError('Bitte Kanton auswählen.'); return }
     setLoading(true)
     setError('')
-    const { error } = await supabase.from('waitlist').insert({ email })
+    const { error } = await supabase.from('waitlist').insert({ email, kanton, gemeinde: gemeinde || null })
     setLoading(false)
     if (error && error.code === '23505') {
       setSubmitted(true)
