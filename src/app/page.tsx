@@ -114,7 +114,7 @@ const bizFeatures = [
 
 const stats = [
   { value: '4200+', label: 'Lokale Geschäfte' },
-  { value: '38'000+', label: 'Produkte verfügbar' },
+  { value: '38000+', label: 'Produkte verfügbar' },
   { value: '2.4 kg', label: 'CO₂ gespart pro Einkauf' },
   { value: '< 5 km', label: 'Ø Distanz zum Produkt' },
 ]
