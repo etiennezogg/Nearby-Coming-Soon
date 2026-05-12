@@ -60,32 +60,49 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
     )
   }
 
+  const cls = `w-full border rounded-2xl px-5 py-3.5 text-sm outline-none transition-all ${
+    isDark
+      ? 'bg-white/10 border-white/20 text-white placeholder-white/40 focus:border-white/40 backdrop-blur-md'
+      : 'bg-white border-gray-200 text-ink placeholder-gray-400 focus:border-green/40 focus:ring-2 focus:ring-green/10'
+  }`
+
   return (
-    <div className="flex flex-col sm:flex-row gap-2.5 max-w-md w-full">
+    <div className="flex flex-col gap-3 w-full max-w-md">
       <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        type="email" value={email}
+        onChange={e => setEmail(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleSubmit()}
         placeholder="deine@email.ch"
-        className={`flex-1 border rounded-full px-6 py-3.5 text-sm outline-none focus:ring-2 shadow-sm ${
-          isDark
-            ? 'bg-white/20 backdrop-blur-md border-white/30 text-white placeholder-white/50 focus:ring-white/40'
-            : 'bg-white border-gray-200 text-ink placeholder-gray-400 focus:ring-green/30'
-        }`}
+        className={cls}
       />
+      <div className="relative">
+        <select
+          value={kanton} onChange={e => setKanton(e.target.value)}
+          className={`${cls} appearance-none cursor-pointer ${!kanton ? (isDark ? 'text-white/40' : 'text-gray-400') : ''}`}
+        >
+          <option value="" disabled>Kanton wählen *</option>
+          {kantone.map(k => <option key={k} value={k} style={{ color: '#0d0d0d' }}>{k}</option>)}
+        </select>
+        <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </div>
+      <input
+        type="text" value={gemeinde}
+        onChange={e => setGemeinde(e.target.value)}
+        placeholder="Gemeinde (optional)"
+        className={cls}
+      />
+      {error && <p className={`text-xs ${isDark ? 'text-red-300' : 'text-red-500'}`}>{error}</p>}
       <motion.button
-        whileHover={{ scale: 1.03, y: -1 }}
-        whileTap={{ scale: 0.97 }}
-        onClick={handleSubmit}
-        disabled={loading}
-        className={`px-7 py-3.5 rounded-full text-sm font-medium font-dm shadow-lg transition-opacity whitespace-nowrap disabled:opacity-60 ${
-          isDark ? 'bg-ink text-white hover:opacity-90' : 'bg-green text-white hover:opacity-90'
+        whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
+        onClick={handleSubmit} disabled={loading}
+        className={`w-full py-4 rounded-2xl text-sm font-medium font-dm shadow-lg transition-opacity disabled:opacity-60 ${
+          isDark ? 'bg-white text-ink hover:opacity-90' : 'bg-green text-white hover:opacity-90'
         }`}
       >
         {loading ? 'Laden...' : 'Benachrichtigen →'}
       </motion.button>
-      {error && <p className="text-red-500 text-xs mt-1 w-full">{error}</p>}
     </div>
   )
 }
