@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useState, useEffect, ReactNode } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
@@ -52,18 +52,29 @@ function ContainerScroll({ titleComponent, children }: { titleComponent: ReactNo
   )
 }
 
-/* ── Map Mockup ── */
+/* ── Map Preview ── */
 const matchaResults = [
   { name: 'Tea House Genève', dist: '0.3 km', price: 'CHF 18.90', tag: 'Bio Matcha 30g' },
   { name: 'Épicerie Japonaise', dist: '0.7 km', price: 'CHF 24.50', tag: 'Ceremonial Grade' },
-  { name: 'Globus Delicatessa', dist: '1.1 km', price: 'CHF 12.80', tag: 'Matcha Latte Pulver' },
+  { name: 'Globus Delicatessa', dist: '1.1 km', price: 'CHF 12.80', tag: 'Matcha Latte' },
   { name: 'Bio Marché Carouge', dist: '1.4 km', price: 'CHF 9.90', tag: 'Matcha 50g' },
 ]
 
-function MapMockup() {
+const MAP_URL = 'https://staticmap.openstreetmap.de/staticmap.php?center=46.2044,6.1432&zoom=14&size=1400x900&maptype=mapnik'
+
+function MapPreview() {
   return (
-    <div className="relative w-full h-full flex flex-col select-none">
-      {/* Search bar */}
+    <div className="relative w-full h-full overflow-hidden select-none">
+      {/* Real Geneva map */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={MAP_URL}
+        alt="Karte Genf"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+        draggable={false}
+      />
+
+      {/* Search bar overlay */}
       <div className="absolute top-3 left-3 right-3 z-10">
         <div className="bg-white rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
@@ -83,65 +94,33 @@ function MapMockup() {
         </div>
       </div>
 
-      {/* Map background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Base map color */}
-        <div className="absolute inset-0" style={{ background: '#f0ebe3' }} />
-        {/* Water */}
-        <div className="absolute" style={{ left: '42%', top: 0, width: '6%', bottom: 0, background: '#b3d1e8', opacity: 0.7 }} />
-        {/* Streets grid */}
-        {[15,28,42,55,68,80].map((y,i) => (
-          <div key={`h${i}`} className="absolute" style={{ top: `${y}%`, left: 0, right: 0, height: '1px', background: '#e2ddd6' }} />
-        ))}
-        {[12,24,36,50,62,74,86].map((x,i) => (
-          <div key={`v${i}`} className="absolute" style={{ left: `${x}%`, top: 0, bottom: 0, width: '1px', background: '#e2ddd6' }} />
-        ))}
-        {/* Main roads */}
-        <div className="absolute" style={{ top: '35%', left: 0, right: 0, height: '3px', background: '#d4c9b0', opacity: 0.8 }} />
-        <div className="absolute" style={{ top: '60%', left: 0, right: 0, height: '2px', background: '#d4c9b0', opacity: 0.8 }} />
-        <div className="absolute" style={{ left: '30%', top: 0, bottom: 0, width: '3px', background: '#d4c9b0', opacity: 0.8 }} />
-        <div className="absolute" style={{ left: '65%', top: 0, bottom: 0, width: '2px', background: '#d4c9b0', opacity: 0.8 }} />
-        {/* Parks */}
-        <div className="absolute rounded-lg" style={{ left: '5%', top: '55%', width: '18%', height: '25%', background: '#c8e6c0', opacity: 0.6 }} />
-        <div className="absolute rounded-lg" style={{ left: '70%', top: '20%', width: '22%', height: '18%', background: '#c8e6c0', opacity: 0.6 }} />
-        {/* Blocks */}
-        {[
-          { l: '14%', t: '18%', w: '12%', h: '14%' },
-          { l: '36%', t: '10%', w: '10%', h: '20%' },
-          { l: '52%', t: '42%', w: '10%', h: '14%' },
-          { l: '72%', t: '48%', w: '14%', h: '18%' },
-          { l: '18%', t: '72%', w: '8%', h: '12%' },
-        ].map((b,i) => (
-          <div key={`b${i}`} className="absolute rounded-sm" style={{ left: b.l, top: b.t, width: b.w, height: b.h, background: '#e8e0d5', opacity: 0.7 }} />
-        ))}
-        {/* Store pins */}
-        {[
-          { left: '28%', top: '42%' },
-          { left: '48%', top: '28%' },
-          { left: '60%', top: '55%' },
-          { left: '20%', top: '65%' },
-        ].map((pos, i) => (
-          <div key={`pin${i}`} className="absolute flex flex-col items-center" style={{ left: pos.left, top: pos.top, transform: 'translate(-50%,-100%)' }}>
-            <div className="bg-green text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md whitespace-nowrap">
-              {matchaResults[i].price}
-            </div>
-            <div className="w-2 h-2 bg-green rounded-full mt-0.5 shadow" />
+      {/* Price pins on map */}
+      {[
+        { left: '32%', top: '38%', price: 'CHF 18.90' },
+        { left: '52%', top: '25%', price: 'CHF 24.50' },
+        { left: '62%', top: '52%', price: 'CHF 12.80' },
+        { left: '22%', top: '62%', price: 'CHF 9.90' },
+      ].map((pin, i) => (
+        <div key={i} className="absolute z-10 flex flex-col items-center" style={{ left: pin.left, top: pin.top, transform: 'translate(-50%, -100%)' }}>
+          <div className="bg-green text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg whitespace-nowrap">
+            {pin.price}
           </div>
-        ))}
-      </div>
+          <div className="w-2 h-2 bg-green rounded-full mt-0.5 shadow" />
+        </div>
+      ))}
 
-      {/* Results panel bottom */}
+      {/* Results panel */}
       <div className="absolute bottom-0 left-0 right-0 z-10">
         <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl shadow-xl px-3 pt-3 pb-2">
           <div className="flex items-center justify-between mb-2 px-1">
             <span className="text-xs font-semibold text-ink">4 Ergebnisse · Matcha in Genf</span>
-            <span className="text-xs text-green font-medium">Karte</span>
+            <span className="text-xs text-green font-medium">Alle anzeigen →</span>
           </div>
           <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
             {matchaResults.map((r, i) => (
               <div key={i} className="flex-shrink-0 bg-gray-50 border border-gray-100 rounded-xl p-2.5 w-36">
                 <div className="w-full h-10 rounded-lg mb-2 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #86efac, #22c55e)' }}>
-                  <span className="text-white text-lg">🍵</span>
+                  <span className="text-lg">🍵</span>
                 </div>
                 <p className="text-xs font-semibold text-ink leading-tight truncate">{r.tag}</p>
                 <p className="text-xs text-gray-400 truncate">{r.name}</p>
@@ -176,37 +155,22 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
     setError('')
     const { error } = await supabase.from('waitlist').insert({ name: name.trim(), email, kanton, gemeinde: gemeinde || null })
     setLoading(false)
-    if (error && error.code === '23505') {
-      setSubmitted(true)
-    } else if (error) {
-      setError('Etwas ist schiefgelaufen. Bitte versuch es nochmals.')
-    } else {
-      setSubmitted(true)
-    }
+    if (error && error.code === '23505') { setSubmitted(true) }
+    else if (error) { setError('Etwas ist schiefgelaufen. Bitte versuch es nochmals.') }
+    else { setSubmitted(true) }
   }
 
   const isDark = variant === 'dark'
-
   if (submitted) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'spring', stiffness: 280 }}
-        className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full text-sm font-medium shadow-lg ${isDark ? 'bg-white/20 text-white border border-white/30 backdrop-blur-md' : 'bg-green-light text-green'}`}
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'spring', stiffness: 280 }}
+        className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full text-sm font-medium shadow-lg ${isDark ? 'bg-white/20 text-white border border-white/30 backdrop-blur-md' : 'bg-green-light text-green'}`}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
         Merci — wir melden uns!
       </motion.div>
     )
   }
-
-  const cls = `w-full border rounded-2xl px-5 py-3.5 text-sm outline-none transition-all ${
-    isDark
-      ? 'bg-white/10 border-white/20 text-white placeholder-white/40 focus:border-white/40 backdrop-blur-md'
-      : 'bg-white border-gray-200 text-ink placeholder-gray-400 focus:border-green/40 focus:ring-2 focus:ring-green/10'
-  }`
-
+  const cls = `w-full border rounded-2xl px-5 py-3.5 text-sm outline-none transition-all ${isDark ? 'bg-white/10 border-white/20 text-white placeholder-white/40 focus:border-white/40 backdrop-blur-md' : 'bg-white border-gray-200 text-ink placeholder-gray-400 focus:border-green/40 focus:ring-2 focus:ring-green/10'}`
   return (
     <div className="flex flex-col gap-3 w-full max-w-md">
       <input type="text" value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder="Dein Name *" className={cls} />
@@ -216,9 +180,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
           <option value="" disabled>Kanton wählen *</option>
           {kantone.map(k => <option key={k} value={k} style={{ color: '#0d0d0d' }}>{k}</option>)}
         </select>
-        <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
+        <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
       </div>
       <input type="text" value={gemeinde} onChange={e => setGemeinde(e.target.value)} placeholder="Gemeinde (optional)" className={cls} />
       {error && <p className={`text-xs ${isDark ? 'text-red-300' : 'text-red-500'}`}>{error}</p>}
@@ -236,7 +198,6 @@ const features = [
   { emoji: '💳', title: 'Digitale Wallet', desc: 'Alle Treuekarten, Cumulus-Punkte und Gutscheine an einem Ort. Immer dabei, nie vergessen.' },
   { emoji: '⚡', title: 'Sofort verfügbar', desc: 'Kein Warten auf die Lieferung. Was du heute brauchst, holst du heute — direkt um die Ecke.' },
 ]
-
 const bizFeatures = [
   'Produkte wie Social-Media-Posts hochladen',
   'Eigenes Geschäftsprofil mit Standort & Öffnungszeiten',
@@ -245,7 +206,6 @@ const bizFeatures = [
   'Statistiken: Reichweite, Klicks & Heatmap',
   'Ab CHF 29 / Monat — ohne Einrichtungsgebühr',
 ]
-
 const stats = [
   { value: '4200+', label: 'Lokale Geschäfte' },
   { value: '38000+', label: 'Produkte verfügbar' },
@@ -256,7 +216,6 @@ const stats = [
 export default function ComingSoonPage() {
   return (
     <div className="bg-white">
-      {/* NAVBAR */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-4 bg-white/70 backdrop-blur-xl border-b border-gray-100/50">
         <div className="font-syne font-extrabold text-2xl text-ink tracking-tight">Nearby</div>
         <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
@@ -265,7 +224,6 @@ export default function ComingSoonPage() {
         </div>
       </nav>
 
-      {/* HERO */}
       <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-6"
         style={{ background: 'linear-gradient(160deg, #4ade80 0%, #22c55e 40%, #16a34a 100%)' }}>
         <motion.div className="absolute pointer-events-none rounded-full"
@@ -301,7 +259,6 @@ export default function ComingSoonPage() {
         </motion.div>
       </section>
 
-      {/* WARUM NEARBY */}
       <section className="px-6 md:px-10 py-24 max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
           <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Die Vision</p>
@@ -315,7 +272,6 @@ export default function ComingSoonPage() {
         </motion.div>
       </section>
 
-      {/* STATS */}
       <section className="border-y border-gray-100">
         <div className="grid grid-cols-2 md:grid-cols-4 max-w-5xl mx-auto">
           {stats.map((s, i) => (
@@ -328,7 +284,6 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* FEATURES */}
       <section className="px-6 md:px-10 py-24 max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-16">
           <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Für Käufer</p>
@@ -361,11 +316,10 @@ export default function ComingSoonPage() {
             </motion.div>
           }
         >
-          <MapMockup />
+          <MapPreview />
         </ContainerScroll>
       </section>
 
-      {/* FÜR UNTERNEHMEN */}
       <section className="px-6 md:px-10 py-24 bg-ink">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
@@ -387,7 +341,6 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="px-6 md:px-10 py-24">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
@@ -403,7 +356,6 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="border-t border-gray-100 px-6 md:px-10 py-12">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
