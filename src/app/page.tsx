@@ -1,7 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
+import { useRef, useState, useEffect, ReactNode } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -16,6 +16,149 @@ const kantone = [
   'Waadt','Wallis','Zug','Zürich',
 ]
 
+/* ── ContainerScroll ── */
+function ContainerScroll({ titleComponent, children }: { titleComponent: ReactNode; children: ReactNode }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: containerRef })
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  const rotate = useTransform(scrollYProgress, [0, 1], [20, 0])
+  const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [0.7, 0.9] : [1.05, 1])
+  const translate = useTransform(scrollYProgress, [0, 1], [0, -100])
+  return (
+    <div className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
+      <div className="py-10 md:py-40 w-full relative" style={{ perspective: '1000px' }}>
+        <motion.div style={{ translateY: translate }} className="max-w-5xl mx-auto text-center mb-8">
+          {titleComponent}
+        </motion.div>
+        <motion.div
+          style={{
+            rotateX: rotate, scale,
+            boxShadow: '0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003',
+          }}
+          className="max-w-5xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full border-4 border-[#6C6C6C] p-2 md:p-3 bg-[#222222] rounded-[30px] shadow-2xl"
+        >
+          <div className="h-full w-full overflow-hidden rounded-2xl bg-gray-100">
+            {children}
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+/* ── Map Mockup ── */
+const matchaResults = [
+  { name: 'Tea House Genève', dist: '0.3 km', price: 'CHF 18.90', tag: 'Bio Matcha 30g' },
+  { name: 'Épicerie Japonaise', dist: '0.7 km', price: 'CHF 24.50', tag: 'Ceremonial Grade' },
+  { name: 'Globus Delicatessa', dist: '1.1 km', price: 'CHF 12.80', tag: 'Matcha Latte Pulver' },
+  { name: 'Bio Marché Carouge', dist: '1.4 km', price: 'CHF 9.90', tag: 'Matcha 50g' },
+]
+
+function MapMockup() {
+  return (
+    <div className="relative w-full h-full flex flex-col select-none">
+      {/* Search bar */}
+      <div className="absolute top-3 left-3 right-3 z-10">
+        <div className="bg-white rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
+            <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <span className="text-sm font-medium text-ink flex-1">Matcha</span>
+          <div className="flex items-center gap-1.5 border-l pl-3">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
+            </svg>
+            <span className="text-xs text-gray-500 whitespace-nowrap">Genève (GE)</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+          <div className="bg-ink text-white text-xs font-medium px-3 py-1.5 rounded-xl flex-shrink-0">Suchen →</div>
+        </div>
+      </div>
+
+      {/* Map background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Base map color */}
+        <div className="absolute inset-0" style={{ background: '#f0ebe3' }} />
+        {/* Water */}
+        <div className="absolute" style={{ left: '42%', top: 0, width: '6%', bottom: 0, background: '#b3d1e8', opacity: 0.7 }} />
+        {/* Streets grid */}
+        {[15,28,42,55,68,80].map((y,i) => (
+          <div key={`h${i}`} className="absolute" style={{ top: `${y}%`, left: 0, right: 0, height: '1px', background: '#e2ddd6' }} />
+        ))}
+        {[12,24,36,50,62,74,86].map((x,i) => (
+          <div key={`v${i}`} className="absolute" style={{ left: `${x}%`, top: 0, bottom: 0, width: '1px', background: '#e2ddd6' }} />
+        ))}
+        {/* Main roads */}
+        <div className="absolute" style={{ top: '35%', left: 0, right: 0, height: '3px', background: '#d4c9b0', opacity: 0.8 }} />
+        <div className="absolute" style={{ top: '60%', left: 0, right: 0, height: '2px', background: '#d4c9b0', opacity: 0.8 }} />
+        <div className="absolute" style={{ left: '30%', top: 0, bottom: 0, width: '3px', background: '#d4c9b0', opacity: 0.8 }} />
+        <div className="absolute" style={{ left: '65%', top: 0, bottom: 0, width: '2px', background: '#d4c9b0', opacity: 0.8 }} />
+        {/* Parks */}
+        <div className="absolute rounded-lg" style={{ left: '5%', top: '55%', width: '18%', height: '25%', background: '#c8e6c0', opacity: 0.6 }} />
+        <div className="absolute rounded-lg" style={{ left: '70%', top: '20%', width: '22%', height: '18%', background: '#c8e6c0', opacity: 0.6 }} />
+        {/* Blocks */}
+        {[
+          { l: '14%', t: '18%', w: '12%', h: '14%' },
+          { l: '36%', t: '10%', w: '10%', h: '20%' },
+          { l: '52%', t: '42%', w: '10%', h: '14%' },
+          { l: '72%', t: '48%', w: '14%', h: '18%' },
+          { l: '18%', t: '72%', w: '8%', h: '12%' },
+        ].map((b,i) => (
+          <div key={`b${i}`} className="absolute rounded-sm" style={{ left: b.l, top: b.t, width: b.w, height: b.h, background: '#e8e0d5', opacity: 0.7 }} />
+        ))}
+        {/* Store pins */}
+        {[
+          { left: '28%', top: '42%' },
+          { left: '48%', top: '28%' },
+          { left: '60%', top: '55%' },
+          { left: '20%', top: '65%' },
+        ].map((pos, i) => (
+          <div key={`pin${i}`} className="absolute flex flex-col items-center" style={{ left: pos.left, top: pos.top, transform: 'translate(-50%,-100%)' }}>
+            <div className="bg-green text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md whitespace-nowrap">
+              {matchaResults[i].price}
+            </div>
+            <div className="w-2 h-2 bg-green rounded-full mt-0.5 shadow" />
+          </div>
+        ))}
+      </div>
+
+      {/* Results panel bottom */}
+      <div className="absolute bottom-0 left-0 right-0 z-10">
+        <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl shadow-xl px-3 pt-3 pb-2">
+          <div className="flex items-center justify-between mb-2 px-1">
+            <span className="text-xs font-semibold text-ink">4 Ergebnisse · Matcha in Genf</span>
+            <span className="text-xs text-green font-medium">Karte</span>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+            {matchaResults.map((r, i) => (
+              <div key={i} className="flex-shrink-0 bg-gray-50 border border-gray-100 rounded-xl p-2.5 w-36">
+                <div className="w-full h-10 rounded-lg mb-2 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #86efac, #22c55e)' }}>
+                  <span className="text-white text-lg">🍵</span>
+                </div>
+                <p className="text-xs font-semibold text-ink leading-tight truncate">{r.tag}</p>
+                <p className="text-xs text-gray-400 truncate">{r.name}</p>
+                <div className="flex items-center justify-between mt-1.5">
+                  <span className="text-xs font-bold text-green">{r.price}</span>
+                  <span className="text-xs text-gray-400">{r.dist}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── EmailSignup ── */
 function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -47,12 +190,8 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   if (submitted) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 280 }}
-        className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full text-sm font-medium shadow-lg ${
-          isDark ? 'bg-white/20 text-white border border-white/30 backdrop-blur-md' : 'bg-green-light text-green'
-        }`}
+        initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'spring', stiffness: 280 }}
+        className={`inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full text-sm font-medium shadow-lg ${isDark ? 'bg-white/20 text-white border border-white/30 backdrop-blur-md' : 'bg-green-light text-green'}`}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="20 6 9 17 4 12" />
@@ -70,25 +209,10 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
 
   return (
     <div className="flex flex-col gap-3 w-full max-w-md">
-      <input
-        type="text" value={name}
-        onChange={e => setName(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-        placeholder="Dein Name *"
-        className={cls}
-      />
-      <input
-        type="email" value={email}
-        onChange={e => setEmail(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-        placeholder="deine@email.ch *"
-        className={cls}
-      />
+      <input type="text" value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder="Dein Name *" className={cls} />
+      <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder="deine@email.ch *" className={cls} />
       <div className="relative">
-        <select
-          value={kanton} onChange={e => setKanton(e.target.value)}
-          className={`${cls} appearance-none cursor-pointer ${!kanton ? (isDark ? 'text-white/40' : 'text-gray-400') : ''}`}
-        >
+        <select value={kanton} onChange={e => setKanton(e.target.value)} className={`${cls} appearance-none cursor-pointer ${!kanton ? (isDark ? 'text-white/40' : 'text-gray-400') : ''}`}>
           <option value="" disabled>Kanton wählen *</option>
           {kantone.map(k => <option key={k} value={k} style={{ color: '#0d0d0d' }}>{k}</option>)}
         </select>
@@ -96,20 +220,10 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
           <polyline points="6 9 12 15 18 9" />
         </svg>
       </div>
-      <input
-        type="text" value={gemeinde}
-        onChange={e => setGemeinde(e.target.value)}
-        placeholder="Gemeinde (optional)"
-        className={cls}
-      />
+      <input type="text" value={gemeinde} onChange={e => setGemeinde(e.target.value)} placeholder="Gemeinde (optional)" className={cls} />
       {error && <p className={`text-xs ${isDark ? 'text-red-300' : 'text-red-500'}`}>{error}</p>}
-      <motion.button
-        whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
-        onClick={handleSubmit} disabled={loading}
-        className={`w-full py-4 rounded-2xl text-sm font-medium font-dm shadow-lg transition-opacity disabled:opacity-60 ${
-          isDark ? 'bg-white text-ink hover:opacity-90' : 'bg-green text-white hover:opacity-90'
-        }`}
-      >
+      <motion.button whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }} onClick={handleSubmit} disabled={loading}
+        className={`w-full py-4 rounded-2xl text-sm font-medium font-dm shadow-lg transition-opacity disabled:opacity-60 ${isDark ? 'bg-white text-ink hover:opacity-90' : 'bg-green text-white hover:opacity-90'}`}>
         {loading ? 'Laden...' : 'Benachrichtigen →'}
       </motion.button>
     </div>
@@ -117,26 +231,10 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
 }
 
 const features = [
-  {
-    emoji: '📍',
-    title: 'Produkte in der Nähe finden',
-    desc: 'Gib ein was du suchst — Nearby zeigt dir sofort wo es in deiner Umgebung erhältlich ist, mit Distanz und Öffnungszeiten.',
-  },
-  {
-    emoji: '🛍️',
-    title: 'Lokale Geschäfte entdecken',
-    desc: 'Finde Bäckereien, Metzgereien, Boutiquen und mehr in deiner Nachbarschaft. Mit Profil, Bewertungen und Live-Sortiment.',
-  },
-  {
-    emoji: '💳',
-    title: 'Digitale Wallet',
-    desc: 'Alle Treuekarten, Cumulus-Punkte und Gutscheine an einem Ort. Immer dabei, nie vergessen.',
-  },
-  {
-    emoji: '⚡',
-    title: 'Sofort verfügbar',
-    desc: 'Kein Warten auf die Lieferung. Was du heute brauchst, holst du heute — direkt um die Ecke.',
-  },
+  { emoji: '📍', title: 'Produkte in der Nähe finden', desc: 'Gib ein was du suchst — Nearby zeigt dir sofort wo es in deiner Umgebung erhältlich ist, mit Distanz und Öffnungszeiten.' },
+  { emoji: '🛍️', title: 'Lokale Geschäfte entdecken', desc: 'Finde Bäckereien, Metzgereien, Boutiquen und mehr in deiner Nachbarschaft. Mit Profil, Bewertungen und Live-Sortiment.' },
+  { emoji: '💳', title: 'Digitale Wallet', desc: 'Alle Treuekarten, Cumulus-Punkte und Gutscheine an einem Ort. Immer dabei, nie vergessen.' },
+  { emoji: '⚡', title: 'Sofort verfügbar', desc: 'Kein Warten auf die Lieferung. Was du heute brauchst, holst du heute — direkt um die Ecke.' },
 ]
 
 const bizFeatures = [
@@ -168,19 +266,15 @@ export default function ComingSoonPage() {
       </nav>
 
       {/* HERO */}
-      <section
-        className="relative overflow-hidden min-h-screen flex items-center justify-center px-6"
-        style={{ background: 'linear-gradient(160deg, #4ade80 0%, #22c55e 40%, #16a34a 100%)' }}
-      >
+      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-6"
+        style={{ background: 'linear-gradient(160deg, #4ade80 0%, #22c55e 40%, #16a34a 100%)' }}>
         <motion.div className="absolute pointer-events-none rounded-full"
           style={{ width: 600, height: 600, left: '-15%', top: '-20%', background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', filter: 'blur(60px)' }}
           animate={{ y: [0, -40, 0], x: [0, 30, 0] }} transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }} />
         <motion.div className="absolute pointer-events-none rounded-full"
           style={{ width: 500, height: 500, right: '-10%', bottom: '-15%', background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%)', filter: 'blur(60px)' }}
           animate={{ y: [0, 40, 0], x: [0, -30, 0] }} transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }} />
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}
-          className="relative z-10 text-center max-w-3xl w-full">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className="relative z-10 text-center max-w-3xl w-full">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }}
             className="inline-flex items-center gap-2 bg-white/20 border border-white/30 text-white text-xs font-medium px-4 py-1.5 rounded-full mb-8 tracking-wide backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
@@ -199,7 +293,6 @@ export default function ComingSoonPage() {
             Entdecke Produkte aus lokalen Geschäften direkt in deiner Nähe — frisch, sofort verfügbar, ohne Liefergebühren.
           </motion.p>
         </motion.div>
-
         <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2" initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 8, 0] }} transition={{ opacity: { delay: 1.5 }, y: { duration: 2, repeat: Infinity, ease: 'easeInOut' } }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.5">
@@ -212,9 +305,7 @@ export default function ComingSoonPage() {
       <section className="px-6 md:px-10 py-24 max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
           <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Die Vision</p>
-          <h2 className="font-syne font-extrabold text-ink tracking-tight leading-tight mb-8" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
-            Warum Nearby?
-          </h2>
+          <h2 className="font-syne font-extrabold text-ink tracking-tight leading-tight mb-8" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>Warum Nearby?</h2>
           <div className="space-y-5 text-gray-600 font-light leading-relaxed text-base md:text-lg max-w-3xl">
             <p className="text-xl md:text-2xl font-medium text-ink leading-snug">Das Produkt das du suchst liegt oft nur 500 Meter entfernt. Du weisst es bloss nicht.</p>
             <p>89% der Schweizer:innen kaufen lieber lokal als online — aber sie finden die lokalen Angebote nicht. Also wird online bestellt — oft im Ausland. Dabei wäre das gleiche Produkt direkt um die Ecke verfügbar.</p>
@@ -257,27 +348,21 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* KARTEN-VORSCHAU */}
-      <section className="px-6 md:px-10 py-24 bg-gray-50 border-y border-gray-100">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-12">
-            <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Vorschau</p>
-            <h2 className="font-syne font-extrabold text-ink tracking-tight leading-tight mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-              Deine Nachbarschaft auf einen Blick.
-            </h2>
-            <p className="text-gray-500 font-light max-w-lg mx-auto">Die interaktive Karte zeigt dir alle teilnehmenden Geschäfte in deiner Umgebung — mit Sortiment, Distanz und Öffnungszeiten.</p>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.7 }}
-            className="rounded-2xl overflow-hidden border border-gray-200 shadow-lg relative" style={{ height: '420px' }}>
-            <div className="absolute inset-0 bg-gradient-to-br from-green-light via-white to-green-light" />
-            <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px] flex items-center justify-center">
-              <div className="bg-white/90 backdrop-blur-md rounded-2xl px-8 py-5 shadow-lg border border-gray-100 text-center">
-                <div className="font-syne font-bold text-ink text-lg mb-1">Interaktive Karte</div>
-                <div className="text-sm text-gray-500 font-light">Verfügbar beim Launch</div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+      {/* KARTEN-VORSCHAU — Scroll Animation */}
+      <section className="bg-gray-50 border-y border-gray-100 overflow-hidden">
+        <ContainerScroll
+          titleComponent={
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+              <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Vorschau</p>
+              <h2 className="font-syne font-extrabold text-ink tracking-tight leading-tight mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
+                Deine Nachbarschaft auf einen Blick.
+              </h2>
+              <p className="text-gray-500 font-light max-w-lg mx-auto">Die interaktive Karte zeigt dir alle teilnehmenden Geschäfte in deiner Umgebung — mit Sortiment, Distanz und Öffnungszeiten.</p>
+            </motion.div>
+          }
+        >
+          <MapMockup />
+        </ContainerScroll>
       </section>
 
       {/* FÜR UNTERNEHMEN */}
