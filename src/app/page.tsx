@@ -113,9 +113,9 @@ const bizFeatures = [
 ]
 
 const stats = [
-  { value: '6', label: 'Produktkategorien' },
-  { value: 'CH', label: 'Ganze Schweiz abgedeckt' },
-  { value: 'Ø 2 Tage', label: 'schneller als Online-Lieferung' },
+  { value: '4200+', label: 'Lokale Geschäfte' },
+  { value: '38'000+', label: 'Produkte verfügbar' },
+  { value: '2.4 kg', label: 'CO₂ gespart pro Einkauf' },
   { value: '< 5 km', label: 'Ø Distanz zum Produkt' },
 ]
 
