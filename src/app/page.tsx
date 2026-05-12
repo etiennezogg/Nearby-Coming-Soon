@@ -17,6 +17,7 @@ const kantone = [
 ]
 
 function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [kanton, setKanton] = useState('')
   const [gemeinde, setGemeinde] = useState('')
@@ -25,11 +26,12 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const [error, setError] = useState('')
 
   const handleSubmit = async () => {
+    if (!name.trim()) { setError('Bitte Name eingeben.'); return }
     if (!email || !email.includes('@')) { setError('Bitte gültige E-Mail eingeben.'); return }
     if (!kanton) { setError('Bitte Kanton auswählen.'); return }
     setLoading(true)
     setError('')
-    const { error } = await supabase.from('waitlist').insert({ email, kanton, gemeinde: gemeinde || null })
+    const { error } = await supabase.from('waitlist').insert({ name: name.trim(), email, kanton, gemeinde: gemeinde || null })
     setLoading(false)
     if (error && error.code === '23505') {
       setSubmitted(true)
@@ -69,10 +71,17 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   return (
     <div className="flex flex-col gap-3 w-full max-w-md">
       <input
+        type="text" value={name}
+        onChange={e => setName(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+        placeholder="Dein Name *"
+        className={cls}
+      />
+      <input
         type="email" value={email}
         onChange={e => setEmail(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-        placeholder="deine@email.ch"
+        placeholder="deine@email.ch *"
         className={cls}
       />
       <div className="relative">
