@@ -83,52 +83,24 @@ function MapMockup() {
         </div>
       </div>
 
-      {/* Map background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Base map color */}
-        <div className="absolute inset-0" style={{ background: '#f0ebe3' }} />
-        {/* Water */}
-        <div className="absolute" style={{ left: '42%', top: 0, width: '6%', bottom: 0, background: '#b3d1e8', opacity: 0.7 }} />
-        {/* Streets grid */}
-        {[15,28,42,55,68,80].map((y,i) => (
-          <div key={`h${i}`} className="absolute" style={{ top: `${y}%`, left: 0, right: 0, height: '1px', background: '#e2ddd6' }} />
-        ))}
-        {[12,24,36,50,62,74,86].map((x,i) => (
-          <div key={`v${i}`} className="absolute" style={{ left: `${x}%`, top: 0, bottom: 0, width: '1px', background: '#e2ddd6' }} />
-        ))}
-        {/* Main roads */}
-        <div className="absolute" style={{ top: '35%', left: 0, right: 0, height: '3px', background: '#d4c9b0', opacity: 0.8 }} />
-        <div className="absolute" style={{ top: '60%', left: 0, right: 0, height: '2px', background: '#d4c9b0', opacity: 0.8 }} />
-        <div className="absolute" style={{ left: '30%', top: 0, bottom: 0, width: '3px', background: '#d4c9b0', opacity: 0.8 }} />
-        <div className="absolute" style={{ left: '65%', top: 0, bottom: 0, width: '2px', background: '#d4c9b0', opacity: 0.8 }} />
-        {/* Parks */}
-        <div className="absolute rounded-lg" style={{ left: '5%', top: '55%', width: '18%', height: '25%', background: '#c8e6c0', opacity: 0.6 }} />
-        <div className="absolute rounded-lg" style={{ left: '70%', top: '20%', width: '22%', height: '18%', background: '#c8e6c0', opacity: 0.6 }} />
-        {/* Blocks */}
-        {[
-          { l: '14%', t: '18%', w: '12%', h: '14%' },
-          { l: '36%', t: '10%', w: '10%', h: '20%' },
-          { l: '52%', t: '42%', w: '10%', h: '14%' },
-          { l: '72%', t: '48%', w: '14%', h: '18%' },
-          { l: '18%', t: '72%', w: '8%', h: '12%' },
-        ].map((b,i) => (
-          <div key={`b${i}`} className="absolute rounded-sm" style={{ left: b.l, top: b.t, width: b.w, height: b.h, background: '#e8e0d5', opacity: 0.7 }} />
-        ))}
-        {/* Store pins */}
-        {[
-          { left: '28%', top: '42%' },
-          { left: '48%', top: '28%' },
-          { left: '60%', top: '55%' },
-          { left: '20%', top: '65%' },
-        ].map((pos, i) => (
-          <div key={`pin${i}`} className="absolute flex flex-col items-center" style={{ left: pos.left, top: pos.top, transform: 'translate(-50%,-100%)' }}>
-            <div className="bg-green text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md whitespace-nowrap">
-              {matchaResults[i].price}
-            </div>
-            <div className="w-2 h-2 bg-green rounded-full mt-0.5 shadow" />
+      {/* Real Geneva map image */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/map-geneva.png" alt="" className="absolute inset-0 w-full h-full object-cover object-center" draggable={false} />
+
+      {/* Store pins */}
+      {[
+        { left: '28%', top: '38%' },
+        { left: '50%', top: '24%' },
+        { left: '62%', top: '50%' },
+        { left: '20%', top: '60%' },
+      ].map((pos, i) => (
+        <div key={`pin${i}`} className="absolute z-10 flex flex-col items-center" style={{ left: pos.left, top: pos.top, transform: 'translate(-50%,-100%)' }}>
+          <div className="bg-green text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg whitespace-nowrap">
+            {matchaResults[i].price}
           </div>
-        ))}
-      </div>
+          <div className="w-2 h-2 bg-green rounded-full mt-0.5 shadow" />
+        </div>
+      ))}
 
       {/* Results panel bottom */}
       <div className="absolute bottom-0 left-0 right-0 z-10">
