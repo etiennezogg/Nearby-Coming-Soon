@@ -95,12 +95,12 @@ function MapMockup() {
         )}
       </div>
 
-      {/* Store pins — Zug Altstadt */}
+      {/* Store pins — Zug Altstadt center */}
       {[
-        { left: '68%', top: '30%' },
-        { left: '78%', top: '48%' },
-        { left: '60%', top: '55%' },
-        { left: '72%', top: '65%' },
+        { left: '38%', top: '28%' },
+        { left: '28%', top: '50%' },
+        { left: '48%', top: '58%' },
+        { left: '35%', top: '72%' },
       ].map((pos, i) => (
         <div key={`pin${i}`} className="absolute z-10 flex flex-col items-center" style={{ left: pos.left, top: pos.top, transform: 'translate(-50%,-100%)' }}>
           <div className="bg-green text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg whitespace-nowrap">
