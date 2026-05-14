@@ -83,9 +83,17 @@ function MapMockup() {
         </div>
       </div>
 
-      {/* Real Geneva map image */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/map-geneva.png" alt="" className="absolute inset-0 w-full h-full object-cover object-center" draggable={false} />
+      {/* Real Geneva map — OSM tiles in CSS grid */}
+      <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', gridTemplateRows: 'repeat(3, 256px)', justifyContent: 'center', alignContent: 'center' }}>
+        {['5757','5758','5759'].map(y =>
+          ['8433','8434','8435'].map(x => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/14/${x}/${y}.png`}
+              alt="" width={256} height={256} draggable={false}
+              style={{ display: 'block', imageRendering: 'auto' }} />
+          ))
+        )}
+      </div>
 
       {/* Store pins */}
       {[
