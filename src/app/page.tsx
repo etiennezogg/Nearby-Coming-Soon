@@ -74,7 +74,7 @@ function MapMockup() {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
             </svg>
-            <span className="text-xs text-gray-500 whitespace-nowrap">Genève (GE)</span>
+            <span className="text-xs text-gray-500 whitespace-nowrap">Zug (ZG)</span>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="6 9 12 15 18 9" />
             </svg>
@@ -83,12 +83,12 @@ function MapMockup() {
         </div>
       </div>
 
-      {/* Real Geneva map — OSM tiles in CSS grid */}
+      {/* Zug map — OSM tiles zoom 16 in CSS grid */}
       <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', gridTemplateRows: 'repeat(3, 256px)', justifyContent: 'center', alignContent: 'center' }}>
-        {['5757','5758','5759'].map(y =>
-          ['8433','8434','8435'].map(x => (
+        {['23005','23006','23007'].map(y =>
+          ['34316','34317','34318'].map(x => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/14/${x}/${y}.png`}
+            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/16/${x}/${y}.png`}
               alt="" width={256} height={256} draggable={false}
               style={{ display: 'block', imageRendering: 'auto' }} />
           ))
@@ -114,7 +114,7 @@ function MapMockup() {
       <div className="absolute bottom-0 left-0 right-0 z-10">
         <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl shadow-xl px-3 pt-3 pb-2">
           <div className="flex items-center justify-between mb-2 px-1">
-            <span className="text-xs font-semibold text-ink">4 Ergebnisse · Matcha in Genf</span>
+            <span className="text-xs font-semibold text-ink">4 Ergebnisse · Matcha in Zug</span>
             <span className="text-xs text-green font-medium">Karte</span>
           </div>
           <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
