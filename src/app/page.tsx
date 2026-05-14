@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useState, useEffect, ReactNode } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
@@ -63,7 +63,6 @@ const matchaResults = [
 function MapMockup() {
   return (
     <div className="relative w-full h-full flex flex-col select-none">
-      {/* Search bar */}
       <div className="absolute top-3 left-3 right-3 z-10">
         <div className="bg-white rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0">
@@ -82,20 +81,15 @@ function MapMockup() {
           <div className="bg-ink text-white text-xs font-medium px-3 py-1.5 rounded-xl flex-shrink-0">Suchen →</div>
         </div>
       </div>
-
-      {/* Zug Altstadt — OSM tiles zoom 17, 5×4 grid filling card */}
       <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 256px)', gridTemplateRows: 'repeat(4, 256px)', justifyContent: 'center', alignContent: 'center', margin: '-2px' }}>
         {['46011','46012','46013','46014'].map(y =>
           ['68634','68635','68636','68637','68638'].map(x => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`}
-              alt="" width={256} height={256} draggable={false}
-              style={{ display: 'block' }} />
+              alt="" width={256} height={256} draggable={false} style={{ display: 'block' }} />
           ))
         )}
       </div>
-
-      {/* Store pins — Kolinplatz, Fischmarkt, Unterstadt, Burg Zug */}
       {[
         { left: '45%', top: '30%' },
         { left: '34%', top: '44%' },
@@ -109,8 +103,6 @@ function MapMockup() {
           <div className="w-2 h-2 bg-green rounded-full mt-0.5 shadow" />
         </div>
       ))}
-
-      {/* Results panel bottom */}
       <div className="absolute bottom-0 left-0 right-0 z-10">
         <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl shadow-xl px-3 pt-3 pb-2">
           <div className="flex items-center justify-between mb-2 px-1">
@@ -211,6 +203,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   )
 }
 
+/* ── Feature data ── */
 const features = [
   {
     step: '01', tag: 'Suchen', accent: '#22c55e',
@@ -234,6 +227,7 @@ const features = [
   },
 ]
 
+/* ── Feature Visuals ── */
 function SearchVisual() {
   const suggestions = ['Bio Rindfleisch','Biofleisch Metzgerei','Biowurst','Bio Milch']
   return (
@@ -302,20 +296,20 @@ function MapVisual() {
 
 function WalletVisual() {
   const cards = [
-    { color: '#7c3f1e', label: 'Tchibo' },
-    { color: '#1a1a1a', label: '' },
-    { color: '#c0392b', label: '' },
-    { color: '#2563eb', label: '' },
-    { color: '#f59e0b', label: '' },
-    { color: '#e5e7eb', label: '' },
-    { color: '#92400e', label: '' },
+    { color: '#7c3f1e' },
+    { color: '#1a1a1a' },
+    { color: '#c0392b' },
+    { color: '#2563eb' },
+    { color: '#f59e0b' },
+    { color: '#e5e7eb' },
+    { color: '#92400e' },
   ]
   return (
     <div className="flex items-center justify-center" style={{ height: 280 }}>
       <div className="relative" style={{ width: 340, height: 220 }}>
         {cards.map((c, i) => (
           <div key={i} className="absolute rounded-2xl shadow-2xl"
-            style={{ width: 240, height: 155, background: c.color, left: i * 18, top: i * 4, transform: `rotate(${-8 + i * 2}deg) translateZ(${i}px)`, zIndex: cards.length - i, border: '1px solid rgba(255,255,255,0.1)' }}>
+            style={{ width: 240, height: 155, background: c.color, left: i * 18, top: i * 4, transform: `rotate(${-8 + i * 2}deg)`, zIndex: cards.length - i, border: '1px solid rgba(255,255,255,0.1)' }}>
             {i === 0 && (
               <div className="p-5">
                 <div className="text-white/80 text-sm font-semibold italic">Tchibo</div>
@@ -341,16 +335,14 @@ function BizVisual() {
   const times = ['06–10','10–14','14–18','18–22']
   return (
     <div className="w-full space-y-3">
-      <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 100 }}>
-        <div className="absolute inset-0 overflow-hidden rounded-2xl" style={{ position: 'relative', height: 100 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', position: 'absolute', inset: 0, top: -60, justifyContent: 'center' }}>
-            {['46012','46013'].slice(0,1).map(y => ['68634','68635','68636'].map(x => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`} alt="" width={256} height={256} draggable={false} style={{ display: 'block' }} />
-            )))}
-          </div>
-          <div className="absolute inset-0 bg-black/20" />
+      <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 100, position: 'relative' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', position: 'absolute', inset: 0, top: -60, justifyContent: 'center' }}>
+          {['46012'].map(y => ['68634','68635','68636'].map(x => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`} alt="" width={256} height={256} draggable={false} style={{ display: 'block' }} />
+          )))}
         </div>
+        <div className="absolute inset-0 bg-black/20" />
       </div>
       <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
         <div className="flex items-center justify-between mb-3">
@@ -369,7 +361,7 @@ function BizVisual() {
           <span className="text-white/60 text-xs">Aufrufe diese Woche</span>
           <span className="text-xs font-semibold" style={{ color: '#a78bfa' }}>142 total · +12%</span>
         </div>
-        <div className="grid gap-1" style={{ gridTemplateColumns: `40px repeat(7, 1fr)` }}>
+        <div className="grid gap-1" style={{ gridTemplateColumns: '40px repeat(7, 1fr)' }}>
           {rows.map((row, ri) => (
             <>
               <div key={`t${ri}`} className="text-white/30 text-xs flex items-center">{times[ri]}</div>
@@ -382,6 +374,121 @@ function BizVisual() {
           ))}
           <div />
           {days.map(d => <div key={d} className="text-white/30 text-xs text-center">{d}</div>)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── FeatureShowcase — sticky scroll, same pattern as main site ── */
+function FeatureShowcase() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return
+      const rect = containerRef.current.getBoundingClientRect()
+      const scrollableHeight = rect.height - window.innerHeight
+      if (scrollableHeight <= 0) return
+      const progress = Math.max(0, Math.min(1, -rect.top / scrollableHeight))
+      const index = Math.min(Math.floor(progress * features.length), features.length - 1)
+      setActiveIndex(index)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const visuals = [<SearchVisual key="s" />, <MapVisual key="m" />, <WalletVisual key="w" />, <BizVisual key="b" />]
+  const active = features[activeIndex]
+
+  return (
+    <div ref={containerRef} style={{ height: '400vh', position: 'relative', background: '#0d0d0d' }}>
+      <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
+
+        {/* Grid overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }} />
+
+        {/* Accent top bar */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 3, zIndex: 20,
+          background: active.accent,
+          transition: 'background 0.5s ease',
+        }} />
+
+        {/* Nav dots */}
+        <div style={{ position: 'absolute', top: 28, left: 32, zIndex: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
+          {features.map((_, i) => (
+            <div key={i} style={{
+              height: 6, borderRadius: 999,
+              width: i === activeIndex ? 28 : 6,
+              background: i === activeIndex ? active.accent : 'rgba(255,255,255,0.2)',
+              transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
+            }} />
+          ))}
+        </div>
+
+        {/* Content */}
+        <div style={{
+          display: 'flex', alignItems: 'center', height: '100%',
+          padding: '60px 6vw 0', gap: '5vw',
+          maxWidth: 1200, margin: '0 auto', boxSizing: 'border-box',
+        }}>
+          {/* Left — text */}
+          <div style={{ flex: 1, position: 'relative', height: '100%' }}>
+            {features.map((f, i) => (
+              <div key={f.step} style={{
+                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                paddingBottom: 120,
+                opacity: i === activeIndex ? 1 : 0,
+                transform: i === activeIndex ? 'translateY(0px)' : i < activeIndex ? 'translateY(-40px)' : 'translateY(40px)',
+                transition: 'opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1)',
+                pointerEvents: i === activeIndex ? 'auto' : 'none',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                  <span style={{ fontFamily: 'monospace', fontSize: 13, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.05em' }}>{f.step}</span>
+                  <span style={{
+                    fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 999,
+                    border: `1px solid ${f.accent}50`, color: f.accent, background: `${f.accent}18`,
+                    letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                  }}>{f.tag}</span>
+                </div>
+                <h2 style={{
+                  fontWeight: 800, fontSize: 'clamp(2.2rem, 3.8vw, 3.5rem)',
+                  color: 'white', lineHeight: 1.06, whiteSpace: 'pre-line',
+                  marginBottom: 24, letterSpacing: '-0.02em',
+                }}>{f.title}</h2>
+                <p style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.75, fontSize: '1.05rem', maxWidth: 420 }}>{f.desc}</p>
+              </div>
+            ))}
+            {/* Counter */}
+            <div style={{ position: 'absolute', bottom: 48, left: 0, display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <span style={{ fontWeight: 800, fontSize: 'clamp(2.5rem, 4vw, 4rem)', color: active.accent, lineHeight: 1, transition: 'color 0.5s ease' }}>
+                {active.step}
+              </span>
+              <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 20, fontWeight: 300 }}>/ 04</span>
+            </div>
+          </div>
+
+          {/* Right — visuals */}
+          <div style={{ flex: 1, position: 'relative', height: '70vh', maxHeight: 520 }}>
+            {visuals.map((v, i) => (
+              <div key={i} style={{
+                position: 'absolute', inset: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                opacity: i === activeIndex ? 1 : 0,
+                transform: i === activeIndex ? 'translateY(0px) scale(1)' : i < activeIndex ? 'translateY(-30px) scale(0.97)' : 'translateY(30px) scale(0.97)',
+                transition: 'opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1)',
+                pointerEvents: i === activeIndex ? 'auto' : 'none',
+              }}>{v}</div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -479,44 +586,10 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* FEATURES — Dark showcase style */}
-      <section style={{ background: '#0d0d0d' }}>
-        {features.map((f, i) => {
-          const visuals = [<SearchVisual key="s" />, <MapVisual key="m" />, <WalletVisual key="w" />, <BizVisual key="b" />]
-          return (
-            <motion.div key={f.step} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }}
-              className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 py-20 border-b border-white/5">
-              <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-                {/* Left: text */}
-                <div>
-                  <div className="flex items-center gap-3 mb-8">
-                    <span className="text-sm font-mono text-white/30">{f.step}</span>
-                    <span className="text-xs font-semibold px-3 py-1 rounded-full border"
-                      style={{ color: f.accent, borderColor: f.accent + '40', background: f.accent + '15' }}>
-                      {f.tag}
-                    </span>
-                  </div>
-                  <h2 className="font-syne font-extrabold text-white leading-tight mb-6 whitespace-pre-line"
-                    style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)' }}>
-                    {f.title}
-                  </h2>
-                  <p className="text-white/50 font-light leading-relaxed" style={{ fontSize: '1.05rem', maxWidth: 440 }}>
-                    {f.desc}
-                  </p>
-                  <div className="mt-16 flex items-baseline gap-2">
-                    <span className="font-syne font-extrabold" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', color: f.accent }}>{f.step}</span>
-                    <span className="text-white/20 text-xl font-light">/ 04</span>
-                  </div>
-                </div>
-                {/* Right: visual */}
-                <div>{visuals[i]}</div>
-              </div>
-            </motion.div>
-          )
-        })}
-      </section>
+      {/* FEATURES — sticky scroll */}
+      <FeatureShowcase />
 
-      {/* KARTEN-VORSCHAU — Scroll Animation */}
+      {/* KARTEN-VORSCHAU */}
       <section className="bg-gray-50 border-y border-gray-100 overflow-hidden">
         <ContainerScroll
           titleComponent={
