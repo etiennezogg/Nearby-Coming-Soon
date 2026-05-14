@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef, useState, useEffect, ReactNode } from 'react'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { useRef, useState, useEffect, useCallback, ReactNode } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(
@@ -52,7 +52,7 @@ function ContainerScroll({ titleComponent, children }: { titleComponent: ReactNo
   )
 }
 
-/* ── Map Mockup ── */
+/* ── Map Mockup (ContainerScroll section) ── */
 const matchaResults = [
   { name: 'Tea House Gardens', dist: '2.3 km', price: 'CHF 18.90', tag: 'Bio Matcha 30g', img: '/matcha-1.png' },
   { name: 'Épicérie Japonaise', dist: '0.7 km', price: 'CHF 24.50', tag: 'Ceremonial Grade', img: '/matcha-2.png' },
@@ -203,56 +203,68 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   )
 }
 
-/* ── Feature data ── */
-const features = [
+/* ══════════════════════════════════════════════════════════
+   FEATURE SHOWCASE — exakt kopiert von FeatureShowcase.tsx
+   ══════════════════════════════════════════════════════════ */
+
+const slides = [
   {
-    step: '01', tag: 'Suchen', accent: '#22c55e',
+    step: '01', tag: 'Suchen',
     title: 'Was du brauchst.\nDirekt um die Ecke.',
-    desc: 'Tippe ein Produkt ein — Nearby zeigt dir sofort welche Geschäfte es in deiner Umgebung haben. Mit Distanz, Öffnungszeiten und Echtzeit-Verfügbarkeit.',
+    description: 'Tippe ein Produkt ein — Nearby zeigt dir sofort welche Geschäfte es in deiner Umgebung haben. Mit Distanz, Öffnungszeiten und Echtzeit-Verfügbarkeit.',
+    accent: '#22c55e',
   },
   {
-    step: '02', tag: 'Karte', accent: '#3b82f6',
+    step: '02', tag: 'Karte',
     title: 'Sieh wo es\nin deiner Nähe liegt.',
-    desc: 'Die interaktive Karte zeigt dir alle Geschäfte in der Umgebung. Filter nach Kategorie, Distanz oder Öffnungszeit — alles auf einen Blick.',
+    description: 'Die interaktive Karte zeigt dir alle Geschäfte in der Umgebung. Filter nach Kategorie, Distanz oder Öffnungszeit — alles auf einen Blick.',
+    accent: '#3b82f6',
   },
   {
-    step: '03', tag: 'Wallet', accent: '#f59e0b',
+    step: '03', tag: 'Wallet',
     title: 'Alle Karten.\nEin Ort.',
-    desc: 'Cumulus, IKEA Family, Gutscheine — alles digital in deiner Nearby Wallet. Barcode vorzeigen, fertig. Nie wieder Plastikstapel im Portemonnaie.',
+    description: 'Cumulus, IKEA Family, Gutscheine — alles digital in deiner Nearby Wallet. Barcode vorzeigen, fertig. Nie wieder Plastikstapel im Portemonnaie.',
+    accent: '#f59e0b',
   },
   {
-    step: '04', tag: 'Für Geschäfte', accent: '#a78bfa',
+    step: '04', tag: 'Für Geschäfte',
     title: 'Sichtbar sein.\nOhne Aufwand.',
-    desc: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Ab CHF 29 / Monat.',
+    description: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Ab CHF 29 / Monat.',
+    accent: '#a78bfa',
   },
 ]
 
-/* ── Feature Visuals ── */
-function SearchVisual() {
-  const suggestions = ['Bio Rindfleisch','Biofleisch Metzgerei','Biowurst','Bio Milch']
+/* — SearchVisual (1:1 von Hauptseite) — */
+function SearchVisual({ accent }: { accent: string }) {
+  const suggestions = [
+    { name: 'Bio Rindfleisch',    kategorie: 'Lebensmittel' },
+    { name: 'Biofleisch Metzgerei', kategorie: 'Lebensmittel' },
+    { name: 'Biowurst',           kategorie: 'Lebensmittel' },
+    { name: 'Bio Milch',          kategorie: 'Lebensmittel' },
+  ]
   return (
-    <div className="w-full space-y-3">
-      <div className="flex items-center gap-3 bg-white rounded-full px-6 py-4 shadow-2xl">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span className="flex-1 text-sm font-medium text-gray-800">Biofleisch</span>
-        <div className="flex items-center gap-1.5 border-l pl-4">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span className="text-xs text-gray-500 whitespace-nowrap">Zürich</span>
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    <div style={{ width: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: '#fff', border: '1px solid #fff', borderRadius: 9999, padding: '20px 32px', boxShadow: '0 4px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.11), 0 32px 56px rgba(0,0,0,0.08)' }}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+        <span style={{ flex: 1, fontSize: '1.1rem', fontWeight: 500, color: '#374151' }}>Biofleisch</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, borderLeft: '1px solid #f3f4f6', paddingLeft: 20 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <span style={{ fontSize: '1rem', fontWeight: 500, color: '#6b7280', whiteSpace: 'nowrap' }}>Zürich</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div className="bg-ink text-white text-xs font-medium px-4 py-2 rounded-xl flex-shrink-0">Suchen →</div>
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', padding: '10px 22px', borderRadius: 14, fontSize: '0.95rem', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0 }}>Suchen →</div>
       </div>
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <div className="px-5 py-3 border-b border-gray-50">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Vorschläge</span>
+      <div style={{ marginTop: 12, background: '#fff', borderRadius: 28, boxShadow: '0 16px 48px rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+        <div style={{ padding: '12px 24px 10px', borderBottom: '1px solid #f9fafb' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Vorschläge</span>
         </div>
-        {suggestions.map((s, i) => (
-          <div key={s} className={`flex items-center justify-between px-5 py-3 ${i < suggestions.length - 1 ? 'border-b border-gray-50' : ''} ${i === 0 ? 'bg-gray-50' : 'bg-white'}`}>
-            <div className="flex items-center gap-3">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <span className={`text-sm ${i === 0 ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>{s}</span>
+        {suggestions.map((v, i) => (
+          <div key={v.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 24px', borderBottom: i < suggestions.length - 1 ? '1px solid #f9fafb' : 'none', background: i === 0 ? '#f9fafb' : '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+              <span style={{ fontSize: '0.88rem', fontWeight: i === 0 ? 600 : 400, color: '#1f2937' }}>{v.name}</span>
             </div>
-            <span className="text-xs" style={{ color: i === 0 ? '#22c55e' : '#9ca3af' }}>Lebensmittel</span>
+            <span style={{ fontSize: '0.75rem', color: i === 0 ? accent : '#9ca3af' }}>{v.kategorie}</span>
           </div>
         ))}
       </div>
@@ -260,24 +272,48 @@ function SearchVisual() {
   )
 }
 
-function MapVisual() {
+/* — MapVisual (1:1 von Hauptseite) — */
+function MapVisual({ accent }: { accent: string }) {
+  const stores = [
+    { label: 'Bäckerei Brunner',  dist: '87 m',  top: '28%', left: '38%' },
+    { label: 'Metzgerei Huwyler', dist: '142 m', top: '22%', left: '63%' },
+    { label: 'Biomarkt Seefeld',  dist: '218 m', top: '62%', left: '32%' },
+    { label: 'Boutique Blanche',  dist: '374 m', top: '58%', left: '68%' },
+  ]
+  const userTop = '44%', userLeft = '50%'
   return (
-    <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 320, position: 'relative' }}>
-      {/* OSM iframe — Zug Innenstadt (Kolinplatz), kein See */}
+    <div style={{ position: 'relative', width: '100%', borderRadius: 22, overflow: 'hidden', aspectRatio: '16/10' }}>
       <iframe
-        src="https://www.openstreetmap.org/export/embed.html?bbox=8.5105%2C47.1620%2C8.5260%2C47.1720&layer=mapnik"
-        style={{ border: 0, width: '100%', height: '100%' }}
-        title="Zug Innenstadt"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=8.546%2C47.354%2C8.566%2C47.364&layer=mapnik"
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'brightness(0.96) saturate(0.9)', pointerEvents: 'none' }}
+        scrolling="no"
+        title="map"
       />
-      {/* Store badge overlay */}
-      <div style={{ position: 'absolute', bottom: 12, right: 12, zIndex: 10, background: 'white', borderRadius: 12, padding: '6px 12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', fontSize: 12, fontWeight: 500, color: '#374151', display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#3b82f6', display: 'inline-block' }} />
-        4 Geschäfte in 374 m
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.25) 100%)', pointerEvents: 'none' }} />
+      {stores.map(store => (
+        <div key={store.label} style={{ position: 'absolute', top: store.top, left: store.left, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
+          <div style={{ width: 10, height: 10, borderRadius: '50%', background: accent, border: '2.5px solid #fff', boxShadow: `0 0 12px ${accent}99`, margin: '0 auto 4px' }} />
+          <div style={{ background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '4px 10px', whiteSpace: 'nowrap', textAlign: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)' }}>
+            <div style={{ fontSize: '0.65rem', fontWeight: 600, color: '#111' }}>{store.label}</div>
+            <div style={{ fontSize: '0.57rem', color: accent, marginTop: 1 }}>{store.dist}</div>
+          </div>
+        </div>
+      ))}
+      <div style={{ position: 'absolute', top: userTop, left: userLeft, transform: 'translate(-50%, -50%)', zIndex: 11 }}>
+        <div style={{ position: 'relative', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="animate-ping" style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: `${accent}30` }} />
+          <div style={{ width: 14, height: 14, borderRadius: '50%', background: accent, border: '3px solid #fff', boxShadow: `0 0 16px ${accent}` }} />
+        </div>
+      </div>
+      <div style={{ position: 'absolute', bottom: 14, right: 14, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 6, zIndex: 10, boxShadow: '0 2px 12px rgba(0,0,0,0.12)' }}>
+        <div style={{ width: 6, height: 6, borderRadius: '50%', background: accent }} />
+        <span style={{ fontSize: '0.72rem', color: '#333' }}>4 Geschäfte in 374 m</span>
       </div>
     </div>
   )
 }
 
+/* — WalletVisual (vereinfacht, kein PreviewCardFace) — */
 function WalletVisual() {
   const cards = [
     { color: '#7c3f1e' },
@@ -289,16 +325,23 @@ function WalletVisual() {
     { color: '#92400e' },
   ]
   return (
-    <div className="flex items-center justify-center" style={{ height: 280 }}>
-      <div className="relative" style={{ width: 340, height: 220 }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+      <div style={{ position: 'relative', width: 340, height: 220 }}>
         {cards.map((c, i) => (
-          <div key={i} className="absolute rounded-2xl shadow-2xl"
-            style={{ width: 240, height: 155, background: c.color, left: i * 18, top: i * 4, transform: `rotate(${-8 + i * 2}deg)`, zIndex: cards.length - i, border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div key={i} style={{
+            position: 'absolute', width: 240, height: 155,
+            background: c.color, left: i * 18, top: i * 4,
+            transform: `rotate(${-8 + i * 2}deg)`,
+            zIndex: cards.length - i,
+            borderRadius: 16,
+            border: '1px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          }}>
             {i === 0 && (
-              <div className="p-5">
-                <div className="text-white/80 text-sm font-semibold italic">Tchibo</div>
-                <div className="text-white/40 text-xs mt-1">CARD</div>
-                <div className="absolute bottom-4 left-5 text-white/50 text-xs">•••• 9911</div>
+              <div style={{ padding: 20 }}>
+                <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 600, fontStyle: 'italic' }}>Tchibo</div>
+                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginTop: 4 }}>CARD</div>
+                <div style={{ position: 'absolute', bottom: 16, left: 20, color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>•••• 9911</div>
               </div>
             )}
           </div>
@@ -308,176 +351,173 @@ function WalletVisual() {
   )
 }
 
-function BizVisual() {
-  const days = ['Mo','Di','Mi','Do','Fr','Sa','So']
-  const rows = [
-    [0,0,0,0,0,0,0],
-    [1,2,0,2,1,1,0],
-    [2,3,1,3,2,1,0],
-    [1,1,0,1,1,0,0],
-  ]
-  const times = ['06–10','10–14','14–18','18–22']
+/* — BizVisual (1:1 von Hauptseite) — */
+const HEATMAP = [
+  [0.18, 0.12, 0.08, 0.28, 0.22, 0.42, 0.30],
+  [0.55, 0.48, 0.40, 0.62, 0.68, 0.72, 0.48],
+  [0.82, 0.92, 0.70, 1.00, 0.88, 0.60, 0.38],
+  [0.44, 0.58, 0.46, 0.72, 0.62, 0.32, 0.20],
+]
+const DAYS  = ['Mo','Di','Mi','Do','Fr','Sa','So']
+const TIMES = ['06–10','10–14','14–18','18–22']
+
+function BizVisual({ accent }: { accent: string }) {
   return (
-    <div className="w-full space-y-3">
-      <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 100, position: 'relative' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', position: 'absolute', inset: 0, top: -60, justifyContent: 'center' }}>
-          {['46012'].map(y => ['68634','68635','68636'].map(x => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`} alt="" width={256} height={256} draggable={false} style={{ display: 'block' }} />
-          )))}
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ borderRadius: 18, overflow: 'hidden', height: 138, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.524%2C47.370%2C8.556%2C47.388&layer=mapnik"
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'brightness(0.88) saturate(0.65)', pointerEvents: 'none' }}
+          scrolling="no"
+          title="biz-map"
+        />
+        {[
+          { top: '28%', left: '22%', r: 36 }, { top: '55%', left: '68%', r: 48 },
+          { top: '38%', left: '60%', r: 30 }, { top: '72%', left: '35%', r: 26 },
+          { top: '18%', left: '78%', r: 22 },
+        ].map((b, i) => (
+          <div key={i} style={{ position: 'absolute', top: b.top, left: b.left, transform: 'translate(-50%,-50%)', width: b.r * 2, height: b.r * 2, borderRadius: '50%', background: `radial-gradient(circle, ${accent}55 0%, transparent 70%)`, pointerEvents: 'none' }} />
+        ))}
+        <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-50%)' }}>
+          <div style={{ width: 13, height: 13, borderRadius: '50%', background: accent, border: '2.5px solid #fff', boxShadow: `0 0 14px ${accent}` }} />
         </div>
-        <div className="absolute inset-0 bg-black/20" />
       </div>
-      <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-sm">🧴</div>
-            <div>
-              <div className="text-white text-sm font-semibold">Lotion Naturelle</div>
-              <div className="text-white/40 text-xs">Apotheke Goldbach</div>
-            </div>
-          </div>
-          <div className="bg-green text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-white" />Live
-          </div>
+      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+        <span style={{ fontSize: '1.35rem' }}>🧴</span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.88)' }}>Lotion Naturelle</div>
+          <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>Apotheke Goldbach</div>
         </div>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-white/60 text-xs">Aufrufe diese Woche</span>
-          <span className="text-xs font-semibold" style={{ color: '#a78bfa' }}>142 total · +12%</span>
+        <div style={{ background: '#22c55e', borderRadius: 20, padding: '4px 11px', display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+          <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#fff' }} />
+          <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#fff' }}>Live</span>
         </div>
-        <div className="grid gap-1" style={{ gridTemplateColumns: '40px repeat(7, 1fr)' }}>
-          {rows.map((row, ri) => (
-            <>
-              <div key={`t${ri}`} className="text-white/30 text-xs flex items-center">{times[ri]}</div>
+      </div>
+      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>Aufrufe diese Woche</span>
+          <span style={{ fontSize: '0.7rem', color: accent }}>142 total · +12%</span>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {HEATMAP.map((row, ri) => (
+            <div key={ri} style={{ display: 'flex', gap: 3, alignItems: 'center' }}>
+              <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.55)', width: 34, flexShrink: 0, fontWeight: 500 }}>{TIMES[ri]}</span>
               {row.map((v, ci) => (
-                <div key={ci} className="h-6 rounded" style={{ background: v === 0 ? 'rgba(167,139,250,0.15)' : v === 1 ? 'rgba(167,139,250,0.4)' : v === 2 ? 'rgba(167,139,250,0.65)' : 'rgba(167,139,250,0.9)' }}>
-                  {v === 3 && <div className="text-white text-xs flex items-center justify-center h-full font-bold">{[25,28,30,26][ci % 4]}</div>}
+                <div key={ci} style={{ flex: 1, height: 24, borderRadius: 5, background: accent, opacity: 0.1 + v * 0.9, position: 'relative' }}>
+                  {v >= 0.75 && (
+                    <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.42rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>
+                      {Math.round(v * 30)}
+                    </span>
+                  )}
                 </div>
               ))}
-            </>
+            </div>
           ))}
-          <div />
-          {days.map(d => <div key={d} className="text-white/30 text-xs text-center">{d}</div>)}
+          <div style={{ display: 'flex', gap: 3, marginTop: 3 }}>
+            <span style={{ width: 34, flexShrink: 0 }} />
+            {DAYS.map(d => (
+              <div key={d} style={{ flex: 1, fontSize: '0.6rem', fontWeight: 500, color: 'rgba(255,255,255,0.45)', textAlign: 'center' }}>{d}</div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-/* ── FeatureShowcase — sticky scroll, same pattern as main site ── */
+function Visual({ index, accent }: { index: number; accent: string }) {
+  if (index === 0) return <SearchVisual accent={accent} />
+  if (index === 1) return <MapVisual accent={accent} />
+  if (index === 2) return <WalletVisual />
+  return <BizVisual accent={accent} />
+}
+
+/* — FeatureShowcase Container (1:1 von Hauptseite) — */
 function FeatureShowcase() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const outerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return
-      const rect = containerRef.current.getBoundingClientRect()
-      const scrollableHeight = rect.height - window.innerHeight
-      if (scrollableHeight <= 0) return
-      const progress = Math.max(0, Math.min(1, -rect.top / scrollableHeight))
-      const index = Math.min(Math.floor(progress * features.length), features.length - 1)
-      setActiveIndex(index)
+    const onScroll = () => {
+      const outer = outerRef.current
+      if (!outer) return
+      const scrolled        = -outer.getBoundingClientRect().top
+      const totalScrollable = outer.offsetHeight - window.innerHeight
+      if (scrolled <= 0)               { setActiveIndex(0);                return }
+      if (scrolled >= totalScrollable)  { setActiveIndex(slides.length - 1); return }
+      setActiveIndex(Math.min(slides.length - 1, Math.floor((scrolled / totalScrollable) * slides.length)))
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const visuals = [<SearchVisual key="s" />, <MapVisual key="m" />, <WalletVisual key="w" />, <BizVisual key="b" />]
-  const active = features[activeIndex]
+  const scrollToSlide = (idx: number) => {
+    const outer = outerRef.current
+    if (!outer) return
+    const absoluteTop     = outer.getBoundingClientRect().top + window.scrollY
+    const totalScrollable = outer.offsetHeight - window.innerHeight
+    window.scrollTo({ top: absoluteTop + (totalScrollable / slides.length) * idx, behavior: 'smooth' })
+  }
+
+  const s = slides[activeIndex]
 
   return (
-    <div ref={containerRef} style={{ height: '400vh', position: 'relative', background: '#0d0d0d' }}>
-      <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
+    <div ref={outerRef} style={{ height: `${slides.length * 100}vh`, position: 'relative' }}>
+      <div style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden', backgroundColor: '#0d0d0d' }}>
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(to right,rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.04) 1px,transparent 1px)', backgroundSize: '54px 54px' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, backgroundColor: s.accent, boxShadow: `0 0 40px 4px ${s.accent}55`, transition: 'background-color 0.6s ease, box-shadow 0.6s ease' }} />
 
-        {/* Grid overlay */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }} />
-
-        {/* Accent top bar */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 3, zIndex: 20,
-          background: active.accent,
-          transition: 'background 0.5s ease',
-        }} />
-
-        {/* Nav dots */}
-        <div style={{ position: 'absolute', top: 28, left: 32, zIndex: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
-          {features.map((_, i) => (
-            <div key={i} style={{
-              height: 6, borderRadius: 999,
-              width: i === activeIndex ? 28 : 6,
-              background: i === activeIndex ? active.accent : 'rgba(255,255,255,0.2)',
-              transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)',
-            }} />
-          ))}
-        </div>
-
-        {/* Content */}
-        <div style={{
-          display: 'flex', alignItems: 'center', height: '100%',
-          padding: '60px 6vw 0', gap: '5vw',
-          maxWidth: 1200, margin: '0 auto', boxSizing: 'border-box',
-        }}>
-          {/* Left — text */}
-          <div style={{ flex: 1, position: 'relative', height: '100%' }}>
-            {features.map((f, i) => (
-              <div key={f.step} style={{
-                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                paddingBottom: 120,
-                opacity: i === activeIndex ? 1 : 0,
-                transform: i === activeIndex ? 'translateY(0px)' : i < activeIndex ? 'translateY(-40px)' : 'translateY(40px)',
-                transition: 'opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1)',
-                pointerEvents: i === activeIndex ? 'auto' : 'none',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
-                  <span style={{ fontFamily: 'monospace', fontSize: 13, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.05em' }}>{f.step}</span>
-                  <span style={{
-                    fontSize: 11, fontWeight: 600, padding: '4px 12px', borderRadius: 999,
-                    border: `1px solid ${f.accent}50`, color: f.accent, background: `${f.accent}18`,
-                    letterSpacing: '0.06em', textTransform: 'uppercase' as const,
-                  }}>{f.tag}</span>
+        <div style={{ height: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '0 32px' }}>
+          {/* LEFT */}
+          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px 0 16px', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+            <div style={{ position: 'absolute', top: 48, left: 16, display: 'flex', gap: 8 }}>
+              {slides.map((_, i) => (
+                <button key={i} onClick={() => scrollToSlide(i)}
+                  style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, width: i === activeIndex ? 40 : 14, backgroundColor: i === activeIndex ? s.accent : 'rgba(255,255,255,0.15)', transition: 'width 0.5s ease, background-color 0.5s ease' }} />
+              ))}
+            </div>
+            <div style={{ position: 'relative', height: 300 }}>
+              {slides.map((slide, i) => (
+                <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', opacity: i === activeIndex ? 1 : 0, transform: i === activeIndex ? 'translateY(0px)' : 'translateY(18px)', transition: 'opacity 0.55s ease, transform 0.55s ease', pointerEvents: i === activeIndex ? 'auto' : 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.18em', color: slide.accent }}>{slide.step}</span>
+                    <span style={{ padding: '4px 14px', borderRadius: 9999, fontSize: '0.7rem', fontWeight: 600, border: `1px solid ${slide.accent}40`, color: slide.accent, backgroundColor: `${slide.accent}12` }}>{slide.tag}</span>
+                  </div>
+                  <h2 style={{ fontWeight: 800, fontSize: 'clamp(2rem, 3.6vw, 3.5rem)', lineHeight: 1.0, color: '#ffffff', marginBottom: 20, whiteSpace: 'pre-line' }}>{slide.title}</h2>
+                  <p style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 300, lineHeight: 1.75, maxWidth: 400, fontSize: '0.98rem' }}>{slide.description}</p>
                 </div>
-                <h2 style={{
-                  fontWeight: 800, fontSize: 'clamp(2.2rem, 3.8vw, 3.5rem)',
-                  color: 'white', lineHeight: 1.06, whiteSpace: 'pre-line',
-                  marginBottom: 24, letterSpacing: '-0.02em',
-                }}>{f.title}</h2>
-                <p style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 300, lineHeight: 1.75, fontSize: '1.05rem', maxWidth: 420 }}>{f.desc}</p>
-              </div>
-            ))}
-            {/* Counter */}
-            <div style={{ position: 'absolute', bottom: 48, left: 0, display: 'flex', alignItems: 'baseline', gap: 8 }}>
-              <span style={{ fontWeight: 800, fontSize: 'clamp(2.5rem, 4vw, 4rem)', color: active.accent, lineHeight: 1, transition: 'color 0.5s ease' }}>
-                {active.step}
-              </span>
-              <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 20, fontWeight: 300 }}>/ 04</span>
+              ))}
+            </div>
+            <div style={{ position: 'absolute', bottom: 48, left: 16, display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <span style={{ fontWeight: 800, fontSize: '2.8rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
+              <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '1.1rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
             </div>
           </div>
 
-          {/* Right — visuals */}
-          <div style={{ flex: 1, position: 'relative', height: '70vh', maxHeight: 520 }}>
-            {visuals.map((v, i) => (
-              <div key={i} style={{
-                position: 'absolute', inset: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                opacity: i === activeIndex ? 1 : 0,
-                transform: i === activeIndex ? 'translateY(0px) scale(1)' : i < activeIndex ? 'translateY(-30px) scale(0.97)' : 'translateY(30px) scale(0.97)',
-                transition: 'opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1)',
-                pointerEvents: i === activeIndex ? 'auto' : 'none',
-              }}>{v}</div>
-            ))}
+          {/* RIGHT */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px 24px 48px', position: 'relative' }}>
+            <div style={{ position: 'relative', width: '100%', maxWidth: 600, height: 520 }}>
+              {slides.map((slide, i) => (
+                <div key={i} style={{
+                  position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
+                  opacity: i === activeIndex ? 1 : 0,
+                  transform: i === activeIndex ? 'translateY(0px)' : 'translateY(20px)',
+                  transition: 'opacity 0.55s ease, transform 0.55s ease',
+                  pointerEvents: i === activeIndex ? 'auto' : 'none',
+                }}>
+                  <Visual index={i} accent={slide.accent} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </div>
   )
 }
+
+/* ════════════════════════════════════════════════════════ */
 
 const bizFeatures = [
   'Produkte wie Social-Media-Posts hochladen',
@@ -570,7 +610,7 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* FEATURES — sticky scroll */}
+      {/* FEATURES — sticky scroll, 1:1 von Hauptseite */}
       <FeatureShowcase />
 
       {/* KARTEN-VORSCHAU */}
