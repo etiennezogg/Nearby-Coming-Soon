@@ -261,34 +261,18 @@ function SearchVisual() {
 }
 
 function MapVisual() {
-  const stores = [
-    { label: 'Bäckerei Brunner', dist: '87 m', top: '30%', left: '35%' },
-    { label: 'Metzgerei Huwyler', dist: '142 m', top: '22%', left: '62%' },
-    { label: 'Biomarkt Seefeld', dist: '218 m', top: '60%', left: '28%' },
-    { label: 'Boutique Blanche', dist: '374 m', top: '56%', left: '65%' },
-  ]
   return (
-    <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 320 }}>
-      <div className="relative w-full h-full">
-        <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', gridTemplateRows: 'repeat(2, 256px)', justifyContent: 'center', alignContent: 'center' }}>
-          {['46012','46013'].map(y => ['68634','68635','68636'].map(x => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`} alt="" width={256} height={256} draggable={false} style={{ display: 'block' }} />
-          )))}
-        </div>
-        {stores.map((s, i) => (
-          <div key={i} className="absolute z-10" style={{ top: s.top, left: s.left, transform: 'translate(-50%,-100%)' }}>
-            <div className="bg-white rounded-xl px-3 py-1.5 shadow-lg text-center" style={{ minWidth: 130 }}>
-              <div className="text-xs font-semibold text-gray-900">{s.label}</div>
-              <div className="text-xs font-bold" style={{ color: '#3b82f6' }}>{s.dist}</div>
-            </div>
-            <div className="w-2 h-2 rounded-full mx-auto mt-0.5" style={{ background: '#3b82f6' }} />
-          </div>
-        ))}
-        <div className="absolute bottom-3 right-3 z-10 bg-white rounded-xl px-3 py-2 shadow text-xs font-medium text-gray-700 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-          4 Geschäfte in 374 m
-        </div>
+    <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 320, position: 'relative' }}>
+      {/* OSM iframe — Zug Innenstadt (Kolinplatz), kein See */}
+      <iframe
+        src="https://www.openstreetmap.org/export/embed.html?bbox=8.5105%2C47.1620%2C8.5260%2C47.1720&layer=mapnik"
+        style={{ border: 0, width: '100%', height: '100%' }}
+        title="Zug Innenstadt"
+      />
+      {/* Store badge overlay */}
+      <div style={{ position: 'absolute', bottom: 12, right: 12, zIndex: 10, background: 'white', borderRadius: 12, padding: '6px 12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', fontSize: 12, fontWeight: 500, color: '#374151', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#3b82f6', display: 'inline-block' }} />
+        4 Geschäfte in 374 m
       </div>
     </div>
   )
