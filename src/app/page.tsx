@@ -54,10 +54,10 @@ function ContainerScroll({ titleComponent, children }: { titleComponent: ReactNo
 
 /* ── Map Mockup ── */
 const matchaResults = [
-  { name: 'Tea House Genève', dist: '0.3 km', price: 'CHF 18.90', tag: 'Bio Matcha 30g' },
-  { name: 'Épicerie Japonaise', dist: '0.7 km', price: 'CHF 24.50', tag: 'Ceremonial Grade' },
-  { name: 'Globus Delicatessa', dist: '1.1 km', price: 'CHF 12.80', tag: 'Matcha Latte Pulver' },
-  { name: 'Bio Marché Carouge', dist: '1.4 km', price: 'CHF 9.90', tag: 'Matcha 50g' },
+  { name: 'Tea House Gardens', dist: '2.3 km', price: 'CHF 18.90', tag: 'Bio Matcha 30g', img: 'https://images.unsplash.com/photo-1704079698754-5e621edb610b?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
+  { name: 'Épicérie Japonaise', dist: '0.7 km', price: 'CHF 24.50', tag: 'Ceremonial Grade', img: 'https://images.unsplash.com/photo-1566373049939-704ea187ef98?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
+  { name: 'Global Delicatessen', dist: '1.1 km', price: 'CHF 12.80', tag: 'Matcha Latte Pulver', img: 'https://images.unsplash.com/photo-1605729988263-7752475299e5?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
+  { name: 'Bio Matcha Garage', dist: '1.4 km', price: 'CHF 9.90', tag: 'Matcha 50g', img: 'https://images.unsplash.com/photo-1565117661210-fd54898de423?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
 ]
 
 function MapMockup() {
@@ -119,15 +119,16 @@ function MapMockup() {
           </div>
           <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
             {matchaResults.map((r, i) => (
-              <div key={i} className="flex-shrink-0 bg-gray-50 border border-gray-100 rounded-xl p-2.5 w-36">
-                <div className="w-full h-10 rounded-lg mb-2 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #86efac, #22c55e)' }}>
-                  <span className="text-white text-lg">🍵</span>
-                </div>
-                <p className="text-xs font-semibold text-ink leading-tight truncate">{r.tag}</p>
-                <p className="text-xs text-gray-400 truncate">{r.name}</p>
-                <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-xs font-bold text-green">{r.price}</span>
-                  <span className="text-xs text-gray-400">{r.dist}</span>
+              <div key={i} className="flex-shrink-0 bg-white border border-gray-100 rounded-xl overflow-hidden w-40 shadow-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={r.img} alt={r.tag} className="w-full h-24 object-cover" draggable={false} />
+                <div className="p-2.5">
+                  <p className="text-xs font-semibold text-ink leading-tight truncate">{r.tag}</p>
+                  <p className="text-xs text-gray-400 truncate">{r.name}</p>
+                  <div className="flex items-center justify-between mt-1.5">
+                    <span className="text-xs font-bold text-green">{r.price}</span>
+                    <span className="text-xs text-gray-400">{r.dist}</span>
+                  </div>
                 </div>
               </div>
             ))}
