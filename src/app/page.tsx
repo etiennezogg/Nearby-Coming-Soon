@@ -212,10 +212,10 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
 }
 
 const features = [
-  { emoji: '📍', title: 'Produkte in der Nähe finden', desc: 'Gib ein was du suchst — Nearby zeigt dir sofort wo es in deiner Umgebung erhältlich ist, mit Distanz und Öffnungszeiten.' },
-  { emoji: '🛍️', title: 'Lokale Geschäfte entdecken', desc: 'Finde Bäckereien, Metzgereien, Boutiquen und mehr in deiner Nachbarschaft. Mit Profil, Bewertungen und Live-Sortiment.' },
-  { emoji: '💳', title: 'Digitale Wallet', desc: 'Alle Treuekarten, Cumulus-Punkte und Gutscheine an einem Ort. Immer dabei, nie vergessen.' },
-  { emoji: '⚡', title: 'Sofort verfügbar', desc: 'Kein Warten auf die Lieferung. Was du heute brauchst, holst du heute — direkt um die Ecke.' },
+  { emoji: '🔍', title: 'Was du brauchst. Direkt um die Ecke.', desc: 'Tippe ein Produkt ein — Nearby zeigt dir sofort welche Geschäfte es in deiner Umgebung haben. Mit Distanz, Öffnungszeiten und Echtzeit-Verfügbarkeit.' },
+  { emoji: '🗺️', title: 'Sieh wo es in deiner Nähe liegt.', desc: 'Die interaktive Karte zeigt dir alle Geschäfte in der Umgebung. Filter nach Kategorie, Distanz oder Öffnungszeit — alles auf einen Blick.' },
+  { emoji: '💳', title: 'Alle Karten. Ein Ort.', desc: 'Cumulus, IKEA Family, Gutscheine — alles digital in deiner Nearby Wallet. Barcode vorzeigen, fertig. Nie wieder Plastikstapel im Portemonnaie.' },
+  { emoji: '🏪', title: 'Sichtbar sein. Ohne Aufwand.', desc: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Ab CHF 29 / Monat.' },
 ]
 
 const bizFeatures = [
