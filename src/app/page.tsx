@@ -54,10 +54,10 @@ function ContainerScroll({ titleComponent, children }: { titleComponent: ReactNo
 
 /* ── Map Mockup ── */
 const matchaResults = [
-  { name: 'Tea House Gardens', dist: '2.3 km', price: 'CHF 18.90', tag: 'Bio Matcha 30g', img: 'https://images.unsplash.com/photo-1704079698754-5e621edb610b?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
-  { name: 'Épicérie Japonaise', dist: '0.7 km', price: 'CHF 24.50', tag: 'Ceremonial Grade', img: 'https://images.unsplash.com/photo-1566373049939-704ea187ef98?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
-  { name: 'Global Delicatessen', dist: '1.1 km', price: 'CHF 12.80', tag: 'Matcha Latte Pulver', img: 'https://images.unsplash.com/photo-1605729988263-7752475299e5?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
-  { name: 'Bio Matcha Garage', dist: '1.4 km', price: 'CHF 9.90', tag: 'Matcha 50g', img: 'https://images.unsplash.com/photo-1565117661210-fd54898de423?fm=jpg&q=80&w=400&h=300&auto=format&fit=crop' },
+  { name: 'Tea House Gardens', dist: '2.3 km', price: 'CHF 18.90', tag: 'Bio Matcha 30g', img: '/matcha-1.png' },
+  { name: 'Épicérie Japonaise', dist: '0.7 km', price: 'CHF 24.50', tag: 'Ceremonial Grade', img: '/matcha-2.png' },
+  { name: 'Global Delicatessen', dist: '1.1 km', price: 'CHF 12.80', tag: 'Matcha Latte Pulver', img: '/matcha-3.png' },
+  { name: 'Bio Matcha Garage', dist: '1.4 km', price: 'CHF 9.90', tag: 'Matcha 50g', img: '/matcha-4.png' },
 ]
 
 function MapMockup() {
