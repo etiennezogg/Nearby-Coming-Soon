@@ -351,37 +351,58 @@ function WalletVisual() {
   )
 }
 
-/* — BizVisual (1:1 von Hauptseite) — */
-const HEATMAP = [
-  [0.18, 0.12, 0.08, 0.28, 0.22, 0.42, 0.30],
-  [0.55, 0.48, 0.40, 0.62, 0.68, 0.72, 0.48],
-  [0.82, 0.92, 0.70, 1.00, 0.88, 0.60, 0.38],
-  [0.44, 0.58, 0.46, 0.72, 0.62, 0.32, 0.20],
-]
-const DAYS  = ['Mo','Di','Mi','Do','Fr','Sa','So']
-const TIMES = ['06–10','10–14','14–18','18–22']
-
+/* — BizVisual mit Aktienchart — */
 function BizVisual({ accent }: { accent: string }) {
+  const data = [
+    { day: 'Mo', v: 14 },
+    { day: 'Di', v: 22 },
+    { day: 'Mi', v: 18 },
+    { day: 'Do', v: 38 },
+    { day: 'Fr', v: 30 },
+    { day: 'Sa', v: 12 },
+    { day: 'So', v: 8  },
+  ]
+  const W = 360, H = 80
+  const maxV = Math.max(...data.map(d => d.v))
+  const xs = data.map((_, i) => 6 + (i / (data.length - 1)) * (W - 12))
+  const ys = data.map(d => 8 + (1 - d.v / maxV) * (H - 16))
+
+  // Smooth catmull-rom → cubic bezier, tension 0.35
+  const pathD = xs.map((x, i) => {
+    if (i === 0) return `M ${x.toFixed(1)},${ys[i].toFixed(1)}`
+    const x0 = xs[i-1], y0 = ys[i-1], x1 = x, y1 = ys[i]
+    const xp = i > 1 ? xs[i-2] : x0, yp = i > 1 ? ys[i-2] : y0
+    const xn = i < xs.length-1 ? xs[i+1] : x1, yn = i < ys.length-1 ? ys[i+1] : y1
+    const t = 0.35
+    return `C ${(x0+(x1-xp)*t).toFixed(1)},${(y0+(y1-yp)*t).toFixed(1)} ${(x1-(xn-x0)*t).toFixed(1)},${(y1-(yn-y0)*t).toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)}`
+  }).join(' ')
+
+  const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${H} L ${xs[0].toFixed(1)},${H} Z`
+  const peakIdx = data.findIndex(d => d.v === maxV)
+  const gradId = `g${accent.replace('#','')}`
+
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <div style={{ borderRadius: 18, overflow: 'hidden', height: 138, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
+      {/* Map heatmap section */}
+      <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
         <iframe
           src="https://www.openstreetmap.org/export/embed.html?bbox=8.524%2C47.370%2C8.556%2C47.388&layer=mapnik"
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'brightness(0.88) saturate(0.65)', pointerEvents: 'none' }}
-          scrolling="no"
-          title="biz-map"
+          scrolling="no" title="biz-map"
         />
         {[
           { top: '28%', left: '22%', r: 36 }, { top: '55%', left: '68%', r: 48 },
           { top: '38%', left: '60%', r: 30 }, { top: '72%', left: '35%', r: 26 },
           { top: '18%', left: '78%', r: 22 },
         ].map((b, i) => (
-          <div key={i} style={{ position: 'absolute', top: b.top, left: b.left, transform: 'translate(-50%,-50%)', width: b.r * 2, height: b.r * 2, borderRadius: '50%', background: `radial-gradient(circle, ${accent}55 0%, transparent 70%)`, pointerEvents: 'none' }} />
+          <div key={i} style={{ position: 'absolute', top: b.top, left: b.left, transform: 'translate(-50%,-50%)', width: b.r*2, height: b.r*2, borderRadius: '50%', background: `radial-gradient(circle, ${accent}55 0%, transparent 70%)`, pointerEvents: 'none' }} />
         ))}
         <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-50%)' }}>
           <div style={{ width: 13, height: 13, borderRadius: '50%', background: accent, border: '2.5px solid #fff', boxShadow: `0 0 14px ${accent}` }} />
         </div>
       </div>
+
+      {/* Product card */}
       <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', padding: '11px 14px', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
         <span style={{ fontSize: '1.35rem' }}>🧴</span>
         <div style={{ flex: 1 }}>
@@ -393,33 +414,49 @@ function BizVisual({ accent }: { accent: string }) {
           <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#fff' }}>Live</span>
         </div>
       </div>
+
+      {/* Stock chart */}
       <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px', flexShrink: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
           <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>Aufrufe diese Woche</span>
           <span style={{ fontSize: '0.7rem', color: accent }}>142 total · +12%</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          {HEATMAP.map((row, ri) => (
-            <div key={ri} style={{ display: 'flex', gap: 3, alignItems: 'center' }}>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.55)', width: 34, flexShrink: 0, fontWeight: 500 }}>{TIMES[ri]}</span>
-              {row.map((v, ci) => (
-                <div key={ci} style={{ flex: 1, height: 24, borderRadius: 5, background: accent, opacity: 0.1 + v * 0.9, position: 'relative' }}>
-                  {v >= 0.75 && (
-                    <span style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.42rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>
-                      {Math.round(v * 30)}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
+        <svg width="100%" viewBox={`0 0 ${W} ${H + 18}`} style={{ overflow: 'visible', display: 'block' }}>
+          <defs>
+            <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={accent} stopOpacity="0.28" />
+              <stop offset="100%" stopColor={accent} stopOpacity="0.02" />
+            </linearGradient>
+          </defs>
+          {/* Horizontal grid lines */}
+          {[0.33, 0.66].map((t, i) => (
+            <line key={i} x1={xs[0]} y1={8 + t * (H - 16)} x2={xs[xs.length-1]} y2={8 + t * (H - 16)}
+              stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 4" />
           ))}
-          <div style={{ display: 'flex', gap: 3, marginTop: 3 }}>
-            <span style={{ width: 34, flexShrink: 0 }} />
-            {DAYS.map(d => (
-              <div key={d} style={{ flex: 1, fontSize: '0.6rem', fontWeight: 500, color: 'rgba(255,255,255,0.45)', textAlign: 'center' }}>{d}</div>
-            ))}
-          </div>
-        </div>
+          {/* Area fill */}
+          <path d={areaD} fill={`url(#${gradId})`} />
+          {/* Line */}
+          <path d={pathD} fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* All dots — small */}
+          {xs.map((x, i) => (
+            <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? accent : 'rgba(255,255,255,0.18)'} />
+          ))}
+          {/* Peak tooltip */}
+          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 14})`}>
+            <rect x="-18" y="-11" width="36" height="16" rx="5" fill={accent} />
+            <text x="0" y="0" textAnchor="middle" fill="#fff" fontSize="8.5" fontWeight="700">
+              {data[peakIdx].v} Aufr.
+            </text>
+          </g>
+          {/* X-axis day labels */}
+          {data.map((d, i) => (
+            <text key={d.day} x={xs[i]} y={H + 16} textAnchor="middle"
+              fill={i === peakIdx ? accent : 'rgba(255,255,255,0.35)'}
+              fontSize="9" fontWeight={i === peakIdx ? '700' : '500'}>
+              {d.day}
+            </text>
+          ))}
+        </svg>
       </div>
     </div>
   )
