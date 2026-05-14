@@ -83,24 +83,24 @@ function MapMockup() {
         </div>
       </div>
 
-      {/* Zug map — OSM tiles zoom 16 in CSS grid */}
-      <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', gridTemplateRows: 'repeat(3, 256px)', justifyContent: 'center', alignContent: 'center' }}>
-        {['23005','23006','23007'].map(y =>
-          ['34316','34317','34318'].map(x => (
+      {/* Zug Altstadt — OSM tiles zoom 17, 5×4 grid filling card */}
+      <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 256px)', gridTemplateRows: 'repeat(4, 256px)', justifyContent: 'center', alignContent: 'center', margin: '-2px' }}>
+        {['46011','46012','46013','46014'].map(y =>
+          ['68635','68636','68637','68638','68639'].map(x => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/16/${x}/${y}.png`}
+            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`}
               alt="" width={256} height={256} draggable={false}
-              style={{ display: 'block', imageRendering: 'auto' }} />
+              style={{ display: 'block' }} />
           ))
         )}
       </div>
 
-      {/* Store pins */}
+      {/* Store pins — Zug Altstadt */}
       {[
-        { left: '28%', top: '38%' },
-        { left: '50%', top: '24%' },
-        { left: '62%', top: '50%' },
-        { left: '20%', top: '60%' },
+        { left: '68%', top: '30%' },
+        { left: '78%', top: '48%' },
+        { left: '60%', top: '55%' },
+        { left: '72%', top: '65%' },
       ].map((pos, i) => (
         <div key={`pin${i}`} className="absolute z-10 flex flex-col items-center" style={{ left: pos.left, top: pos.top, transform: 'translate(-50%,-100%)' }}>
           <div className="bg-green text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg whitespace-nowrap">
