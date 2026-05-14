@@ -212,11 +212,181 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
 }
 
 const features = [
-  { emoji: '🔍', title: 'Was du brauchst. Direkt um die Ecke.', desc: 'Tippe ein Produkt ein — Nearby zeigt dir sofort welche Geschäfte es in deiner Umgebung haben. Mit Distanz, Öffnungszeiten und Echtzeit-Verfügbarkeit.' },
-  { emoji: '🗺️', title: 'Sieh wo es in deiner Nähe liegt.', desc: 'Die interaktive Karte zeigt dir alle Geschäfte in der Umgebung. Filter nach Kategorie, Distanz oder Öffnungszeit — alles auf einen Blick.' },
-  { emoji: '💳', title: 'Alle Karten. Ein Ort.', desc: 'Cumulus, IKEA Family, Gutscheine — alles digital in deiner Nearby Wallet. Barcode vorzeigen, fertig. Nie wieder Plastikstapel im Portemonnaie.' },
-  { emoji: '🏪', title: 'Sichtbar sein. Ohne Aufwand.', desc: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Ab CHF 29 / Monat.' },
+  {
+    step: '01', tag: 'Suchen', accent: '#22c55e',
+    title: 'Was du brauchst.\nDirekt um die Ecke.',
+    desc: 'Tippe ein Produkt ein — Nearby zeigt dir sofort welche Geschäfte es in deiner Umgebung haben. Mit Distanz, Öffnungszeiten und Echtzeit-Verfügbarkeit.',
+  },
+  {
+    step: '02', tag: 'Karte', accent: '#3b82f6',
+    title: 'Sieh wo es\nin deiner Nähe liegt.',
+    desc: 'Die interaktive Karte zeigt dir alle Geschäfte in der Umgebung. Filter nach Kategorie, Distanz oder Öffnungszeit — alles auf einen Blick.',
+  },
+  {
+    step: '03', tag: 'Wallet', accent: '#f59e0b',
+    title: 'Alle Karten.\nEin Ort.',
+    desc: 'Cumulus, IKEA Family, Gutscheine — alles digital in deiner Nearby Wallet. Barcode vorzeigen, fertig. Nie wieder Plastikstapel im Portemonnaie.',
+  },
+  {
+    step: '04', tag: 'Für Geschäfte', accent: '#a78bfa',
+    title: 'Sichtbar sein.\nOhne Aufwand.',
+    desc: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Ab CHF 29 / Monat.',
+  },
 ]
+
+function SearchVisual() {
+  const suggestions = ['Bio Rindfleisch','Biofleisch Metzgerei','Biowurst','Bio Milch']
+  return (
+    <div className="w-full space-y-3">
+      <div className="flex items-center gap-3 bg-white rounded-full px-6 py-4 shadow-2xl">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span className="flex-1 text-sm font-medium text-gray-800">Biofleisch</span>
+        <div className="flex items-center gap-1.5 border-l pl-4">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span className="text-xs text-gray-500 whitespace-nowrap">Zürich</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div className="bg-ink text-white text-xs font-medium px-4 py-2 rounded-xl flex-shrink-0">Suchen →</div>
+      </div>
+      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="px-5 py-3 border-b border-gray-50">
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Vorschläge</span>
+        </div>
+        {suggestions.map((s, i) => (
+          <div key={s} className={`flex items-center justify-between px-5 py-3 ${i < suggestions.length - 1 ? 'border-b border-gray-50' : ''} ${i === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+            <div className="flex items-center gap-3">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span className={`text-sm ${i === 0 ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>{s}</span>
+            </div>
+            <span className="text-xs" style={{ color: i === 0 ? '#22c55e' : '#9ca3af' }}>Lebensmittel</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function MapVisual() {
+  const stores = [
+    { label: 'Bäckerei Brunner', dist: '87 m', top: '30%', left: '35%' },
+    { label: 'Metzgerei Huwyler', dist: '142 m', top: '22%', left: '62%' },
+    { label: 'Biomarkt Seefeld', dist: '218 m', top: '60%', left: '28%' },
+    { label: 'Boutique Blanche', dist: '374 m', top: '56%', left: '65%' },
+  ]
+  return (
+    <div className="w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 320 }}>
+      <div className="relative w-full h-full">
+        <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', gridTemplateRows: 'repeat(2, 256px)', justifyContent: 'center', alignContent: 'center' }}>
+          {['46012','46013'].map(y => ['68634','68635','68636'].map(x => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`} alt="" width={256} height={256} draggable={false} style={{ display: 'block' }} />
+          )))}
+        </div>
+        {stores.map((s, i) => (
+          <div key={i} className="absolute z-10" style={{ top: s.top, left: s.left, transform: 'translate(-50%,-100%)' }}>
+            <div className="bg-white rounded-xl px-3 py-1.5 shadow-lg text-center" style={{ minWidth: 130 }}>
+              <div className="text-xs font-semibold text-gray-900">{s.label}</div>
+              <div className="text-xs font-bold" style={{ color: '#3b82f6' }}>{s.dist}</div>
+            </div>
+            <div className="w-2 h-2 rounded-full mx-auto mt-0.5" style={{ background: '#3b82f6' }} />
+          </div>
+        ))}
+        <div className="absolute bottom-3 right-3 z-10 bg-white rounded-xl px-3 py-2 shadow text-xs font-medium text-gray-700 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+          4 Geschäfte in 374 m
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function WalletVisual() {
+  const cards = [
+    { color: '#7c3f1e', label: 'Tchibo' },
+    { color: '#1a1a1a', label: '' },
+    { color: '#c0392b', label: '' },
+    { color: '#2563eb', label: '' },
+    { color: '#f59e0b', label: '' },
+    { color: '#e5e7eb', label: '' },
+    { color: '#92400e', label: '' },
+  ]
+  return (
+    <div className="flex items-center justify-center" style={{ height: 280 }}>
+      <div className="relative" style={{ width: 340, height: 220 }}>
+        {cards.map((c, i) => (
+          <div key={i} className="absolute rounded-2xl shadow-2xl"
+            style={{ width: 240, height: 155, background: c.color, left: i * 18, top: i * 4, transform: `rotate(${-8 + i * 2}deg) translateZ(${i}px)`, zIndex: cards.length - i, border: '1px solid rgba(255,255,255,0.1)' }}>
+            {i === 0 && (
+              <div className="p-5">
+                <div className="text-white/80 text-sm font-semibold italic">Tchibo</div>
+                <div className="text-white/40 text-xs mt-1">CARD</div>
+                <div className="absolute bottom-4 left-5 text-white/50 text-xs">•••• 9911</div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function BizVisual() {
+  const days = ['Mo','Di','Mi','Do','Fr','Sa','So']
+  const rows = [
+    [0,0,0,0,0,0,0],
+    [1,2,0,2,1,1,0],
+    [2,3,1,3,2,1,0],
+    [1,1,0,1,1,0,0],
+  ]
+  const times = ['06–10','10–14','14–18','18–22']
+  return (
+    <div className="w-full space-y-3">
+      <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/10" style={{ height: 100 }}>
+        <div className="absolute inset-0 overflow-hidden rounded-2xl" style={{ position: 'relative', height: 100 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 256px)', position: 'absolute', inset: 0, top: -60, justifyContent: 'center' }}>
+            {['46012','46013'].slice(0,1).map(y => ['68634','68635','68636'].map(x => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`} alt="" width={256} height={256} draggable={false} style={{ display: 'block' }} />
+            )))}
+          </div>
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+      </div>
+      <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-sm">🧴</div>
+            <div>
+              <div className="text-white text-sm font-semibold">Lotion Naturelle</div>
+              <div className="text-white/40 text-xs">Apotheke Goldbach</div>
+            </div>
+          </div>
+          <div className="bg-green text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-white" />Live
+          </div>
+        </div>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-white/60 text-xs">Aufrufe diese Woche</span>
+          <span className="text-xs font-semibold" style={{ color: '#a78bfa' }}>142 total · +12%</span>
+        </div>
+        <div className="grid gap-1" style={{ gridTemplateColumns: `40px repeat(7, 1fr)` }}>
+          {rows.map((row, ri) => (
+            <>
+              <div key={`t${ri}`} className="text-white/30 text-xs flex items-center">{times[ri]}</div>
+              {row.map((v, ci) => (
+                <div key={ci} className="h-6 rounded" style={{ background: v === 0 ? 'rgba(167,139,250,0.15)' : v === 1 ? 'rgba(167,139,250,0.4)' : v === 2 ? 'rgba(167,139,250,0.65)' : 'rgba(167,139,250,0.9)' }}>
+                  {v === 3 && <div className="text-white text-xs flex items-center justify-center h-full font-bold">{[25,28,30,26][ci % 4]}</div>}
+                </div>
+              ))}
+            </>
+          ))}
+          <div />
+          {days.map(d => <div key={d} className="text-white/30 text-xs text-center">{d}</div>)}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const bizFeatures = [
   'Produkte wie Social-Media-Posts hochladen',
@@ -309,24 +479,41 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* FEATURES */}
-      <section className="px-6 md:px-10 py-24 max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-16">
-          <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">Für Käufer</p>
-          <h2 className="font-syne font-extrabold text-ink tracking-tight leading-tight" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            Alles was du suchst —<br /><span className="text-gray-400 font-light font-dm">direkt um die Ecke.</span>
-          </h2>
-        </motion.div>
-        <div className="grid md:grid-cols-2 gap-6">
-          {features.map((f, i) => (
-            <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="bg-gray-50 rounded-2xl p-7 border border-gray-100">
-              <span className="text-3xl mb-4 block">{f.emoji}</span>
-              <h3 className="font-syne font-bold text-ink text-lg mb-2">{f.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed font-light">{f.desc}</p>
+      {/* FEATURES — Dark showcase style */}
+      <section style={{ background: '#0d0d0d' }}>
+        {features.map((f, i) => {
+          const visuals = [<SearchVisual key="s" />, <MapVisual key="m" />, <WalletVisual key="w" />, <BizVisual key="b" />]
+          return (
+            <motion.div key={f.step} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.6 }}
+              className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 py-20 border-b border-white/5">
+              <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+                {/* Left: text */}
+                <div>
+                  <div className="flex items-center gap-3 mb-8">
+                    <span className="text-sm font-mono text-white/30">{f.step}</span>
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full border"
+                      style={{ color: f.accent, borderColor: f.accent + '40', background: f.accent + '15' }}>
+                      {f.tag}
+                    </span>
+                  </div>
+                  <h2 className="font-syne font-extrabold text-white leading-tight mb-6 whitespace-pre-line"
+                    style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)' }}>
+                    {f.title}
+                  </h2>
+                  <p className="text-white/50 font-light leading-relaxed" style={{ fontSize: '1.05rem', maxWidth: 440 }}>
+                    {f.desc}
+                  </p>
+                  <div className="mt-16 flex items-baseline gap-2">
+                    <span className="font-syne font-extrabold" style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', color: f.accent }}>{f.step}</span>
+                    <span className="text-white/20 text-xl font-light">/ 04</span>
+                  </div>
+                </div>
+                {/* Right: visual */}
+                <div>{visuals[i]}</div>
+              </div>
             </motion.div>
-          ))}
-        </div>
+          )
+        })}
       </section>
 
       {/* KARTEN-VORSCHAU — Scroll Animation */}
