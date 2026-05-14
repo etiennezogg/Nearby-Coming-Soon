@@ -86,7 +86,7 @@ function MapMockup() {
       {/* Zug Altstadt — OSM tiles zoom 17, shifted west towards old town */}
       <div className="absolute inset-0 overflow-hidden" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 256px)', gridTemplateRows: 'repeat(4, 256px)', justifyContent: 'center', alignContent: 'center', margin: '-2px' }}>
         {['46011','46012','46013','46014'].map(y =>
-          ['68633','68634','68635','68636','68637'].map(x => (
+          ['68637','68638','68639','68640','68641'].map(x => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`}
               alt="" width={256} height={256} draggable={false}
@@ -97,10 +97,10 @@ function MapMockup() {
 
       {/* Store pins — Goldgasse, Kolinplatz, Kirchenstrasse, Unter-Altstadt */}
       {[
-        { left: '52%', top: '22%' },
-        { left: '38%', top: '42%' },
-        { left: '55%', top: '52%' },
-        { left: '42%', top: '62%' },
+        { left: '22%', top: '25%' },
+        { left: '15%', top: '45%' },
+        { left: '32%', top: '50%' },
+        { left: '20%', top: '65%' },
       ].map((pos, i) => (
         <div key={`pin${i}`} className="absolute z-10 flex flex-col items-center" style={{ left: pos.left, top: pos.top, transform: 'translate(-50%,-100%)' }}>
           <div className="bg-green text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg whitespace-nowrap">
