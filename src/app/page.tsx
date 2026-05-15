@@ -706,9 +706,9 @@ export default function ComingSoonPage() {
                 desc: 'Sieh wer dein Profil besucht, welche Produkte klicken und wann die Nachfrage steigt.',
               },
               {
-                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
-                title: 'Ab CHF 29 / Monat',
-                desc: 'Keine Einrichtungsgebühr. Kein Jahresvertrag. Jederzeit kündbar.',
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+                title: 'Schweizer Qualität',
+                desc: 'Entwickelt in der Schweiz, für Schweizer Geschäfte. Deine Daten bleiben in der Schweiz.',
               },
             ].map((item, i) => (
               <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.5 }}
