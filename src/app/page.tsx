@@ -580,8 +580,8 @@ const bizFeatures = [
 ]
 
 const stats = [
-  { value: '4200+', label: 'Lokale Geschäfte' },
-  { value: '38000+', label: 'Produkte verfügbar' },
+  { value: '50\'000+', label: 'Lokale Geschäfte in der Schweiz' },
+  { value: '12\'700+', label: 'Hofläden & Direktvermarkter' },
   { value: '2.4 kg', label: 'CO₂ gespart pro Einkauf' },
   { value: '< 5 km', label: 'Ø Distanz zum Produkt' },
 ]
@@ -642,7 +642,7 @@ export default function ComingSoonPage() {
           <div className="space-y-5 text-gray-600 font-light leading-relaxed text-base md:text-lg max-w-3xl">
             <p className="text-xl md:text-2xl font-medium text-ink leading-snug">Das Produkt das du suchst liegt oft nur 500 Meter entfernt. Du weisst es bloss nicht.</p>
             <p>89% der Schweizer:innen kaufen lieber lokal als online — aber sie finden die lokalen Angebote nicht. Also wird online bestellt — oft im Ausland. Dabei wäre das gleiche Produkt direkt um die Ecke verfügbar.</p>
-            <p>Über <strong className="text-ink font-medium">600'000 Läden, Hofläden und Bäckereien</strong> in der Schweiz haben kein digitales Schaufenster. Nearby gibt ihnen eines — und dir die Möglichkeit, ihr Angebot in Sekunden zu finden.</p>
+            <p>Über <strong className="text-ink font-medium">50'000 Läden, Hofläden und Bäckereien</strong> in der Schweiz haben kein digitales Schaufenster. Nearby gibt ihnen eines — und dir die Möglichkeit, ihr Angebot in Sekunden zu finden.</p>
             <p>Kein Warten. Keine Liefergebühren. Einfach suchen, hingehen, kaufen.</p>
           </div>
         </motion.div>
