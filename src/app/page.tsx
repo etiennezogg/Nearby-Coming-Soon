@@ -583,7 +583,7 @@ const stats = [
   { value: '60\'000+', label: 'Läden & Hofläden in der Schweiz' },
   { value: '1 Mio.+', label: 'Produkte im Schweizer Handel' },
   { value: '2.4 kg', label: 'CO₂ gespart pro Einkauf' },
-  { value: '< 500 m', label: 'Ø Distanz zum nächsten Produkt' },
+  { value: '∅ 330 m', label: 'Distanz zum nächsten Laden' },
 ]
 
 export default function ComingSoonPage() {
