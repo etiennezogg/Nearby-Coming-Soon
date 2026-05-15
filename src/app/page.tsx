@@ -669,22 +669,64 @@ export default function ComingSoonPage() {
 
       {/* FÜR UNTERNEHMEN */}
       <section className="px-6 md:px-10 py-24 bg-ink">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-14">
             <p className="text-xs uppercase tracking-widest text-green mb-4">Für Unternehmen</p>
             <h2 className="font-syne font-extrabold text-white tracking-tight leading-tight mb-4" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-              Zeig der Welt,<br />was du anbietest.
+              Dein Geschäft.<br />Digital sichtbar.
             </h2>
-            <p className="text-white/70 font-light leading-relaxed max-w-xl mb-10">Nearby gibt lokalen Geschäften eine digitale Bühne. Präsentiere dein Sortiment deinen Kundinnen und Kunden direkt in der Umgebung — einfach, schnell und ohne technische Hürden.</p>
-            <div className="grid md:grid-cols-2 gap-4">
-              {bizFeatures.map((feature, i) => (
-                <motion.div key={feature} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
-                  className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white/85">{feature}</motion.div>
-              ))}
-            </div>
-            <div className="mt-12 flex justify-start">
-              <EmailSignup variant="dark" />
-            </div>
+            <p className="text-white/50 font-light leading-relaxed max-w-xl">Nearby gibt lokalen Geschäften eine digitale Bühne — einfach einrichten, sofort sichtbar, messbar wirksam.</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-5 mb-14">
+            {[
+              {
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
+                title: 'In 5 Minuten live',
+                desc: 'Produkte hochladen wie einen Social-Media-Post. Kein technisches Know-how nötig.',
+              },
+              {
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
+                title: 'Lokal gefunden werden',
+                desc: 'Automatisch auf der Karte für alle Kunden in deiner Nähe sichtbar — ohne Werbung.',
+              },
+              {
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+                title: 'Neue Kunden erreichen',
+                desc: 'Kunden die aktiv nach Produkten in der Nähe suchen — kaufbereit, ohne Umweg.',
+              },
+              {
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,
+                title: 'Digitale Treuekarten',
+                desc: 'Eigene Stempelkarten und Gutscheine direkt in der Nearby Wallet deiner Kunden.',
+              },
+              {
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
+                title: 'Echte Statistiken',
+                desc: 'Sieh wer dein Profil besucht, welche Produkte klicken und wann die Nachfrage steigt.',
+              },
+              {
+                icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+                title: 'Ab CHF 29 / Monat',
+                desc: 'Keine Einrichtungsgebühr. Kein Jahresvertrag. Jederzeit kündbar.',
+              },
+            ].map((item, i) => (
+              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.5 }}
+                className="rounded-2xl border border-white/8 bg-white/4 p-6 flex flex-col gap-4 hover:bg-white/7 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-green/15 flex items-center justify-center text-green flex-shrink-0">
+                  {item.icon}
+                </div>
+                <div>
+                  <div className="text-white font-semibold text-sm mb-1.5">{item.title}</div>
+                  <div className="text-white/45 text-sm font-light leading-relaxed">{item.desc}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <p className="text-white/40 text-sm mb-6">Interesse? Trag dich ein — wir kontaktieren dich persönlich zum Launch.</p>
+            <EmailSignup variant="dark" />
           </motion.div>
         </div>
       </section>
