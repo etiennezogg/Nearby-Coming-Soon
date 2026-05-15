@@ -192,7 +192,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
                 ? isDark ? 'bg-white text-ink shadow-sm' : 'bg-white text-ink shadow-sm'
                 : isDark ? 'text-white/50' : 'text-gray-400'
             }`}>
-            {r === 'kunde' ? '🛍 Ich bin Kunde' : '🏪 Ich bin Verkäufer'}
+            {r === 'kunde' ? 'Ich bin Kunde' : 'Ich bin Verkäufer'}
           </button>
         ))}
       </div>
