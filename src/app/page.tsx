@@ -649,13 +649,13 @@ export default function ComingSoonPage() {
       </section>
 
       {/* STATS */}
-      <section className="border-y border-gray-100">
-        <div className="grid grid-cols-2 md:grid-cols-4 max-w-5xl mx-auto">
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8">
           {stats.map((s, i) => (
-            <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="p-8 md:p-12 border-r border-gray-100 last:border-r-0 [&:nth-child(2)]:border-r-0 md:[&:nth-child(2)]:border-r text-center">
-              <div className="font-syne font-extrabold text-4xl md:text-5xl tracking-tight text-green mb-2">{s.value}</div>
-              <div className="text-sm text-gray-500">{s.label}</div>
+            <motion.div key={s.label} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
+              className="flex flex-col gap-2">
+              <div className="font-syne font-extrabold tracking-tight text-ink leading-none whitespace-nowrap" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' }}>{s.value}</div>
+              <div className="text-xs text-gray-400 uppercase tracking-widest leading-snug max-w-[160px]">{s.label}</div>
             </motion.div>
           ))}
         </div>
