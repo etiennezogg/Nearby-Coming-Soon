@@ -137,6 +137,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const [email, setEmail] = useState('')
   const [kanton, setKanton] = useState('')
   const [gemeinde, setGemeinde] = useState('')
+  const [role, setRole] = useState<'kunde' | 'verkäufer'>('kunde')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -147,7 +148,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
     if (!kanton) { setError('Bitte Kanton auswählen.'); return }
     setLoading(true)
     setError('')
-    const { error } = await supabase.from('waitlist').insert({ name: name.trim(), email, kanton, gemeinde: gemeinde || null })
+    const { error } = await supabase.from('waitlist').insert({ name: name.trim(), email, kanton, gemeinde: gemeinde || null, role })
     setLoading(false)
     if (error && error.code === '23505') {
       setSubmitted(true)
@@ -182,6 +183,19 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
 
   return (
     <div className="flex flex-col gap-3 w-full max-w-md">
+      {/* Rolle-Toggle */}
+      <div className={`flex rounded-2xl p-1 ${isDark ? 'bg-white/10' : 'bg-gray-100'}`}>
+        {(['kunde', 'verkäufer'] as const).map(r => (
+          <button key={r} onClick={() => setRole(r)} type="button"
+            className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              role === r
+                ? isDark ? 'bg-white text-ink shadow-sm' : 'bg-white text-ink shadow-sm'
+                : isDark ? 'text-white/50' : 'text-gray-400'
+            }`}>
+            {r === 'kunde' ? '🛍 Ich bin Kunde' : '🏪 Ich bin Verkäufer'}
+          </button>
+        ))}
+      </div>
       <input type="text" value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder="Dein Name *" className={cls} />
       <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder="deine@email.ch *" className={cls} />
       <div className="relative">
@@ -724,10 +738,6 @@ export default function ComingSoonPage() {
             ))}
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-white/40 text-sm mb-6">Interesse? Trag dich ein — wir kontaktieren dich persönlich zum Launch.</p>
-            <EmailSignup variant="dark" />
-          </motion.div>
         </div>
       </section>
 
