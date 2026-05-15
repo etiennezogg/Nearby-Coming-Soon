@@ -607,23 +607,23 @@ export default function ComingSoonPage() {
         <motion.div className="absolute pointer-events-none rounded-full"
           style={{ width: 500, height: 500, right: '-10%', bottom: '-15%', background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%)', filter: 'blur(60px)' }}
           animate={{ y: [0, 40, 0], x: [0, -30, 0] }} transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }} />
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className="relative z-10 text-center max-w-3xl w-full">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className="relative z-10 text-center max-w-5xl w-full">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }}
             className="inline-flex items-center gap-2 bg-white/20 border border-white/30 text-white text-xs font-medium px-4 py-1.5 rounded-full mb-8 tracking-wide backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
             Bald verfügbar in der Schweiz
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-6" style={{ fontSize: 'clamp(4.5rem, 13vw, 10rem)' }}>
+            className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-8" style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
             Nearby.
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
-            className="text-white/85 text-lg md:text-xl font-light leading-relaxed max-w-xl mx-auto mb-3">
+            className="text-white/90 font-semibold leading-snug max-w-3xl mx-auto mb-5" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)' }}>
             Lokales Einkaufen, neu gedacht.
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }}
-            className="text-white/65 text-base font-light leading-relaxed max-w-lg mx-auto">
-            Entdecke Produkte aus lokalen Geschäften direkt in deiner Nähe — frisch, sofort verfügbar, ohne Liefergebühren.
+            className="text-white/70 font-light leading-relaxed max-w-2xl mx-auto" style={{ fontSize: 'clamp(1.05rem, 1.8vw, 1.3rem)' }}>
+            Dein Lieblingsprodukt ist längst um die Ecke. Du hast es bloss noch nie gefunden — weil über 60'000 Läden und Hofläden in der Schweiz kein digitales Schaufenster haben. Das ändert sich jetzt.
           </motion.p>
         </motion.div>
         <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2" initial={{ opacity: 0 }}
