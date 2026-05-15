@@ -580,10 +580,10 @@ const bizFeatures = [
 ]
 
 const stats = [
-  { value: '50\'000+', label: 'Lokale Geschäfte in der Schweiz' },
-  { value: '12\'700+', label: 'Hofläden & Direktvermarkter' },
+  { value: '60\'000+', label: 'Läden & Hofläden in der Schweiz' },
+  { value: '1 Mio.+', label: 'Produkte im Schweizer Handel' },
   { value: '2.4 kg', label: 'CO₂ gespart pro Einkauf' },
-  { value: '< 5 km', label: 'Ø Distanz zum Produkt' },
+  { value: '< 500 m', label: 'Ø Distanz zum nächsten Produkt' },
 ]
 
 export default function ComingSoonPage() {
