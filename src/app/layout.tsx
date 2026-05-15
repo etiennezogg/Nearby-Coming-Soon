@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: 'Nearby',
     images: [
       {
-        url: 'https://nearby-switzerland.ch/og-image.jpg',
+        url: 'https://nearby-switzerland.ch/og-image.png',
         width: 1344,
         height: 768,
         alt: 'Nearby — Lokales Einkaufen, neu gedacht.',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Nearby — Lokales Einkaufen, neu gedacht.',
     description: 'Entdecke Produkte aus lokalen Geschäften direkt in deiner Nähe.',
-    images: ['https://nearby-switzerland.ch/og-image.jpg'],
+    images: ['https://nearby-switzerland.ch/og-image.png'],
   },
 }
 
