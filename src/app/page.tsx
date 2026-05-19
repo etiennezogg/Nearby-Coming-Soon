@@ -2,12 +2,6 @@
 
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useRef, useState, useEffect, useCallback, ReactNode } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 const kantone = [
   'Aargau','Appenzell Ausserrhoden','Appenzell Innerrhoden','Basel-Landschaft','Basel-Stadt',
@@ -138,6 +132,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const [kanton, setKanton] = useState('')
   const [gemeinde, setGemeinde] = useState('')
   const [role, setRole] = useState<'kunde' | 'verkäufer'>('kunde')
+  const [honeypot, setHoneypot] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -148,11 +143,15 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
     if (!kanton) { setError('Bitte Kanton auswählen.'); return }
     setLoading(true)
     setError('')
-    const { error } = await supabase.from('waitlist').insert({ name: name.trim(), email, kanton, gemeinde: gemeinde || null, role })
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name.trim(), email, kanton, gemeinde: gemeinde || null, role, website: honeypot }),
+    })
     setLoading(false)
-    if (error && error.code === '23505') {
-      setSubmitted(true)
-    } else if (error) {
+    if (res.status === 429) {
+      setError('Zu viele Versuche. Bitte warte eine Stunde.')
+    } else if (!res.ok) {
       setError('Etwas ist schiefgelaufen. Bitte versuch es nochmals.')
     } else {
       setSubmitted(true)
@@ -208,6 +207,8 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
         </svg>
       </div>
       <input type="text" value={gemeinde} onChange={e => setGemeinde(e.target.value)} placeholder="Gemeinde (optional)" className={cls} />
+      {/* Honeypot: hidden from real users, bots fill it */}
+      <input type="text" value={honeypot} onChange={e => setHoneypot(e.target.value)} tabIndex={-1} aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }} />
       {error && <p className={`text-xs ${isDark ? 'text-red-300' : 'text-red-500'}`}>{error}</p>}
       <motion.button whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }} onClick={handleSubmit} disabled={loading}
         className={`w-full py-4 rounded-2xl text-sm font-medium font-dm shadow-lg transition-opacity disabled:opacity-60 ${isDark ? 'bg-white text-ink hover:opacity-90' : 'bg-green text-white hover:opacity-90'}`}>
