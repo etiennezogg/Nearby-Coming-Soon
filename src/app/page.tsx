@@ -155,6 +155,14 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
       setError('Etwas ist schiefgelaufen. Bitte versuch es nochmals.')
     } else {
       setSubmitted(true)
+      setTimeout(() => {
+        setSubmitted(false)
+        setName('')
+        setEmail('')
+        setKanton('')
+        setGemeinde('')
+        setRole('kunde')
+      }, 4000)
     }
   }
 
