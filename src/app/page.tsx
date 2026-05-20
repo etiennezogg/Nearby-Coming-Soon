@@ -408,11 +408,16 @@ function BizVisual({ accent }: { accent: string }) {
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
       {/* Map heatmap section */}
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
-        <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.524%2C47.370%2C8.556%2C47.388&layer=mapnik"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', pointerEvents: 'none' }}
-          scrolling="no" title="biz-map"
-        />
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: -73, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'row', gap: 0 }}>
+            {['68645','68646','68647','68648','68649'].map(x => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={x} src={`https://tile.openstreetmap.org/17/${x}/46006.png`}
+                alt="" width={256} height={256} draggable={false}
+                style={{ display: 'block', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', flexShrink: 0 }} />
+            ))}
+          </div>
+        </div>
         {[
           { top: '28%', left: '22%', r: 36 }, { top: '55%', left: '68%', r: 48 },
           { top: '38%', left: '60%', r: 30 }, { top: '72%', left: '35%', r: 26 },
@@ -861,3 +866,4 @@ export default function ComingSoonPage() {
     </div>
   )
 }
+
