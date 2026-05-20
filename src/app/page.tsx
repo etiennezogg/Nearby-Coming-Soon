@@ -532,7 +532,7 @@ function FeatureShowcase() {
           /* ── MOBILE LAYOUT ── */
           <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 20px 28px' }}>
             {/* Step pills */}
-            <div style={{ display: 'flex', gap: 8, paddingTop: 28, paddingBottom: 20, flexShrink: 0 }}>
+            <div style={{ display: 'flex', gap: 8, paddingTop: 76, paddingBottom: 20, flexShrink: 0 }}>
               {slides.map((_, i) => (
                 <button key={i} onClick={() => scrollToSlide(i)}
                   style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, flexShrink: 0,
