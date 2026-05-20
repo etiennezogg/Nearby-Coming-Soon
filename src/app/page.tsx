@@ -298,12 +298,16 @@ function MapVisual({ accent }: { accent: string }) {
   const userTop = '44%', userLeft = '50%'
   return (
     <div style={{ position: 'relative', width: '100%', borderRadius: 22, overflow: 'hidden', aspectRatio: '16/10' }}>
-      <iframe
-        src="https://www.openstreetmap.org/export/embed.html?bbox=8.546%2C47.354%2C8.566%2C47.364&layer=mapnik"
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'brightness(0.96) saturate(0.9)', pointerEvents: 'none' }}
-        scrolling="no"
-        title="map"
-      />
+      <div style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(5, 256px)', gridTemplateRows: 'repeat(3, 256px)', justifyContent: 'center', alignContent: 'center' }}>
+        {['46011','46012','46013'].flatMap(y =>
+          ['68634','68635','68636','68637','68638'].map(x => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`}
+              alt="" width={256} height={256} draggable={false}
+              style={{ display: 'block', filter: 'brightness(0.97) saturate(0.88)' }} />
+          ))
+        )}
+      </div>
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.25) 100%)', pointerEvents: 'none' }} />
       {stores.map(store => (
         <div key={store.label} style={{ position: 'absolute', top: store.top, left: store.left, transform: 'translate(-50%, -50%)', zIndex: 10 }}>
@@ -400,11 +404,16 @@ function BizVisual({ accent }: { accent: string }) {
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
       {/* Map heatmap section */}
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
-        <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.524%2C47.370%2C8.556%2C47.388&layer=mapnik"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'brightness(0.88) saturate(0.65)', pointerEvents: 'none' }}
-          scrolling="no" title="biz-map"
-        />
+        <div style={{ position: 'absolute', inset: 0, display: 'grid', gridTemplateColumns: 'repeat(4, 256px)', gridTemplateRows: 'repeat(2, 256px)', justifyContent: 'center', alignContent: 'center' }}>
+          {['46011','46012'].flatMap(y =>
+            ['68634','68635','68636','68637'].map(x => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/17/${x}/${y}.png`}
+                alt="" width={256} height={256} draggable={false}
+                style={{ display: 'block', filter: 'brightness(0.52) saturate(0.45) contrast(1.15)' }} />
+            ))
+          )}
+        </div>
         {[
           { top: '28%', left: '22%', r: 36 }, { top: '55%', left: '68%', r: 48 },
           { top: '38%', left: '60%', r: 30 }, { top: '72%', left: '35%', r: 26 },
