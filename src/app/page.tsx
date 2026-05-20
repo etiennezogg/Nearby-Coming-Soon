@@ -250,7 +250,7 @@ const slides = [
 ]
 
 /* — SearchVisual (1:1 von Hauptseite) — */
-function SearchVisual({ accent }: { accent: string }) {
+function SearchVisual({ accent, isMobile = false }: { accent: string; isMobile?: boolean }) {
   const suggestions = [
     { name: 'Bio Rindfleisch',    kategorie: 'Lebensmittel' },
     { name: 'Biofleisch Metzgerei', kategorie: 'Lebensmittel' },
@@ -259,27 +259,27 @@ function SearchVisual({ accent }: { accent: string }) {
   ]
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: '#fff', border: '1px solid #fff', borderRadius: 9999, padding: '20px 32px', boxShadow: '0 4px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.11), 0 32px 56px rgba(0,0,0,0.08)' }}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
-        <span style={{ flex: 1, fontSize: '1.1rem', fontWeight: 500, color: '#374151' }}>Biofleisch</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, borderLeft: '1px solid #f3f4f6', paddingLeft: 20 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          <span style={{ fontSize: '1rem', fontWeight: 500, color: '#6b7280', whiteSpace: 'nowrap' }}>Zürich</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 16, background: '#fff', border: '1px solid #fff', borderRadius: 9999, padding: isMobile ? '14px 18px' : '20px 32px', boxShadow: '0 4px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.11), 0 32px 56px rgba(0,0,0,0.08)' }}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+        <span style={{ flex: 1, fontSize: isMobile ? '0.95rem' : '1.1rem', fontWeight: 500, color: '#374151', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Biofleisch</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 5 : 8, borderLeft: '1px solid #f3f4f6', paddingLeft: isMobile ? 12 : 20, flexShrink: 0 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <span style={{ fontSize: isMobile ? '0.85rem' : '1rem', fontWeight: 500, color: '#6b7280', whiteSpace: 'nowrap' }}>Zürich</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', padding: '10px 22px', borderRadius: 14, fontSize: '0.95rem', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0 }}>Suchen →</div>
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', padding: isMobile ? '7px 13px' : '10px 22px', borderRadius: 14, fontSize: isMobile ? '0.82rem' : '0.95rem', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0 }}>Suchen →</div>
       </div>
-      <div style={{ marginTop: 12, background: '#fff', borderRadius: 28, boxShadow: '0 16px 48px rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' }}>
-        <div style={{ padding: '12px 24px 10px', borderBottom: '1px solid #f9fafb' }}>
+      <div style={{ marginTop: 10, background: '#fff', borderRadius: 28, boxShadow: '0 16px 48px rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+        <div style={{ padding: isMobile ? '10px 18px 8px' : '12px 24px 10px', borderBottom: '1px solid #f9fafb' }}>
           <span style={{ fontSize: '0.68rem', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Vorschläge</span>
         </div>
         {suggestions.map((v, i) => (
-          <div key={v.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 24px', borderBottom: i < suggestions.length - 1 ? '1px solid #f9fafb' : 'none', background: i === 0 ? '#f9fafb' : '#fff' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
-              <span style={{ fontSize: '0.88rem', fontWeight: i === 0 ? 600 : 400, color: '#1f2937' }}>{v.name}</span>
+          <div key={v.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '11px 18px' : '13px 24px', borderBottom: i < suggestions.length - 1 ? '1px solid #f9fafb' : 'none', background: i === 0 ? '#f9fafb' : '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+              <span style={{ fontSize: isMobile ? '0.82rem' : '0.88rem', fontWeight: i === 0 ? 600 : 400, color: '#1f2937' }}>{v.name}</span>
             </div>
-            <span style={{ fontSize: '0.75rem', color: i === 0 ? accent : '#9ca3af' }}>{v.kategorie}</span>
+            <span style={{ fontSize: '0.72rem', color: i === 0 ? accent : '#9ca3af' }}>{v.kategorie}</span>
           </div>
         ))}
       </div>
@@ -477,8 +477,8 @@ function BizVisual({ accent }: { accent: string }) {
   )
 }
 
-function Visual({ index, accent }: { index: number; accent: string }) {
-  if (index === 0) return <SearchVisual accent={accent} />
+function Visual({ index, accent, isMobile = false }: { index: number; accent: string; isMobile?: boolean }) {
+  if (index === 0) return <SearchVisual accent={accent} isMobile={isMobile} />
   if (index === 1) return <MapVisual accent={accent} />
   if (index === 2) return <WalletVisual />
   return <BizVisual accent={accent} />
@@ -567,7 +567,7 @@ function FeatureShowcase() {
                   opacity: i === activeIndex ? 1 : 0, transition: 'opacity 0.55s ease',
                   pointerEvents: i === activeIndex ? 'auto' : 'none',
                   transform: 'scale(0.82)', transformOrigin: 'top center' }}>
-                  <Visual index={i} accent={slide.accent} />
+                  <Visual index={i} accent={slide.accent} isMobile={true} />
                 </div>
               ))}
             </div>
