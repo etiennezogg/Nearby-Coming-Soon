@@ -487,7 +487,15 @@ function Visual({ index, accent }: { index: number; accent: string }) {
 /* — FeatureShowcase Container (1:1 von Hauptseite) — */
 function FeatureShowcase() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
   const outerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => {
@@ -520,50 +528,103 @@ function FeatureShowcase() {
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(to right,rgba(255,255,255,0.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,0.04) 1px,transparent 1px)', backgroundSize: '54px 54px' }} />
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, backgroundColor: s.accent, boxShadow: `0 0 40px 4px ${s.accent}55`, transition: 'background-color 0.6s ease, box-shadow 0.6s ease' }} />
 
-        <div style={{ height: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '0 32px' }}>
-          {/* LEFT */}
-          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px 0 16px', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
-            <div style={{ position: 'absolute', top: 48, left: 16, display: 'flex', gap: 8 }}>
+        {isMobile ? (
+          /* ── MOBILE LAYOUT ── */
+          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 20px 28px' }}>
+            {/* Step pills */}
+            <div style={{ display: 'flex', gap: 8, paddingTop: 28, paddingBottom: 20, flexShrink: 0 }}>
               {slides.map((_, i) => (
                 <button key={i} onClick={() => scrollToSlide(i)}
-                  style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, width: i === activeIndex ? 40 : 14, backgroundColor: i === activeIndex ? s.accent : 'rgba(255,255,255,0.15)', transition: 'width 0.5s ease, background-color 0.5s ease' }} />
+                  style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, flexShrink: 0,
+                    width: i === activeIndex ? 40 : 14,
+                    backgroundColor: i === activeIndex ? s.accent : 'rgba(255,255,255,0.15)',
+                    transition: 'width 0.5s ease, background-color 0.5s ease' }} />
               ))}
             </div>
-            <div style={{ position: 'relative', height: 300 }}>
+
+            {/* Text content */}
+            <div style={{ position: 'relative', height: 210, flexShrink: 0 }}>
               {slides.map((slide, i) => (
-                <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', opacity: i === activeIndex ? 1 : 0, transform: i === activeIndex ? 'translateY(0px)' : 'translateY(18px)', transition: 'opacity 0.55s ease, transform 0.55s ease', pointerEvents: i === activeIndex ? 'auto' : 'none' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                    <span style={{ fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.18em', color: slide.accent }}>{slide.step}</span>
-                    <span style={{ padding: '4px 14px', borderRadius: 9999, fontSize: '0.7rem', fontWeight: 600, border: `1px solid ${slide.accent}40`, color: slide.accent, backgroundColor: `${slide.accent}12` }}>{slide.tag}</span>
+                <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
+                  opacity: i === activeIndex ? 1 : 0, transform: i === activeIndex ? 'translateY(0)' : 'translateY(14px)',
+                  transition: 'opacity 0.55s ease, transform 0.55s ease', pointerEvents: i === activeIndex ? 'auto' : 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.7rem', letterSpacing: '0.18em', color: slide.accent }}>{slide.step}</span>
+                    <span style={{ padding: '3px 12px', borderRadius: 9999, fontSize: '0.68rem', fontWeight: 600,
+                      border: `1px solid ${slide.accent}40`, color: slide.accent, backgroundColor: `${slide.accent}12` }}>{slide.tag}</span>
                   </div>
-                  <h2 style={{ fontWeight: 800, fontSize: 'clamp(2rem, 3.6vw, 3.5rem)', lineHeight: 1.0, color: '#ffffff', marginBottom: 20, whiteSpace: 'pre-line' }}>{slide.title}</h2>
-                  <p style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 300, lineHeight: 1.75, maxWidth: 400, fontSize: '0.98rem' }}>{slide.description}</p>
+                  <h2 style={{ fontWeight: 800, fontSize: 'clamp(1.65rem, 7.5vw, 2.1rem)', lineHeight: 1.05, color: '#ffffff', marginBottom: 12, whiteSpace: 'pre-line' }}>{slide.title}</h2>
+                  <p style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 300, lineHeight: 1.65, fontSize: '0.85rem',
+                    display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{slide.description}</p>
                 </div>
               ))}
             </div>
-            <div style={{ position: 'absolute', bottom: 48, left: 16, display: 'flex', alignItems: 'baseline', gap: 8 }}>
-              <span style={{ fontWeight: 800, fontSize: '2.8rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
-              <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '1.1rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
-            </div>
-          </div>
 
-          {/* RIGHT */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px 24px 48px', position: 'relative' }}>
-            <div style={{ position: 'relative', width: '100%', maxWidth: 600, height: 520 }}>
+            {/* Visual */}
+            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
               {slides.map((slide, i) => (
-                <div key={i} style={{
-                  position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
-                  opacity: i === activeIndex ? 1 : 0,
-                  transform: i === activeIndex ? 'translateY(0px)' : 'translateY(20px)',
-                  transition: 'opacity 0.55s ease, transform 0.55s ease',
+                <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  opacity: i === activeIndex ? 1 : 0, transition: 'opacity 0.55s ease',
                   pointerEvents: i === activeIndex ? 'auto' : 'none',
-                }}>
+                  transform: 'scale(0.82)', transformOrigin: 'top center' }}>
                   <Visual index={i} accent={slide.accent} />
                 </div>
               ))}
             </div>
+
+            {/* Counter */}
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexShrink: 0, paddingTop: 10 }}>
+              <span style={{ fontWeight: 800, fontSize: '2rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
+              <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '0.9rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* ── DESKTOP LAYOUT ── */
+          <div style={{ height: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '0 32px' }}>
+            {/* LEFT */}
+            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px 0 16px', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
+              <div style={{ position: 'absolute', top: 48, left: 16, display: 'flex', gap: 8 }}>
+                {slides.map((_, i) => (
+                  <button key={i} onClick={() => scrollToSlide(i)}
+                    style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, width: i === activeIndex ? 40 : 14, backgroundColor: i === activeIndex ? s.accent : 'rgba(255,255,255,0.15)', transition: 'width 0.5s ease, background-color 0.5s ease' }} />
+                ))}
+              </div>
+              <div style={{ position: 'relative', height: 300 }}>
+                {slides.map((slide, i) => (
+                  <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', opacity: i === activeIndex ? 1 : 0, transform: i === activeIndex ? 'translateY(0px)' : 'translateY(18px)', transition: 'opacity 0.55s ease, transform 0.55s ease', pointerEvents: i === activeIndex ? 'auto' : 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                      <span style={{ fontWeight: 800, fontSize: '0.72rem', letterSpacing: '0.18em', color: slide.accent }}>{slide.step}</span>
+                      <span style={{ padding: '4px 14px', borderRadius: 9999, fontSize: '0.7rem', fontWeight: 600, border: `1px solid ${slide.accent}40`, color: slide.accent, backgroundColor: `${slide.accent}12` }}>{slide.tag}</span>
+                    </div>
+                    <h2 style={{ fontWeight: 800, fontSize: 'clamp(2rem, 3.6vw, 3.5rem)', lineHeight: 1.0, color: '#ffffff', marginBottom: 20, whiteSpace: 'pre-line' }}>{slide.title}</h2>
+                    <p style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 300, lineHeight: 1.75, maxWidth: 400, fontSize: '0.98rem' }}>{slide.description}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{ position: 'absolute', bottom: 48, left: 16, display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <span style={{ fontWeight: 800, fontSize: '2.8rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
+                <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '1.1rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
+              </div>
+            </div>
+
+            {/* RIGHT */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 16px 24px 48px', position: 'relative' }}>
+              <div style={{ position: 'relative', width: '100%', maxWidth: 600, height: 520 }}>
+                {slides.map((slide, i) => (
+                  <div key={i} style={{
+                    position: 'absolute', inset: 0, display: 'flex', alignItems: 'center',
+                    opacity: i === activeIndex ? 1 : 0,
+                    transform: i === activeIndex ? 'translateY(0px)' : 'translateY(20px)',
+                    transition: 'opacity 0.55s ease, transform 0.55s ease',
+                    pointerEvents: i === activeIndex ? 'auto' : 'none',
+                  }}>
+                    <Visual index={i} accent={slide.accent} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
