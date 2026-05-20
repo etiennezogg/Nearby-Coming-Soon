@@ -530,9 +530,9 @@ function FeatureShowcase() {
 
         {isMobile ? (
           /* ── MOBILE LAYOUT ── */
-          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 20px 28px' }}>
+          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 20px 14px' }}>
             {/* Step pills */}
-            <div style={{ display: 'flex', gap: 8, paddingTop: 76, paddingBottom: 20, flexShrink: 0 }}>
+            <div style={{ display: 'flex', gap: 8, paddingTop: 68, paddingBottom: 12, flexShrink: 0 }}>
               {slides.map((_, i) => (
                 <button key={i} onClick={() => scrollToSlide(i)}
                   style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, flexShrink: 0,
@@ -543,7 +543,7 @@ function FeatureShowcase() {
             </div>
 
             {/* Text content */}
-            <div style={{ position: 'relative', height: 210, flexShrink: 0 }}>
+            <div style={{ position: 'relative', height: 178, flexShrink: 0 }}>
               {slides.map((slide, i) => (
                 <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
                   opacity: i === activeIndex ? 1 : 0, transform: i === activeIndex ? 'translateY(0)' : 'translateY(14px)',
@@ -566,16 +566,16 @@ function FeatureShowcase() {
                 <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   opacity: i === activeIndex ? 1 : 0, transition: 'opacity 0.55s ease',
                   pointerEvents: i === activeIndex ? 'auto' : 'none',
-                  transform: 'scale(0.82)', transformOrigin: 'top center' }}>
+                  transform: 'scale(0.94)', transformOrigin: 'top center' }}>
                   <Visual index={i} accent={slide.accent} isMobile={true} />
                 </div>
               ))}
             </div>
 
             {/* Counter */}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexShrink: 0, paddingTop: 10 }}>
-              <span style={{ fontWeight: 800, fontSize: '2rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
-              <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '0.9rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexShrink: 0, paddingTop: 6 }}>
+              <span style={{ fontWeight: 800, fontSize: '1.7rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
+              <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '0.8rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
             </div>
           </div>
         ) : (
