@@ -421,10 +421,10 @@ function BizVisual({ accent }: { accent: string }) {
         ))}
         <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-100%)' }}>
           {/* Pulsing ring */}
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: `${accent}22`, border: `1.5px solid ${accent}55` }} />
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: 'rgba(0,0,0,0.18)', border: '1.5px solid rgba(0,0,0,0.3)' }} />
           {/* Pin shape */}
-          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" style={{ display: 'block', filter: `drop-shadow(0 3px 8px ${accent}88)` }}>
-            <path d="M11 0C6.03 0 2 4.03 2 9c0 6.75 9 19 9 19s9-12.25 9-19c0-4.97-4.03-9-9-9z" fill={accent} />
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" style={{ display: 'block', filter: 'drop-shadow(0 3px 8px rgba(0,0,0,0.5))' }}>
+            <path d="M11 0C6.03 0 2 4.03 2 9c0 6.75 9 19 9 19s9-12.25 9-19c0-4.97-4.03-9-9-9z" fill="#0d0d0d" />
             <circle cx="11" cy="9" r="3.5" fill="#fff" />
           </svg>
         </div>
@@ -444,16 +444,16 @@ function BizVisual({ accent }: { accent: string }) {
       </div>
 
       {/* Stock chart */}
-      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px', flexShrink: 0 }}>
+      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '48px 14px 13px', flexShrink: 0, overflow: 'visible', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
           <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>Aufrufe diese Woche</span>
-          <span style={{ fontSize: '0.7rem', color: accent }}>142 total · +12%</span>
+          <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)' }}>142 total · +12%</span>
         </div>
-        <svg width="100%" viewBox={`0 0 ${W} ${H + 18}`} style={{ overflow: 'visible', display: 'block' }}>
+        <svg width="100%" viewBox={`0 -48 ${W} ${H + 18 + 48}`} style={{ overflow: 'visible', display: 'block' }}>
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={accent} stopOpacity="0.28" />
-              <stop offset="100%" stopColor={accent} stopOpacity="0.02" />
+              <stop offset="0%" stopColor="rgba(255,255,255,1)" stopOpacity="0.18" />
+              <stop offset="100%" stopColor="rgba(255,255,255,1)" stopOpacity="0.01" />
             </linearGradient>
           </defs>
           {/* Horizontal grid lines */}
@@ -464,25 +464,26 @@ function BizVisual({ accent }: { accent: string }) {
           {/* Area fill */}
           <path d={areaD} fill={`url(#${gradId})`} />
           {/* Line */}
-          <path d={pathD} fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={pathD} fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           {/* All dots — small */}
           {xs.map((x, i) => (
-            <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? accent : 'rgba(255,255,255,0.18)'} />
+            <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? '#fff' : 'rgba(255,255,255,0.25)'} />
           ))}
           {/* Peak tooltip */}
           <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 32})`}>
-            <rect x="-26" y="-14" width="52" height="26" rx="7" fill={accent} />
+            <rect x="-26" y="-14" width="52" height="26" rx="7" fill="rgba(255,255,255,0.15)" style={{ backdropFilter: 'blur(4px)' }} />
+            <rect x="-26" y="-14" width="52" height="26" rx="7" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
             <text x="0" y="-2" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="800">
               {data[peakIdx].v}
             </text>
-            <text x="0" y="9" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="7" fontWeight="500">
+            <text x="0" y="9" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="7" fontWeight="500">
               Aufrufe
             </text>
           </g>
           {/* X-axis day labels */}
           {data.map((d, i) => (
             <text key={d.day} x={xs[i]} y={H + 16} textAnchor="middle"
-              fill={i === peakIdx ? accent : 'rgba(255,255,255,0.35)'}
+              fill={i === peakIdx ? '#fff' : 'rgba(255,255,255,0.35)'}
               fontSize="9" fontWeight={i === peakIdx ? '700' : '500'}>
               {d.day}
             </text>
