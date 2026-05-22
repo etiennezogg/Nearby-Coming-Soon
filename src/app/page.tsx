@@ -390,15 +390,9 @@ function BizVisual({ accent }: { accent: string }) {
   const xs = data.map((_, i) => 6 + (i / (data.length - 1)) * (W - 12))
   const ys = data.map(d => 8 + (1 - d.v / maxV) * (H - 16))
 
-  // Smooth catmull-rom → cubic bezier, tension 0.35
-  const pathD = xs.map((x, i) => {
-    if (i === 0) return `M ${x.toFixed(1)},${ys[i].toFixed(1)}`
-    const x0 = xs[i-1], y0 = ys[i-1], x1 = x, y1 = ys[i]
-    const xp = i > 1 ? xs[i-2] : x0, yp = i > 1 ? ys[i-2] : y0
-    const xn = i < xs.length-1 ? xs[i+1] : x1, yn = i < ys.length-1 ? ys[i+1] : y1
-    const t = 0.35
-    return `C ${(x0+(x1-xp)*t).toFixed(1)},${(y0+(y1-yp)*t).toFixed(1)} ${(x1-(xn-x0)*t).toFixed(1)},${(y1-(yn-y0)*t).toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)}`
-  }).join(' ')
+  const pathD = xs.map((x, i) =>
+    i === 0 ? `M ${x.toFixed(1)},${ys[i].toFixed(1)}` : `L ${x.toFixed(1)},${ys[i].toFixed(1)}`
+  ).join(' ')
 
   const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${H} L ${xs[0].toFixed(1)},${H} Z`
   const peakIdx = data.findIndex(d => d.v === maxV)
