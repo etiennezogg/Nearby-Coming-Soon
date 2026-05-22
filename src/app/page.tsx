@@ -473,7 +473,7 @@ function BizVisual({ accent }: { accent: string }) {
           <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 14})`}>
             <rect x="-18" y="-11" width="36" height="16" rx="5" fill={accent} />
             <text x="0" y="0" textAnchor="middle" fill="#fff" fontSize="8.5" fontWeight="700">
-              {data[peakIdx].v} Aufr.
+              {data[peakIdx].v} Aufrufe
             </text>
           </g>
           {/* X-axis day labels */}
