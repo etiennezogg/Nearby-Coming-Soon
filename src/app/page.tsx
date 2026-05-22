@@ -410,9 +410,9 @@ function BizVisual({ accent }: { accent: string }) {
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
         <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: -73, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'row', gap: 0 }}>
-            {['68645','68646','68647','68648','68649'].map(x => (
+            {['68643','68644','68645','68646','68647'].map(x => (
               // eslint-disable-next-line @next/next/no-img-element
-              <img key={x} src={`https://tile.openstreetmap.org/17/${x}/46006.png`}
+              <img key={x} src={`https://tile.openstreetmap.org/17/${x}/45900.png`}
                 alt="" width={256} height={256} draggable={false}
                 style={{ display: 'block', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', flexShrink: 0 }} />
             ))}
