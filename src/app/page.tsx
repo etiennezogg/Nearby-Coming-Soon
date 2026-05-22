@@ -408,15 +408,15 @@ function BizVisual({ accent }: { accent: string }) {
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
       {/* Map heatmap section */}
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: -73, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'row', gap: 0 }}>
-            {['68643','68644','68645','68646','68647'].map(x => (
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'repeat(4, 256px)', gridTemplateRows: 'repeat(2, 256px)', justifyContent: 'center', alignContent: 'center' }}>
+          {['11475','11476'].map(y =>
+            ['17160','17161','17162','17163'].map(x => (
               // eslint-disable-next-line @next/next/no-img-element
-              <img key={x} src={`https://tile.openstreetmap.org/17/${x}/45900.png`}
+              <img key={`${x}-${y}`} src={`https://tile.openstreetmap.org/15/${x}/${y}.png`}
                 alt="" width={256} height={256} draggable={false}
-                style={{ display: 'block', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', flexShrink: 0 }} />
-            ))}
-          </div>
+                style={{ display: 'block', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)' }} />
+            ))
+          )}
         </div>
         {[
           { top: '28%', left: '22%', r: 36 }, { top: '55%', left: '68%', r: 48 },
