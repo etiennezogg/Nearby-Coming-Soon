@@ -443,7 +443,7 @@ function BizVisual({ accent }: { accent: string }) {
           <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>Aufrufe diese Woche</span>
           <span style={{ fontSize: '0.7rem', color: accent }}>142 total · +12%</span>
         </div>
-        <svg width="100%" viewBox={`0 0 ${W} ${H + 18}`} style={{ overflow: 'visible', display: 'block' }}>
+        <svg width="100%" viewBox={`0 -48 ${W} ${H + 18 + 48}`} style={{ overflow: 'visible', display: 'block' }}>
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={accent} stopOpacity="0.28" />
