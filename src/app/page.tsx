@@ -419,8 +419,14 @@ function BizVisual({ accent }: { accent: string }) {
         ].map((b, i) => (
           <div key={i} style={{ position: 'absolute', top: b.top, left: b.left, transform: 'translate(-50%,-50%)', width: b.r*2, height: b.r*2, borderRadius: '50%', background: `radial-gradient(circle, ${accent}55 0%, transparent 70%)`, pointerEvents: 'none' }} />
         ))}
-        <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-50%)' }}>
-          <div style={{ width: 13, height: 13, borderRadius: '50%', background: accent, border: '2.5px solid #fff', boxShadow: `0 0 14px ${accent}` }} />
+        <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-100%)' }}>
+          {/* Pulsing ring */}
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: `${accent}22`, border: `1.5px solid ${accent}55` }} />
+          {/* Pin shape */}
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" style={{ display: 'block', filter: `drop-shadow(0 3px 8px ${accent}88)` }}>
+            <path d="M11 0C6.03 0 2 4.03 2 9c0 6.75 9 19 9 19s9-12.25 9-19c0-4.97-4.03-9-9-9z" fill={accent} />
+            <circle cx="11" cy="9" r="3.5" fill="#fff" />
+          </svg>
         </div>
       </div>
 
@@ -443,7 +449,7 @@ function BizVisual({ accent }: { accent: string }) {
           <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>Aufrufe diese Woche</span>
           <span style={{ fontSize: '0.7rem', color: accent }}>142 total · +12%</span>
         </div>
-        <svg width="100%" viewBox={`0 -48 ${W} ${H + 18 + 48}`} style={{ overflow: 'visible', display: 'block' }}>
+        <svg width="100%" viewBox={`0 0 ${W} ${H + 18}`} style={{ overflow: 'visible', display: 'block' }}>
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={accent} stopOpacity="0.28" />
