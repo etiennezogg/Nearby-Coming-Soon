@@ -470,7 +470,7 @@ function BizVisual({ accent }: { accent: string }) {
             <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? accent : 'rgba(255,255,255,0.18)'} />
           ))}
           {/* Peak tooltip */}
-          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 22})`}>
+          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 8})`}>
             <rect x="-26" y="-14" width="52" height="26" rx="7" fill={accent} />
             <text x="0" y="-2" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="800">
               {data[peakIdx].v}
