@@ -470,10 +470,13 @@ function BizVisual({ accent }: { accent: string }) {
             <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? accent : 'rgba(255,255,255,0.18)'} />
           ))}
           {/* Peak tooltip */}
-          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 14})`}>
-            <rect x="-18" y="-11" width="36" height="16" rx="5" fill={accent} />
-            <text x="0" y="0" textAnchor="middle" fill="#fff" fontSize="8.5" fontWeight="700">
-              {data[peakIdx].v} Aufrufe
+          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 22})`}>
+            <rect x="-26" y="-14" width="52" height="26" rx="7" fill={accent} />
+            <text x="0" y="-2" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="800">
+              {data[peakIdx].v}
+            </text>
+            <text x="0" y="9" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="7" fontWeight="500">
+              Aufrufe
             </text>
           </g>
           {/* X-axis day labels */}
