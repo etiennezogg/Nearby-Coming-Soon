@@ -213,6 +213,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
         <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="6 9 12 15 18 9" />
         </svg>
+        </div>
       </div>
       <input type="text" value={gemeinde} onChange={e => setGemeinde(e.target.value)} placeholder="Gemeinde (optional)" className={cls} />
       {/* Honeypot: hidden from real users, bots fill it */}
@@ -444,11 +445,12 @@ function BizVisual({ accent }: { accent: string }) {
       </div>
 
       {/* Stock chart */}
-      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '48px 14px 13px', flexShrink: 0, overflow: 'visible', position: 'relative' }}>
+      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px', flexShrink: 0, overflow: 'visible', position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>Aufrufe diese Woche</span>
-          <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)' }}>142 total · +12%</span>
+          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>Aufrufe diese Woche</span>
+          <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>142 total · +12%</span>
         </div>
+        <div style={{ paddingTop: 42, overflow: 'visible' }}>
         <svg width="100%" viewBox={`0 -48 ${W} ${H + 18 + 48}`} style={{ overflow: 'visible', display: 'block' }}>
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
