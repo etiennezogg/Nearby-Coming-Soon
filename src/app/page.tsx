@@ -385,22 +385,22 @@ function BizVisual({ accent }: { accent: string }) {
     { day: 'Sa', v: 12 },
     { day: 'So', v: 8  },
   ]
-  const W = 360, H = 80
+  const W = 360, H = 100
   const maxV = Math.max(...data.map(d => d.v))
-  const xs = data.map((_, i) => 6 + (i / (data.length - 1)) * (W - 12))
-  const ys = data.map(d => 8 + (1 - d.v / maxV) * (H - 16))
+  const xs = data.map((_, i) => 10 + (i / (data.length - 1)) * (W - 20))
+  const ys = data.map(d => 12 + (1 - d.v / maxV) * (H - 24))
+  const peakIdx = data.findIndex(d => d.v === maxV)
+  const gradId = `gbiz${accent.replace('#','')}`
 
   const pathD = xs.map((x, i) =>
     i === 0 ? `M ${x.toFixed(1)},${ys[i].toFixed(1)}` : `L ${x.toFixed(1)},${ys[i].toFixed(1)}`
   ).join(' ')
-
   const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${H} L ${xs[0].toFixed(1)},${H} Z`
-  const peakIdx = data.findIndex(d => d.v === maxV)
-  const gradId = `g${accent.replace('#','')}`
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
-      {/* Map heatmap section */}
+
+      {/* Map */}
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
         <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'repeat(4, 256px)', gridTemplateRows: 'repeat(2, 256px)', justifyContent: 'center', alignContent: 'center' }}>
           {['11475','11476'].map(y =>
@@ -420,9 +420,7 @@ function BizVisual({ accent }: { accent: string }) {
           <div key={i} style={{ position: 'absolute', top: b.top, left: b.left, transform: 'translate(-50%,-50%)', width: b.r*2, height: b.r*2, borderRadius: '50%', background: `radial-gradient(circle, ${accent}55 0%, transparent 70%)`, pointerEvents: 'none' }} />
         ))}
         <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-100%)' }}>
-          {/* Pulsing ring */}
           <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: 'rgba(0,0,0,0.18)', border: '1.5px solid rgba(0,0,0,0.3)' }} />
-          {/* Pin shape */}
           <svg width="22" height="28" viewBox="0 0 22 28" fill="none" style={{ display: 'block', filter: 'drop-shadow(0 3px 8px rgba(0,0,0,0.5))' }}>
             <path d="M11 0C6.03 0 2 4.03 2 9c0 6.75 9 19 9 19s9-12.25 9-19c0-4.97-4.03-9-9-9z" fill="#0d0d0d" />
             <circle cx="11" cy="9" r="3.5" fill="#fff" />
@@ -443,54 +441,45 @@ function BizVisual({ accent }: { accent: string }) {
         </div>
       </div>
 
-      {/* Stock chart */}
-      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px', flexShrink: 0, overflow: 'visible', position: 'relative' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
+      {/* Chart */}
+      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px 10px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
           <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>Aufrufe diese Woche</span>
           <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>142 total · +12%</span>
         </div>
-        <div style={{ paddingTop: 42, overflow: 'visible' }}>
-        <svg width="100%" viewBox={`0 -48 ${W} ${H + 18 + 48}`} style={{ overflow: 'visible', display: 'block' }}>
+        <svg width="100%" viewBox={`0 0 ${W} ${H + 20}`} style={{ display: 'block', overflow: 'visible' }}>
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(255,255,255,1)" stopOpacity="0.18" />
-              <stop offset="100%" stopColor="rgba(255,255,255,1)" stopOpacity="0.01" />
+              <stop offset="0%" stopColor="#fff" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#fff" stopOpacity="0.01" />
             </linearGradient>
           </defs>
-          {/* Horizontal grid lines */}
           {[0.33, 0.66].map((t, i) => (
-            <line key={i} x1={xs[0]} y1={8 + t * (H - 16)} x2={xs[xs.length-1]} y2={8 + t * (H - 16)}
-              stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 4" />
+            <line key={i} x1={xs[0]} y1={12 + t * (H - 24)} x2={xs[xs.length-1]} y2={12 + t * (H - 24)}
+              stroke="rgba(255,255,255,0.07)" strokeWidth="1" strokeDasharray="3 4" />
           ))}
-          {/* Area fill */}
           <path d={areaD} fill={`url(#${gradId})`} />
-          {/* Line */}
-          <path d={pathD} fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          {/* All dots — small */}
+          <path d={pathD} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           {xs.map((x, i) => (
             <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? '#fff' : 'rgba(255,255,255,0.25)'} />
           ))}
-          {/* Peak tooltip */}
-          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 32})`}>
-            <rect x="-26" y="-14" width="52" height="26" rx="7" fill="rgba(255,255,255,0.15)" style={{ backdropFilter: 'blur(4px)' }} />
-            <rect x="-26" y="-14" width="52" height="26" rx="7" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
-            <text x="0" y="-2" textAnchor="middle" fill="#fff" fontSize="11" fontWeight="800">
-              {data[peakIdx].v}
-            </text>
-            <text x="0" y="9" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="7" fontWeight="500">
-              Aufrufe
-            </text>
+          {/* Tooltip — anchored just above peak dot */}
+          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 10})`}>
+            <rect x="-28" y="-28" width="56" height="26" rx="7" fill="rgba(255,255,255,0.13)" />
+            <rect x="-28" y="-28" width="56" height="26" rx="7" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
+            <text x="0" y="-15" textAnchor="middle" fill="#fff" fontSize="12" fontWeight="800">{data[peakIdx].v}</text>
+            <text x="0" y="-5" textAnchor="middle" fill="rgba(255,255,255,0.65)" fontSize="7.5" fontWeight="500">Aufrufe</text>
           </g>
-          {/* X-axis day labels */}
           {data.map((d, i) => (
             <text key={d.day} x={xs[i]} y={H + 16} textAnchor="middle"
               fill={i === peakIdx ? '#fff' : 'rgba(255,255,255,0.35)'}
-              fontSize="9" fontWeight={i === peakIdx ? '700' : '500'}>
+              fontSize="9" fontWeight={i === peakIdx ? '700' : '400'}>
               {d.day}
             </text>
           ))}
         </svg>
       </div>
+
     </div>
   )
 }
