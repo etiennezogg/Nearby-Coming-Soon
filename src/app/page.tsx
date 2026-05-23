@@ -385,6 +385,7 @@ function BizVisual({ accent }: { accent: string }) {
     { day: 'Sa', v: 12 },
     { day: 'So', v: 8  },
   ]
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
   const W = 360, H = 100
   const maxV = Math.max(...data.map(d => d.v))
   const xs = data.map((_, i) => 10 + (i / (data.length - 1)) * (W - 20))
@@ -396,6 +397,7 @@ function BizVisual({ accent }: { accent: string }) {
     i === 0 ? `M ${x.toFixed(1)},${ys[i].toFixed(1)}` : `L ${x.toFixed(1)},${ys[i].toFixed(1)}`
   ).join(' ')
   const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${H} L ${xs[0].toFixed(1)},${H} Z`
+  const activeIdx = hoveredIdx !== null ? hoveredIdx : null
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -460,20 +462,42 @@ function BizVisual({ accent }: { accent: string }) {
           ))}
           <path d={areaD} fill={`url(#${gradId})`} />
           <path d={pathD} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Dots */}
           {xs.map((x, i) => (
-            <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? '#fff' : 'rgba(255,255,255,0.25)'} />
+            <circle key={i} cx={x} cy={ys[i]} r={activeIdx === i ? 4 : 2.5}
+              fill={activeIdx === i ? '#fff' : 'rgba(255,255,255,0.3)'}
+              style={{ transition: 'r 0.15s, fill 0.15s' }} />
           ))}
-          {/* Tooltip — anchored just above peak dot */}
-          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 10})`}>
-            <rect x="-28" y="-28" width="56" height="26" rx="7" fill="rgba(255,255,255,0.13)" />
-            <rect x="-28" y="-28" width="56" height="26" rx="7" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
-            <text x="0" y="-15" textAnchor="middle" fill="#fff" fontSize="12" fontWeight="800">{data[peakIdx].v}</text>
-            <text x="0" y="-5" textAnchor="middle" fill="rgba(255,255,255,0.65)" fontSize="7.5" fontWeight="500">Aufrufe</text>
-          </g>
+          {/* Invisible hit areas */}
+          {xs.map((x, i) => (
+            <rect key={`hit${i}`}
+              x={x - 22} y={0} width={44} height={H}
+              fill="transparent" style={{ cursor: 'crosshair' }}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)} />
+          ))}
+          {/* Tooltip on hover */}
+          {activeIdx !== null && (() => {
+            const tx = xs[activeIdx]
+            const ty = ys[activeIdx]
+            const flip = tx > W * 0.75
+            const ox = flip ? -34 : 34
+            return (
+              <g transform={`translate(${tx},${ty})`}>
+                <line x1="0" y1="-4" x2="0" y2="-18" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="2 2" />
+                <g transform={`translate(${ox},-30)`}>
+                  <rect x="-30" y="-14" width="60" height="28" rx="7" fill="rgba(30,30,30,0.92)" />
+                  <rect x="-30" y="-14" width="60" height="28" rx="7" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                  <text x="0" y="-2" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="800">{data[activeIdx].v}</text>
+                  <text x="0" y="10" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="7.5" fontWeight="500">Aufrufe</text>
+                </g>
+              </g>
+            )
+          })()}
           {data.map((d, i) => (
             <text key={d.day} x={xs[i]} y={H + 16} textAnchor="middle"
-              fill={i === peakIdx ? '#fff' : 'rgba(255,255,255,0.35)'}
-              fontSize="9" fontWeight={i === peakIdx ? '700' : '400'}>
+              fill={activeIdx === i ? '#fff' : 'rgba(255,255,255,0.35)'}
+              fontSize="9" fontWeight={activeIdx === i ? '700' : '400'}>
               {d.day}
             </text>
           ))}
