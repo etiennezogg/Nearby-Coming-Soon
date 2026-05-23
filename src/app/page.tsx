@@ -578,7 +578,7 @@ function FeatureShowcase() {
           /* ── MOBILE LAYOUT ── */
           <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 20px 14px' }}>
             {/* Step pills */}
-            <div style={{ display: 'flex', gap: 8, paddingTop: 68, paddingBottom: 12, flexShrink: 0 }}>
+            <div style={{ display: 'flex', gap: 8, paddingTop: 88, paddingBottom: 12, flexShrink: 0 }}>
               {slides.map((_, i) => (
                 <button key={i} onClick={() => scrollToSlide(i)}
                   style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, flexShrink: 0,
@@ -629,7 +629,7 @@ function FeatureShowcase() {
           <div style={{ height: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '0 32px' }}>
             {/* LEFT */}
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px 0 16px', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
-              <div style={{ position: 'absolute', top: 48, left: 16, display: 'flex', gap: 8 }}>
+              <div style={{ position: 'absolute', top: 76, left: 16, display: 'flex', gap: 8 }}>
                 {slides.map((_, i) => (
                   <button key={i} onClick={() => scrollToSlide(i)}
                     style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, width: i === activeIndex ? 40 : 14, backgroundColor: i === activeIndex ? s.accent : 'rgba(255,255,255,0.15)', transition: 'width 0.5s ease, background-color 0.5s ease' }} />
