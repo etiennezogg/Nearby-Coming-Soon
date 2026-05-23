@@ -460,7 +460,7 @@ function BizVisual({ accent }: { accent: string }) {
             </linearGradient>
           </defs>
           {/* Y-axis labels */}
-          {yLabels.map((val) => {
+          {yLabels.map((val, i) => {
             const yy = 12 + (1 - val / yMax) * (H - 24)
             return (
               <text key={i} x={LEFT - 4} y={yy} textAnchor="end" dominantBaseline="middle"
