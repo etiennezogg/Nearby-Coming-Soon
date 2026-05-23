@@ -386,10 +386,11 @@ function BizVisual({ accent }: { accent: string }) {
     { day: 'So', v: 8  },
   ]
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
-  const W = 360, H = 100
+  const W = 360, H = 100, LEFT = 32
   const maxV = Math.max(...data.map(d => d.v))
-  const xs = data.map((_, i) => 10 + (i / (data.length - 1)) * (W - 20))
+  const xs = data.map((_, i) => LEFT + 6 + (i / (data.length - 1)) * (W - LEFT - 16))
   const ys = data.map(d => 12 + (1 - d.v / maxV) * (H - 24))
+  const yLabels = [0, Math.round(maxV / 2), maxV]
   const peakIdx = data.findIndex(d => d.v === maxV)
   const gradId = `gbiz${accent.replace('#','')}`
 
@@ -456,8 +457,20 @@ function BizVisual({ accent }: { accent: string }) {
               <stop offset="100%" stopColor="#fff" stopOpacity="0.01" />
             </linearGradient>
           </defs>
+          {/* Y-axis labels */}
+          {yLabels.map((val, i) => {
+            const yy = i === 0 ? H - 4 : i === 1 ? 12 + (H - 24) / 2 : 12
+            return (
+              <text key={i} x={LEFT - 4} y={yy} textAnchor="end" dominantBaseline="middle"
+                fill="rgba(255,255,255,0.35)" fontSize="8" fontWeight="400">
+                {val}
+              </text>
+            )
+          })}
+          {/* Y-axis line */}
+          <line x1={LEFT} y1={12} x2={LEFT} y2={H} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
           {[0.33, 0.66].map((t, i) => (
-            <line key={i} x1={xs[0]} y1={12 + t * (H - 24)} x2={xs[xs.length-1]} y2={12 + t * (H - 24)}
+            <line key={i} x1={LEFT} y1={12 + t * (H - 24)} x2={xs[xs.length-1]} y2={12 + t * (H - 24)}
               stroke="rgba(255,255,255,0.07)" strokeWidth="1" strokeDasharray="3 4" />
           ))}
           <path d={areaD} fill={`url(#${gradId})`} />
