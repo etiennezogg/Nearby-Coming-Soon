@@ -722,7 +722,7 @@ export default function ComingSoonPage() {
             Bald verfügbar in der Schweiz
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-8" style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
+            className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-16" style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
             Nearby.
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
