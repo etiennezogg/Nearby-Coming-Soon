@@ -707,7 +707,7 @@ export default function ComingSoonPage() {
       </nav>
 
       {/* HERO */}
-      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-6"
+      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-6 pt-20 md:pt-24"
         style={{ background: 'linear-gradient(160deg, #4ade80 0%, #22c55e 40%, #16a34a 100%)' }}>
         <motion.div className="absolute pointer-events-none rounded-full"
           style={{ width: 600, height: 600, left: '-15%', top: '-20%', background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', filter: 'blur(60px)' }}
@@ -899,4 +899,5 @@ export default function ComingSoonPage() {
     </div>
   )
 }
+
 
