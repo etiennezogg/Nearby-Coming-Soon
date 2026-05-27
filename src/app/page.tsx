@@ -757,8 +757,8 @@ function TimedPopup() {
             <h3 className="font-syne font-extrabold text-ink text-3xl leading-tight tracking-tight mb-2">
               Dein Lieblingsprodukt liegt<br />um die Ecke. Finde es.
             </h3>
-            <p className="text-gray-400 text-sm font-light leading-relaxed mb-6">
-              Trag dich ein — du erfährst als Erstes, wann Nearby in deiner Region startet.
+            <p className="text-gray-600 text-sm font-medium leading-relaxed mb-6">
+              Kein Spam, kein Abo. Nur eine E-Mail wenn Nearby in deiner Region startet — versprochen.
             </p>
             <EmailSignup variant="light" />
           </div>
