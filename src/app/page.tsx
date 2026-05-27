@@ -140,7 +140,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const handleSubmit = async () => {
     if (!name.trim()) { setError('Bitte Name eingeben.'); return }
     if (!email || !email.includes('@')) { setError('Bitte gültige E-Mail eingeben.'); return }
-    if (!kanton) { setError('Bitte Kanton auswählen.'); return }
+    
     setLoading(true)
     setError('')
     const res = await fetch('/api/waitlist', {
@@ -189,7 +189,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   }`
 
   return (
-    <div className="flex flex-col gap-3 w-full max-w-md">
+    <div className="flex flex-col gap-3 w-full">
       {/* Rolle-Toggle */}
       <div className={`flex rounded-2xl p-1 ${isDark ? 'bg-white/10' : 'bg-gray-100'}`}>
         {(['kunde', 'verkäufer'] as const).map(r => (
@@ -207,7 +207,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
       <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder="deine@email.ch *" className={cls} />
       <div className="relative">
         <select value={kanton} onChange={e => setKanton(e.target.value)} className={`${cls} appearance-none cursor-pointer ${!kanton ? (isDark ? 'text-white/40' : 'text-gray-400') : ''}`}>
-          <option value="" disabled>Kanton wählen *</option>
+          <option value="">Kanton wählen (optional)</option>
           {kantone.map(k => <option key={k} value={k} style={{ color: '#0d0d0d' }}>{k}</option>)}
         </select>
         <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
