@@ -700,12 +700,20 @@ function TimedPopup() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    // Reset for testing: comment out the next line to always show
     const seen = sessionStorage.getItem('nearby_popup_seen')
     if (seen) return
     const t = setTimeout(() => setShow(true), 30000)
     return () => clearTimeout(t)
   }, [])
+
+  useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [show])
 
   const dismiss = () => {
     setShow(false)
@@ -723,7 +731,7 @@ function TimedPopup() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
         className="fixed inset-0 z-[999] flex items-center justify-center px-4"
-        style={{ backdropFilter: 'blur(20px)', background: 'rgba(0,0,0,0.55)' }}
+        style={{ backdropFilter: 'blur(8px)', background: 'rgba(0,0,0,0.35)' }}
         onClick={dismiss}
       >
         <motion.div
@@ -732,25 +740,25 @@ function TimedPopup() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.97 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
+          className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden"
           onClick={e => e.stopPropagation()}
         >
           <div className="h-1.5 w-full bg-green" />
-          <div className="px-8 pt-8 pb-10">
+          <div className="px-10 pt-7 pb-8">
             <button onClick={dismiss} className="absolute top-5 right-5 text-gray-300 hover:text-gray-500 transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
-            <div className="inline-flex items-center gap-1.5 bg-green/10 text-green text-xs font-medium px-3 py-1 rounded-full mb-5">
+            <div className="inline-flex items-center gap-1.5 bg-green/10 text-green text-xs font-medium px-3 py-1 rounded-full mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-              Bald verfügbar
+              Bald verfügbar in der Schweiz
             </div>
-            <h3 className="font-syne font-extrabold text-ink text-2xl leading-tight tracking-tight mb-2">
-              Sei beim Launch dabei.
+            <h3 className="font-syne font-extrabold text-ink text-3xl leading-tight tracking-tight mb-2">
+              Dein Lieblingsprodukt liegt<br />um die Ecke. Finde es.
             </h3>
-            <p className="text-gray-400 text-sm font-light leading-relaxed mb-7">
-              Trag dich ein — du erfährst als Erstes, wann Nearby in deiner Region live geht.
+            <p className="text-gray-400 text-sm font-light leading-relaxed mb-6">
+              Trag dich ein — du erfährst als Erstes, wann Nearby in deiner Region startet.
             </p>
             <EmailSignup variant="light" />
           </div>
