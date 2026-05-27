@@ -25,7 +25,7 @@ function ContainerScroll({ titleComponent, children }: { titleComponent: ReactNo
   const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [0.7, 0.9] : [1.05, 1])
   const translate = useTransform(scrollYProgress, [0, 1], [0, -100])
   return (
-    <div className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
+    <div className="h-[45rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
       <div className="py-10 md:py-40 w-full relative" style={{ perspective: '1000px' }}>
         <motion.div style={{ translateY: translate }} className="max-w-5xl mx-auto text-center mb-8">
           {titleComponent}
@@ -189,7 +189,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   }`
 
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div className="flex flex-col gap-3 w-full max-w-md">
       {/* Rolle-Toggle */}
       <div className={`flex rounded-2xl p-1 ${isDark ? 'bg-white/10' : 'bg-gray-100'}`}>
         {(['kunde', 'verkäufer'] as const).map(r => (
@@ -744,7 +744,7 @@ function TimedPopup() {
           onClick={e => e.stopPropagation()}
         >
           <div className="h-1.5 w-full bg-green" />
-          <div className="px-10 pt-7 pb-8">
+          <div className="px-6 md:px-10 pt-7 pb-8">
             <button onClick={dismiss} className="absolute top-5 right-5 text-gray-300 hover:text-gray-500 transition-colors">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -799,7 +799,7 @@ export default function ComingSoonPage() {
             Nearby.
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
-            className="text-white/90 font-semibold leading-snug max-w-3xl mx-auto mb-5" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)' }}>
+            className="text-white/90 font-semibold leading-snug max-w-3xl mx-auto mb-5" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 2rem)' }}>
             Lokales Einkaufen, neu gedacht.
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }}
@@ -835,7 +835,7 @@ export default function ComingSoonPage() {
           {stats.map((s, i) => (
             <motion.div key={s.label} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
               className="flex flex-col gap-2">
-              <div className="font-syne font-extrabold tracking-tight text-ink leading-none whitespace-nowrap" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' }}>{s.value}</div>
+              <div className="font-syne font-extrabold tracking-tight text-ink leading-none" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' }}>{s.value}</div>
               <div className="text-xs text-gray-400 uppercase tracking-widest leading-snug max-w-[160px]">{s.label}</div>
             </motion.div>
           ))}
@@ -873,7 +873,7 @@ export default function ComingSoonPage() {
             <p className="text-white/50 font-light leading-relaxed max-w-xl">Nearby gibt lokalen Geschäften eine digitale Bühne — einfach einrichten, sofort sichtbar, messbar wirksam.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-5 mb-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-14">
             {[
               {
                 icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
@@ -932,7 +932,9 @@ export default function ComingSoonPage() {
             </h2>
             <p className="text-gray-500 font-light leading-relaxed max-w-xl mx-auto mb-10">Trag dich ein und erfahre als Erstes, wann Nearby in deiner Region live geht.</p>
             <div className="flex justify-center">
-              <EmailSignup variant="light" />
+              <div className="w-full max-w-lg">
+                <EmailSignup variant="light" />
+              </div>
             </div>
           </motion.div>
         </div>
