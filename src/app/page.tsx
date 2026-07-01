@@ -388,18 +388,18 @@ function BizVisual({ accent }: { accent: string }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
   const W = 360, H = 100, LEFT = 32
   const maxV = Math.max(...data.map(d => d.v))
-  const xs = data.map((_, i) => LEFT + 6 + (i / (data.length - 1)) * (W - LEFT - 16))
-  const ys = data.map(d => 12 + (1 - d.v / maxV) * (H - 24))
   const step = 10
   const yMax = Math.ceil(maxV / step) * step
+  const xs = data.map((_, i) => LEFT + 6 + (i / (data.length - 1)) * (W - LEFT - 16))
+  const ys = data.map(d => 12 + (1 - d.v / yMax) * (H - 24))
   const yLabels = Array.from({ length: Math.floor(yMax / step) + 1 }, (_, i) => i * step)
-  const peakIdx = data.findIndex(d => d.v === maxV)
   const gradId = `gbiz${accent.replace('#','')}`
 
   const pathD = xs.map((x, i) =>
     i === 0 ? `M ${x.toFixed(1)},${ys[i].toFixed(1)}` : `L ${x.toFixed(1)},${ys[i].toFixed(1)}`
   ).join(' ')
-  const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${H} L ${xs[0].toFixed(1)},${H} Z`
+  const zeroY = 12 + (H - 24)
+  const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${zeroY} L ${xs[0].toFixed(1)},${zeroY} Z`
   const activeIdx = hoveredIdx !== null ? hoveredIdx : null
 
   return (
