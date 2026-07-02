@@ -409,10 +409,11 @@ function BizVisual({ accent }: { accent: string }) {
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
         <iframe
           src="https://www.openstreetmap.org/export/embed.html?bbox=8.510%2C47.355%2C8.565%2C47.385&layer=mapnik"
-          style={{ position: 'absolute', top: '-20px', left: 0, width: '100%', height: 'calc(100% + 40px)', border: 'none', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', pointerEvents: 'none' }}
+          style={{ position: 'absolute', top: '-90px', left: '-5px', width: 'calc(100% + 10px)', height: 'calc(100% + 220px)', border: 'none', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', pointerEvents: 'none' }}
           scrolling="no"
           title="heatmap-bg"
         />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.3) 100%)', zIndex: 1, pointerEvents: 'none' }} />
         {[
           { top: '28%', left: '22%', r: 36 }, { top: '55%', left: '68%', r: 48 },
           { top: '38%', left: '60%', r: 30 }, { top: '72%', left: '35%', r: 26 },
