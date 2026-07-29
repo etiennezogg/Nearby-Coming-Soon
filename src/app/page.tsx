@@ -968,6 +968,11 @@ export default function ComingSoonPage() {
               </a>
             </div>
           </div>
+          <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+            <p className="text-xs text-gray-400 leading-relaxed max-w-2xl mx-auto">
+              Nearby ist eine Informationsplattform und tritt nicht als Verkäufer oder Vertragspartner auf. Alle Angaben zu Produkten, Preisen und Verfügbarkeit stammen von den jeweiligen Geschäften. Nearby übernimmt keine Gewähr für deren Richtigkeit oder Vollständigkeit.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
