@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useRef, useState, useEffect, useCallback, ReactNode } from 'react'
 
 const kantone = [
@@ -25,7 +25,7 @@ function ContainerScroll({ titleComponent, children }: { titleComponent: ReactNo
   const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [0.7, 0.9] : [1.05, 1])
   const translate = useTransform(scrollYProgress, [0, 1], [0, -100])
   return (
-    <div className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
+    <div className="h-[45rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
       <div className="py-10 md:py-40 w-full relative" style={{ perspective: '1000px' }}>
         <motion.div style={{ translateY: translate }} className="max-w-5xl mx-auto text-center mb-8">
           {titleComponent}
@@ -140,7 +140,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const handleSubmit = async () => {
     if (!name.trim()) { setError('Bitte Name eingeben.'); return }
     if (!email || !email.includes('@')) { setError('Bitte gültige E-Mail eingeben.'); return }
-    if (!kanton) { setError('Bitte Kanton auswählen.'); return }
+    
     setLoading(true)
     setError('')
     const res = await fetch('/api/waitlist', {
@@ -155,6 +155,14 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
       setError('Etwas ist schiefgelaufen. Bitte versuch es nochmals.')
     } else {
       setSubmitted(true)
+      setTimeout(() => {
+        setSubmitted(false)
+        setName('')
+        setEmail('')
+        setKanton('')
+        setGemeinde('')
+        setRole('kunde')
+      }, 4000)
     }
   }
 
@@ -181,7 +189,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   }`
 
   return (
-    <div className="flex flex-col gap-3 w-full max-w-md">
+    <div className="flex flex-col gap-3 w-full">
       {/* Rolle-Toggle */}
       <div className={`flex rounded-2xl p-1 ${isDark ? 'bg-white/10' : 'bg-gray-100'}`}>
         {(['kunde', 'verkäufer'] as const).map(r => (
@@ -199,7 +207,7 @@ function EmailSignup({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
       <input type="email" value={email} onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSubmit()} placeholder="deine@email.ch *" className={cls} />
       <div className="relative">
         <select value={kanton} onChange={e => setKanton(e.target.value)} className={`${cls} appearance-none cursor-pointer ${!kanton ? (isDark ? 'text-white/40' : 'text-gray-400') : ''}`}>
-          <option value="" disabled>Kanton wählen *</option>
+          <option value="">Kanton wählen (optional)</option>
           {kantone.map(k => <option key={k} value={k} style={{ color: '#0d0d0d' }}>{k}</option>)}
         </select>
         <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-40" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -250,7 +258,7 @@ const slides = [
 ]
 
 /* — SearchVisual (1:1 von Hauptseite) — */
-function SearchVisual({ accent }: { accent: string }) {
+function SearchVisual({ accent, isMobile = false }: { accent: string; isMobile?: boolean }) {
   const suggestions = [
     { name: 'Bio Rindfleisch',    kategorie: 'Lebensmittel' },
     { name: 'Biofleisch Metzgerei', kategorie: 'Lebensmittel' },
@@ -259,27 +267,27 @@ function SearchVisual({ accent }: { accent: string }) {
   ]
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16, background: '#fff', border: '1px solid #fff', borderRadius: 9999, padding: '20px 32px', boxShadow: '0 4px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.11), 0 32px 56px rgba(0,0,0,0.08)' }}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
-        <span style={{ flex: 1, fontSize: '1.1rem', fontWeight: 500, color: '#374151' }}>Biofleisch</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, borderLeft: '1px solid #f3f4f6', paddingLeft: 20 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          <span style={{ fontSize: '1rem', fontWeight: 500, color: '#6b7280', whiteSpace: 'nowrap' }}>Zürich</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 16, background: '#fff', border: '1px solid #fff', borderRadius: 9999, padding: isMobile ? '14px 18px' : '20px 32px', boxShadow: '0 4px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.11), 0 32px 56px rgba(0,0,0,0.08)' }}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+        <span style={{ flex: 1, fontSize: isMobile ? '0.95rem' : '1.1rem', fontWeight: 500, color: '#374151', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Biofleisch</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 5 : 8, borderLeft: '1px solid #f3f4f6', paddingLeft: isMobile ? 12 : 20, flexShrink: 0 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <span style={{ fontSize: isMobile ? '0.85rem' : '1rem', fontWeight: 500, color: '#6b7280', whiteSpace: 'nowrap' }}>Zürich</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', padding: '10px 22px', borderRadius: 14, fontSize: '0.95rem', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0 }}>Suchen →</div>
+        <div style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', padding: isMobile ? '7px 13px' : '10px 22px', borderRadius: 14, fontSize: isMobile ? '0.82rem' : '0.95rem', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0 }}>Suchen →</div>
       </div>
-      <div style={{ marginTop: 12, background: '#fff', borderRadius: 28, boxShadow: '0 16px 48px rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' }}>
-        <div style={{ padding: '12px 24px 10px', borderBottom: '1px solid #f9fafb' }}>
+      <div style={{ marginTop: 10, background: '#fff', borderRadius: 28, boxShadow: '0 16px 48px rgba(0,0,0,0.15)', border: '1px solid rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+        <div style={{ padding: isMobile ? '10px 18px 8px' : '12px 24px 10px', borderBottom: '1px solid #f9fafb' }}>
           <span style={{ fontSize: '0.68rem', fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Vorschläge</span>
         </div>
         {suggestions.map((v, i) => (
-          <div key={v.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 24px', borderBottom: i < suggestions.length - 1 ? '1px solid #f9fafb' : 'none', background: i === 0 ? '#f9fafb' : '#fff' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
-              <span style={{ fontSize: '0.88rem', fontWeight: i === 0 ? 600 : 400, color: '#1f2937' }}>{v.name}</span>
+          <div key={v.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '11px 18px' : '13px 24px', borderBottom: i < suggestions.length - 1 ? '1px solid #f9fafb' : 'none', background: i === 0 ? '#f9fafb' : '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+              <span style={{ fontSize: isMobile ? '0.82rem' : '0.88rem', fontWeight: i === 0 ? 600 : 400, color: '#1f2937' }}>{v.name}</span>
             </div>
-            <span style={{ fontSize: '0.75rem', color: i === 0 ? accent : '#9ca3af' }}>{v.kategorie}</span>
+            <span style={{ fontSize: '0.72rem', color: i === 0 ? accent : '#9ca3af' }}>{v.kategorie}</span>
           </div>
         ))}
       </div>
@@ -300,7 +308,7 @@ function MapVisual({ accent }: { accent: string }) {
     <div style={{ position: 'relative', width: '100%', borderRadius: 22, overflow: 'hidden', aspectRatio: '16/10' }}>
       <iframe
         src="https://www.openstreetmap.org/export/embed.html?bbox=8.546%2C47.354%2C8.566%2C47.364&layer=mapnik"
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'brightness(0.96) saturate(0.9)', pointerEvents: 'none' }}
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'contrast(1.3) saturate(0.88) brightness(0.97)', pointerEvents: 'none' }}
         scrolling="no"
         title="map"
       />
@@ -377,34 +385,35 @@ function BizVisual({ accent }: { accent: string }) {
     { day: 'Sa', v: 12 },
     { day: 'So', v: 8  },
   ]
-  const W = 360, H = 80
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const W = 360, H = 100, LEFT = 32
   const maxV = Math.max(...data.map(d => d.v))
-  const xs = data.map((_, i) => 6 + (i / (data.length - 1)) * (W - 12))
-  const ys = data.map(d => 8 + (1 - d.v / maxV) * (H - 16))
+  const step = 10
+  const yMax = Math.ceil(maxV / step) * step
+  const xs = data.map((_, i) => LEFT + 6 + (i / (data.length - 1)) * (W - LEFT - 16))
+  const ys = data.map(d => 12 + (1 - d.v / yMax) * (H - 24))
+  const yLabels = Array.from({ length: Math.floor(yMax / step) + 1 }, (_, i) => i * step)
+  const gradId = `gbiz${accent.replace('#','')}`
 
-  // Smooth catmull-rom → cubic bezier, tension 0.35
-  const pathD = xs.map((x, i) => {
-    if (i === 0) return `M ${x.toFixed(1)},${ys[i].toFixed(1)}`
-    const x0 = xs[i-1], y0 = ys[i-1], x1 = x, y1 = ys[i]
-    const xp = i > 1 ? xs[i-2] : x0, yp = i > 1 ? ys[i-2] : y0
-    const xn = i < xs.length-1 ? xs[i+1] : x1, yn = i < ys.length-1 ? ys[i+1] : y1
-    const t = 0.35
-    return `C ${(x0+(x1-xp)*t).toFixed(1)},${(y0+(y1-yp)*t).toFixed(1)} ${(x1-(xn-x0)*t).toFixed(1)},${(y1-(yn-y0)*t).toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)}`
-  }).join(' ')
-
-  const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${H} L ${xs[0].toFixed(1)},${H} Z`
-  const peakIdx = data.findIndex(d => d.v === maxV)
-  const gradId = `g${accent.replace('#','')}`
+  const pathD = xs.map((x, i) =>
+    i === 0 ? `M ${x.toFixed(1)},${ys[i].toFixed(1)}` : `L ${x.toFixed(1)},${ys[i].toFixed(1)}`
+  ).join(' ')
+  const zeroY = 12 + (H - 24)
+  const areaD = `${pathD} L ${xs[xs.length-1].toFixed(1)},${zeroY} L ${xs[0].toFixed(1)},${zeroY} Z`
+  const activeIdx = hoveredIdx !== null ? hoveredIdx : null
 
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
-      {/* Map heatmap section */}
+
+      {/* Map */}
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
         <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.524%2C47.370%2C8.556%2C47.388&layer=mapnik"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 'calc(100% + 75px)', border: 'none', filter: 'brightness(0.88) saturate(0.65)', pointerEvents: 'none' }}
-          scrolling="no" title="biz-map"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.522%2C47.361%2C8.553%2C47.379&layer=mapnik"
+          style={{ position: 'absolute', top: '-90px', left: '-42px', width: 'calc(100% + 57px)', height: 'calc(100% + 220px)', border: 'none', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', pointerEvents: 'none' }}
+          scrolling="no"
+          title="heatmap-bg"
         />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.3) 100%)', zIndex: 1, pointerEvents: 'none' }} />
         {[
           { top: '28%', left: '22%', r: 36 }, { top: '55%', left: '68%', r: 48 },
           { top: '38%', left: '60%', r: 30 }, { top: '72%', left: '35%', r: 26 },
@@ -412,8 +421,12 @@ function BizVisual({ accent }: { accent: string }) {
         ].map((b, i) => (
           <div key={i} style={{ position: 'absolute', top: b.top, left: b.left, transform: 'translate(-50%,-50%)', width: b.r*2, height: b.r*2, borderRadius: '50%', background: `radial-gradient(circle, ${accent}55 0%, transparent 70%)`, pointerEvents: 'none' }} />
         ))}
-        <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-50%)' }}>
-          <div style={{ width: 13, height: 13, borderRadius: '50%', background: accent, border: '2.5px solid #fff', boxShadow: `0 0 14px ${accent}` }} />
+        <div style={{ position: 'absolute', top: '48%', left: '46%', transform: 'translate(-50%,-100%)' }}>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: 'rgba(0,0,0,0.18)', border: '1.5px solid rgba(0,0,0,0.3)' }} />
+          <svg width="22" height="28" viewBox="0 0 22 28" fill="none" style={{ display: 'block', filter: 'drop-shadow(0 3px 8px rgba(0,0,0,0.5))' }}>
+            <path d="M11 0C6.03 0 2 4.03 2 9c0 6.75 9 19 9 19s9-12.25 9-19c0-4.97-4.03-9-9-9z" fill="#0d0d0d" />
+            <circle cx="11" cy="9" r="3.5" fill="#fff" />
+          </svg>
         </div>
       </div>
 
@@ -430,55 +443,85 @@ function BizVisual({ accent }: { accent: string }) {
         </div>
       </div>
 
-      {/* Stock chart */}
-      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px', flexShrink: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>Aufrufe diese Woche</span>
-          <span style={{ fontSize: '0.7rem', color: accent }}>142 total · +12%</span>
+      {/* Chart */}
+      <div style={{ borderRadius: 14, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', padding: '13px 14px 10px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'rgba(255,255,255,0.8)' }}>Aufrufe diese Woche</span>
+          <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>142 total · +12%</span>
         </div>
-        <svg width="100%" viewBox={`0 0 ${W} ${H + 18}`} style={{ overflow: 'visible', display: 'block' }}>
+        <svg width="100%" viewBox={`0 0 ${W} ${H + 20}`} style={{ display: 'block', overflow: 'visible' }}>
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={accent} stopOpacity="0.28" />
-              <stop offset="100%" stopColor={accent} stopOpacity="0.02" />
+              <stop offset="0%" stopColor="#fff" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#fff" stopOpacity="0.01" />
             </linearGradient>
           </defs>
-          {/* Horizontal grid lines */}
+          {/* Y-axis labels */}
+          {yLabels.map((val, i) => {
+            const yy = 12 + (1 - val / yMax) * (H - 24)
+            return (
+              <text key={i} x={LEFT - 4} y={yy} textAnchor="end" dominantBaseline="middle"
+                fill="rgba(255,255,255,0.35)" fontSize="8" fontWeight="400">
+                {val}
+              </text>
+            )
+          })}
+          {/* Y-axis line */}
+          <line x1={LEFT} y1={12} x2={LEFT} y2={H} stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
           {[0.33, 0.66].map((t, i) => (
-            <line key={i} x1={xs[0]} y1={8 + t * (H - 16)} x2={xs[xs.length-1]} y2={8 + t * (H - 16)}
-              stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="3 4" />
+            <line key={i} x1={LEFT} y1={12 + t * (H - 24)} x2={xs[xs.length-1]} y2={12 + t * (H - 24)}
+              stroke="rgba(255,255,255,0.07)" strokeWidth="1" strokeDasharray="3 4" />
           ))}
-          {/* Area fill */}
           <path d={areaD} fill={`url(#${gradId})`} />
-          {/* Line */}
-          <path d={pathD} fill="none" stroke={accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          {/* All dots — small */}
+          <path d={pathD} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Dots */}
           {xs.map((x, i) => (
-            <circle key={i} cx={x} cy={ys[i]} r="2.5" fill={i === peakIdx ? accent : 'rgba(255,255,255,0.18)'} />
+            <circle key={i} cx={x} cy={ys[i]} r={activeIdx === i ? 4 : 2.5}
+              fill={activeIdx === i ? '#fff' : 'rgba(255,255,255,0.3)'}
+              style={{ transition: 'r 0.15s, fill 0.15s' }} />
           ))}
-          {/* Peak tooltip */}
-          <g transform={`translate(${xs[peakIdx]},${ys[peakIdx] - 14})`}>
-            <rect x="-18" y="-11" width="36" height="16" rx="5" fill={accent} />
-            <text x="0" y="0" textAnchor="middle" fill="#fff" fontSize="8.5" fontWeight="700">
-              {data[peakIdx].v} Aufr.
-            </text>
-          </g>
-          {/* X-axis day labels */}
+          {/* Invisible hit areas */}
+          {xs.map((x, i) => (
+            <rect key={`hit${i}`}
+              x={x - 22} y={0} width={44} height={H}
+              fill="transparent" style={{ cursor: 'crosshair' }}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)} />
+          ))}
+          {/* Tooltip on hover */}
+          {activeIdx !== null && (() => {
+            const tx = xs[activeIdx]
+            const ty = ys[activeIdx]
+            const flip = tx > W * 0.75
+            const ox = flip ? -34 : 34
+            return (
+              <g transform={`translate(${tx},${ty})`}>
+                <line x1="0" y1="-4" x2="0" y2="-18" stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="2 2" />
+                <g transform={`translate(${ox},-30)`}>
+                  <rect x="-30" y="-14" width="60" height="28" rx="7" fill="rgba(30,30,30,0.92)" />
+                  <rect x="-30" y="-14" width="60" height="28" rx="7" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                  <text x="0" y="-2" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="800">{data[activeIdx].v}</text>
+                  <text x="0" y="10" textAnchor="middle" fill="rgba(255,255,255,0.6)" fontSize="7.5" fontWeight="500">Aufrufe</text>
+                </g>
+              </g>
+            )
+          })()}
           {data.map((d, i) => (
             <text key={d.day} x={xs[i]} y={H + 16} textAnchor="middle"
-              fill={i === peakIdx ? accent : 'rgba(255,255,255,0.35)'}
-              fontSize="9" fontWeight={i === peakIdx ? '700' : '500'}>
+              fill={activeIdx === i ? '#fff' : 'rgba(255,255,255,0.35)'}
+              fontSize="9" fontWeight={activeIdx === i ? '700' : '400'}>
               {d.day}
             </text>
           ))}
         </svg>
       </div>
+
     </div>
   )
 }
 
-function Visual({ index, accent }: { index: number; accent: string }) {
-  if (index === 0) return <SearchVisual accent={accent} />
+function Visual({ index, accent, isMobile = false }: { index: number; accent: string; isMobile?: boolean }) {
+  if (index === 0) return <SearchVisual accent={accent} isMobile={isMobile} />
   if (index === 1) return <MapVisual accent={accent} />
   if (index === 2) return <WalletVisual />
   return <BizVisual accent={accent} />
@@ -530,9 +573,9 @@ function FeatureShowcase() {
 
         {isMobile ? (
           /* ── MOBILE LAYOUT ── */
-          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 20px 28px' }}>
+          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '0 20px 14px' }}>
             {/* Step pills */}
-            <div style={{ display: 'flex', gap: 8, paddingTop: 28, paddingBottom: 20, flexShrink: 0 }}>
+            <div style={{ display: 'flex', gap: 8, paddingTop: 88, paddingBottom: 12, flexShrink: 0 }}>
               {slides.map((_, i) => (
                 <button key={i} onClick={() => scrollToSlide(i)}
                   style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, flexShrink: 0,
@@ -543,7 +586,7 @@ function FeatureShowcase() {
             </div>
 
             {/* Text content */}
-            <div style={{ position: 'relative', height: 210, flexShrink: 0 }}>
+            <div style={{ position: 'relative', height: 178, flexShrink: 0 }}>
               {slides.map((slide, i) => (
                 <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
                   opacity: i === activeIndex ? 1 : 0, transform: i === activeIndex ? 'translateY(0)' : 'translateY(14px)',
@@ -566,16 +609,16 @@ function FeatureShowcase() {
                 <div key={i} style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
                   opacity: i === activeIndex ? 1 : 0, transition: 'opacity 0.55s ease',
                   pointerEvents: i === activeIndex ? 'auto' : 'none',
-                  transform: 'scale(0.82)', transformOrigin: 'top center' }}>
-                  <Visual index={i} accent={slide.accent} />
+                  transform: 'scale(0.94)', transformOrigin: 'top center' }}>
+                  <Visual index={i} accent={slide.accent} isMobile={true} />
                 </div>
               ))}
             </div>
 
             {/* Counter */}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexShrink: 0, paddingTop: 10 }}>
-              <span style={{ fontWeight: 800, fontSize: '2rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
-              <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '0.9rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexShrink: 0, paddingTop: 6 }}>
+              <span style={{ fontWeight: 800, fontSize: '1.7rem', color: s.accent, transition: 'color 0.6s ease' }}>{String(activeIndex + 1).padStart(2, '0')}</span>
+              <span style={{ color: 'rgba(255,255,255,0.18)', fontSize: '0.8rem' }}>/ {String(slides.length).padStart(2, '0')}</span>
             </div>
           </div>
         ) : (
@@ -583,7 +626,7 @@ function FeatureShowcase() {
           <div style={{ height: '100%', maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '0 32px' }}>
             {/* LEFT */}
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px 0 16px', borderRight: '1px solid rgba(255,255,255,0.07)' }}>
-              <div style={{ position: 'absolute', top: 48, left: 16, display: 'flex', gap: 8 }}>
+              <div style={{ position: 'absolute', top: 76, left: 16, display: 'flex', gap: 8 }}>
                 {slides.map((_, i) => (
                   <button key={i} onClick={() => scrollToSlide(i)}
                     style={{ height: 3, border: 'none', cursor: 'pointer', padding: 0, borderRadius: 9999, width: i === activeIndex ? 40 : 14, backgroundColor: i === activeIndex ? s.accent : 'rgba(255,255,255,0.15)', transition: 'width 0.5s ease, background-color 0.5s ease' }} />
@@ -648,6 +691,79 @@ const stats = [
   { value: '∅ 330 m', label: 'Distanz zum nächsten Laden' },
 ]
 
+
+/* ── TimedPopup ── */
+function TimedPopup() {
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    const seen = sessionStorage.getItem('nearby_popup_seen')
+    if (seen) return
+    const t = setTimeout(() => setShow(true), 15000)
+    return () => clearTimeout(t)
+  }, [])
+
+  useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [show])
+
+  const dismiss = () => {
+    setShow(false)
+    sessionStorage.setItem('nearby_popup_seen', '1')
+  }
+
+  if (!show) return null
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="popup-overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 z-[999] flex items-center justify-center px-4"
+        style={{ backdropFilter: 'blur(8px)', background: 'rgba(0,0,0,0.35)' }}
+        onClick={dismiss}
+      >
+        <motion.div
+          key="popup-card"
+          initial={{ opacity: 0, y: 32, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 16, scale: 0.97 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="h-1.5 w-full bg-green" />
+          <div className="px-6 md:px-10 pt-7 pb-8">
+            <button onClick={dismiss} className="absolute top-5 right-5 text-gray-300 hover:text-gray-500 transition-colors">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+            <div className="inline-flex items-center gap-1.5 bg-green/10 text-green text-xs font-medium px-3 py-1 rounded-full mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
+              Bald verfügbar in der Schweiz
+            </div>
+            <h3 className="font-syne font-extrabold text-ink text-3xl leading-tight tracking-tight mb-2">
+              Dein Lieblingsprodukt liegt<br />um die Ecke. Finde es.
+            </h3>
+            <p className="text-gray-600 text-sm font-medium leading-relaxed mb-6">
+              Kein Spam, kein Abo. Nur eine E-Mail wenn Nearby in deiner Region startet — versprochen.
+            </p>
+            <EmailSignup variant="light" />
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
 export default function ComingSoonPage() {
   return (
     <div className="bg-white">
@@ -661,7 +777,7 @@ export default function ComingSoonPage() {
       </nav>
 
       {/* HERO */}
-      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-6"
+      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-6 pt-20 md:pt-24"
         style={{ background: 'linear-gradient(160deg, #4ade80 0%, #22c55e 40%, #16a34a 100%)' }}>
         <motion.div className="absolute pointer-events-none rounded-full"
           style={{ width: 600, height: 600, left: '-15%', top: '-20%', background: 'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)', filter: 'blur(60px)' }}
@@ -676,11 +792,11 @@ export default function ComingSoonPage() {
             Bald verfügbar in der Schweiz
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-8" style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
+            className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-16" style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
             Nearby.
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
-            className="text-white/90 font-semibold leading-snug max-w-3xl mx-auto mb-5" style={{ fontSize: 'clamp(1.4rem, 2.5vw, 2rem)' }}>
+            className="text-white/90 font-semibold leading-snug max-w-3xl mx-auto mb-5" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 2rem)' }}>
             Lokales Einkaufen, neu gedacht.
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65 }}
@@ -716,7 +832,7 @@ export default function ComingSoonPage() {
           {stats.map((s, i) => (
             <motion.div key={s.label} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08, duration: 0.5 }}
               className="flex flex-col gap-2">
-              <div className="font-syne font-extrabold tracking-tight text-ink leading-none whitespace-nowrap" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' }}>{s.value}</div>
+              <div className="font-syne font-extrabold tracking-tight text-ink leading-none" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' }}>{s.value}</div>
               <div className="text-xs text-gray-400 uppercase tracking-widest leading-snug max-w-[160px]">{s.label}</div>
             </motion.div>
           ))}
@@ -754,7 +870,7 @@ export default function ComingSoonPage() {
             <p className="text-white/50 font-light leading-relaxed max-w-xl">Nearby gibt lokalen Geschäften eine digitale Bühne — einfach einrichten, sofort sichtbar, messbar wirksam.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-5 mb-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-14">
             {[
               {
                 icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
@@ -813,11 +929,15 @@ export default function ComingSoonPage() {
             </h2>
             <p className="text-gray-500 font-light leading-relaxed max-w-xl mx-auto mb-10">Trag dich ein und erfahre als Erstes, wann Nearby in deiner Region live geht.</p>
             <div className="flex justify-center">
-              <EmailSignup variant="light" />
+              <div className="w-full max-w-lg">
+                <EmailSignup variant="light" />
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
+
+      <TimedPopup />
 
       {/* FOOTER */}
       <footer className="border-t border-gray-100 px-6 md:px-10 py-12">
@@ -847,6 +967,11 @@ export default function ComingSoonPage() {
                 etienne.zogg@yahoo.com
               </a>
             </div>
+          </div>
+          <div className="mt-8 pt-6 border-t border-gray-100 text-center">
+            <p className="text-xs text-gray-400 leading-relaxed max-w-2xl mx-auto">
+              Nearby ist eine Informationsplattform und tritt nicht als Verkäufer oder Vertragspartner auf. Alle Angaben zu Produkten, Preisen und Verfügbarkeit stammen von den jeweiligen Geschäften. Nearby übernimmt keine Gewähr für deren Richtigkeit oder Vollständigkeit.
+            </p>
           </div>
         </div>
       </footer>
