@@ -408,8 +408,8 @@ function BizVisual({ accent }: { accent: string }) {
       {/* Map */}
       <div style={{ borderRadius: 18, overflow: 'hidden', height: 110, position: 'relative', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
         <iframe
-          src="https://www.openstreetmap.org/export/embed.html?bbox=8.510%2C47.355%2C8.565%2C47.385&layer=mapnik"
-          style={{ position: 'absolute', top: '-90px', left: '-5px', width: 'calc(100% + 10px)', height: 'calc(100% + 220px)', border: 'none', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', pointerEvents: 'none' }}
+          src="https://www.openstreetmap.org/export/embed.html?bbox=8.522%2C47.361%2C8.553%2C47.379&layer=mapnik"
+          style={{ position: 'absolute', top: '-90px', left: '-42px', width: 'calc(100% + 57px)', height: 'calc(100% + 220px)', border: 'none', filter: 'contrast(1.25) saturate(0.45) brightness(0.82)', pointerEvents: 'none' }}
           scrolling="no"
           title="heatmap-bg"
         />
@@ -978,5 +978,3 @@ export default function ComingSoonPage() {
     </div>
   )
 }
-
-
