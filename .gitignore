@@ -12,5 +12,8 @@ next-env.d.ts
 .env.local
 .env.*.local
 
+# TypeScript build cache
+*.tsbuildinfo
+
 # OS
 .DS_Store
