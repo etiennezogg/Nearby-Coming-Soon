@@ -675,13 +675,18 @@ function FeatureShowcase() {
 
 /* ════════════════════════════════════════════════════════ */
 
-const pricingTiers = [
-  { tier: 'Free',       posts: '5',            preis: 'Gratis',      einheit: '',      zielgruppe: 'SB-Hüsli, Einstieg' },
-  { tier: 'Starter',    posts: '30',           preis: 'CHF 15',      einheit: '/Mt',   zielgruppe: 'Hofladen, Käserei, Weingut' },
-  { tier: 'Pro',        posts: '100',          preis: 'CHF 39',      einheit: '/Mt',   zielgruppe: 'Bäckerei, Metzgerei, Delikatessen' },
-  { tier: 'Business',   posts: '300',          preis: 'CHF 79',      einheit: '/Mt',   zielgruppe: 'Grosse Läden, Boutiquen' },
-  { tier: 'Enterprise', posts: 'Unlimitiert',  preis: 'Auf Anfrage', einheit: '',      zielgruppe: 'Ketten, Filialisten' },
+// Pläne, die man selbst buchen kann — Enterprise läuft über ein Gespräch
+// und wird darum separat dargestellt.
+const selfServeTiers = [
+  { tier: 'Free',     posts: '5',   preis: 'Gratis', einheit: '',    zielgruppe: 'SB-Hüsli, Einstieg' },
+  { tier: 'Starter',  posts: '30',  preis: 'CHF 15', einheit: '/Mt', zielgruppe: 'Hofladen, Käserei, Weingut' },
+  { tier: 'Pro',      posts: '100', preis: 'CHF 39', einheit: '/Mt', zielgruppe: 'Bäckerei, Metzgerei, Delikatessen' },
+  { tier: 'Business', posts: '300', preis: 'CHF 79', einheit: '/Mt', zielgruppe: 'Grosse Läden, Boutiquen' },
 ]
+
+const enterpriseTier = {
+  tier: 'Enterprise', preis: 'Auf Anfrage', zielgruppe: 'Ketten, Filialisten',
+}
 
 const stats = [
   { value: '60\'000+', label: 'Läden & Hofläden in der Schweiz' },
@@ -929,48 +934,65 @@ export default function ComingSoonPage() {
               jederzeit wechseln — ohne Einrichtungsgebühr.
             </p>
 
-            {/* Tabelle ab md */}
-            <div className="hidden md:block rounded-2xl border border-white/8 overflow-hidden">
-              <div className="grid grid-cols-[1.1fr_0.9fr_1fr_1.8fr] gap-4 px-6 py-3.5 bg-white/[0.06] text-[11px] uppercase tracking-widest text-white/40">
-                <div>Plan</div><div>Posts</div><div>Preis</div><div>Passt zu</div>
-              </div>
-              {pricingTiers.map((t, i) => (
-                <div
-                  key={t.tier}
-                  className={`grid grid-cols-[1.1fr_0.9fr_1fr_1.8fr] gap-4 px-6 py-4 items-center ${i > 0 ? 'border-t border-white/8' : ''} ${t.tier === 'Free' ? 'bg-green/[0.07]' : ''}`}
-                >
-                  <div className="font-semibold text-white text-[15px]">{t.tier}</div>
-                  <div className="text-white/70 text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>{t.posts}</div>
-                  <div className="text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                    <span className={t.preis === 'Gratis' ? 'text-green font-semibold' : 'text-white font-medium'}>{t.preis}</span>
-                    {t.einheit && <span className="text-white/40">{t.einheit}</span>}
-                  </div>
-                  <div className="text-white/45 text-sm font-light">{t.zielgruppe}</div>
-                </div>
-              ))}
+            {/* Die Anzahl Posts ist der eigentliche Unterschied zwischen den
+                Plänen — deshalb steht sie gross im Vordergrund. */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {selfServeTiers.map((t, i) => {
+                const isFree = t.tier === 'Free'
+                return (
+                  <motion.div
+                    key={t.tier}
+                    initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }} transition={{ delay: i * 0.07, duration: 0.5 }}
+                    className={`rounded-2xl border p-5 sm:p-6 flex flex-col transition-colors ${
+                      isFree
+                        ? 'border-green/30 bg-green/[0.06] hover:bg-green/[0.09]'
+                        : 'border-white/8 bg-white/[0.03] hover:bg-white/[0.06]'
+                    }`}
+                  >
+                    <div
+                      className={`font-syne font-extrabold tracking-tight leading-none ${isFree ? 'text-green' : 'text-white'}`}
+                      style={{ fontSize: 'clamp(2.2rem, 5vw, 3rem)', fontVariantNumeric: 'tabular-nums' }}
+                    >
+                      {t.posts}
+                    </div>
+                    <div className="text-[11px] uppercase tracking-widest text-white/35 mt-1.5">
+                      Posts
+                    </div>
+
+                    <div className="h-px bg-white/8 my-4 sm:my-5" />
+
+                    <div className="text-white font-semibold text-[15px]">{t.tier}</div>
+                    <div className="text-sm mt-0.5 mb-3" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                      <span className={isFree ? 'text-green font-semibold' : 'text-white/85 font-medium'}>{t.preis}</span>
+                      {t.einheit && <span className="text-white/35">{t.einheit}</span>}
+                    </div>
+                    <div className="text-white/40 text-[13px] font-light leading-snug">
+                      {t.zielgruppe}
+                    </div>
+                  </motion.div>
+                )
+              })}
             </div>
 
-            {/* Karten unter md — eine Tabelle mit vier Spalten ist auf dem Handy nicht lesbar */}
-            <div className="md:hidden flex flex-col gap-3">
-              {pricingTiers.map(t => (
-                <div
-                  key={t.tier}
-                  className={`rounded-2xl border p-5 ${t.tier === 'Free' ? 'border-green/35 bg-green/[0.07]' : 'border-white/8 bg-white/4'}`}
-                >
-                  <div className="flex items-baseline justify-between gap-3 mb-1">
-                    <span className="font-semibold text-white text-base">{t.tier}</span>
-                    <span className="text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                      <span className={t.preis === 'Gratis' ? 'text-green font-semibold' : 'text-white font-medium'}>{t.preis}</span>
-                      {t.einheit && <span className="text-white/40">{t.einheit}</span>}
-                    </span>
-                  </div>
-                  <div className="text-white/70 text-sm mb-2" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                    {t.posts === 'Unlimitiert' ? 'Unbegrenzt viele Posts' : `${t.posts} Posts`}
-                  </div>
-                  <div className="text-white/45 text-sm font-light">{t.zielgruppe}</div>
+            {/* Enterprise ist kein Selbstbedienungs-Plan, sondern ein Gespräch —
+                darum eine eigene Zeile statt einer fünften Karte. */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: 0.28, duration: 0.5 }}
+              className="mt-3 sm:mt-4 rounded-2xl border border-white/8 bg-white/[0.03] p-5 sm:p-6 flex flex-wrap items-center gap-x-8 gap-y-3"
+            >
+              <div className="font-syne font-extrabold text-white leading-none" style={{ fontSize: 'clamp(1.9rem, 4vw, 2.4rem)' }}>
+                ∞
+              </div>
+              <div className="flex-1 min-w-[190px]">
+                <div className="text-white font-semibold text-[15px]">{enterpriseTier.tier}</div>
+                <div className="text-white/40 text-[13px] font-light">
+                  Unbegrenzt viele Posts · {enterpriseTier.zielgruppe}
                 </div>
-              ))}
-            </div>
+              </div>
+              <div className="text-white/85 font-medium text-sm">{enterpriseTier.preis}</div>
+            </motion.div>
 
             <p className="text-white/30 text-xs font-light mt-5">
               Alle Preise exkl. MwSt. Monatlich kündbar.
