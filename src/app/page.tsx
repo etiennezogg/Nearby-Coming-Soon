@@ -252,7 +252,7 @@ const slides = [
   {
     step: '04', tag: 'Für Geschäfte',
     title: 'Sichtbar sein.\nOhne Aufwand.',
-    description: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Ab CHF 29 / Monat.',
+    description: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Gratis starten, ab CHF 15 / Monat für mehr.',
     accent: '#a78bfa',
   },
 ]
@@ -675,13 +675,12 @@ function FeatureShowcase() {
 
 /* ════════════════════════════════════════════════════════ */
 
-const bizFeatures = [
-  'Produkte wie Social-Media-Posts hochladen',
-  'Eigenes Geschäftsprofil mit Standort & Öffnungszeiten',
-  'Automatisch auf der Karte für Kunden sichtbar',
-  'Digitale Gutscheine & Treuekarten anbieten',
-  'Statistiken: Reichweite, Klicks & Heatmap',
-  'Ab CHF 29 / Monat — ohne Einrichtungsgebühr',
+const pricingTiers = [
+  { tier: 'Free',       posts: '5',            preis: 'Gratis',      einheit: '',      zielgruppe: 'SB-Hüsli, Einstieg' },
+  { tier: 'Starter',    posts: '30',           preis: 'CHF 15',      einheit: '/Mt',   zielgruppe: 'Hofladen, Käserei, Weingut' },
+  { tier: 'Pro',        posts: '100',          preis: 'CHF 39',      einheit: '/Mt',   zielgruppe: 'Bäckerei, Metzgerei, Delikatessen' },
+  { tier: 'Business',   posts: '300',          preis: 'CHF 79',      einheit: '/Mt',   zielgruppe: 'Grosse Läden, Boutiquen' },
+  { tier: 'Enterprise', posts: 'Unlimitiert',  preis: 'Auf Anfrage', einheit: '',      zielgruppe: 'Ketten, Filialisten' },
 ]
 
 const stats = [
@@ -915,6 +914,68 @@ export default function ComingSoonPage() {
               </motion.div>
             ))}
           </div>
+
+          {/* ── Preise ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.6 }}
+          >
+            <p className="text-xs uppercase tracking-widest text-green mb-4">Preise</p>
+            <h3 className="font-syne font-extrabold text-white tracking-tight leading-tight mb-3" style={{ fontSize: 'clamp(1.5rem, 2.6vw, 2rem)' }}>
+              Zahl nur, was du brauchst.
+            </h3>
+            <p className="text-white/50 font-light leading-relaxed max-w-xl mb-10">
+              Der Plan richtet sich danach, wie viele Produkte du gleichzeitig zeigst. Gratis starten,
+              jederzeit wechseln — ohne Einrichtungsgebühr.
+            </p>
+
+            {/* Tabelle ab md */}
+            <div className="hidden md:block rounded-2xl border border-white/8 overflow-hidden">
+              <div className="grid grid-cols-[1.1fr_0.9fr_1fr_1.8fr] gap-4 px-6 py-3.5 bg-white/[0.06] text-[11px] uppercase tracking-widest text-white/40">
+                <div>Plan</div><div>Posts</div><div>Preis</div><div>Passt zu</div>
+              </div>
+              {pricingTiers.map((t, i) => (
+                <div
+                  key={t.tier}
+                  className={`grid grid-cols-[1.1fr_0.9fr_1fr_1.8fr] gap-4 px-6 py-4 items-center ${i > 0 ? 'border-t border-white/8' : ''} ${t.tier === 'Free' ? 'bg-green/[0.07]' : ''}`}
+                >
+                  <div className="font-semibold text-white text-[15px]">{t.tier}</div>
+                  <div className="text-white/70 text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>{t.posts}</div>
+                  <div className="text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                    <span className={t.preis === 'Gratis' ? 'text-green font-semibold' : 'text-white font-medium'}>{t.preis}</span>
+                    {t.einheit && <span className="text-white/40">{t.einheit}</span>}
+                  </div>
+                  <div className="text-white/45 text-sm font-light">{t.zielgruppe}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Karten unter md — eine Tabelle mit vier Spalten ist auf dem Handy nicht lesbar */}
+            <div className="md:hidden flex flex-col gap-3">
+              {pricingTiers.map(t => (
+                <div
+                  key={t.tier}
+                  className={`rounded-2xl border p-5 ${t.tier === 'Free' ? 'border-green/35 bg-green/[0.07]' : 'border-white/8 bg-white/4'}`}
+                >
+                  <div className="flex items-baseline justify-between gap-3 mb-1">
+                    <span className="font-semibold text-white text-base">{t.tier}</span>
+                    <span className="text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                      <span className={t.preis === 'Gratis' ? 'text-green font-semibold' : 'text-white font-medium'}>{t.preis}</span>
+                      {t.einheit && <span className="text-white/40">{t.einheit}</span>}
+                    </span>
+                  </div>
+                  <div className="text-white/70 text-sm mb-2" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                    {t.posts === 'Unlimitiert' ? 'Unbegrenzt viele Posts' : `${t.posts} Posts`}
+                  </div>
+                  <div className="text-white/45 text-sm font-light">{t.zielgruppe}</div>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-white/30 text-xs font-light mt-5">
+              Alle Preise exkl. MwSt. Monatlich kündbar.
+            </p>
+          </motion.div>
 
         </div>
       </section>
