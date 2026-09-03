@@ -960,10 +960,10 @@ export default function ComingSoonPage() {
                       Posts
                     </div>
 
-                    <div className="h-px bg-white/8 my-4 sm:my-5" />
+                    <div className={`h-px my-3.5 sm:my-4 ${isFree ? 'bg-green/25' : 'bg-white/[0.13]'}`} />
 
                     <div className="text-white font-semibold text-[15px]">{t.tier}</div>
-                    <div className="text-sm mt-0.5 mb-3" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                    <div className="text-sm mt-0.5 mb-2.5" style={{ fontVariantNumeric: 'tabular-nums' }}>
                       <span className={isFree ? 'text-green font-semibold' : 'text-white/85 font-medium'}>{t.preis}</span>
                       {t.einheit && <span className="text-white/35">{t.einheit}</span>}
                     </div>
