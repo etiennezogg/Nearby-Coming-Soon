@@ -252,7 +252,7 @@ const slides = [
   {
     step: '04', tag: 'Für Geschäfte',
     title: 'Sichtbar sein.\nOhne Aufwand.',
-    description: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Gratis starten, ab CHF 15 / Monat für mehr.',
+    description: 'Produkte hochladen wie einen Social-Media-Post. Sofort sichtbar für Kunden — ohne Website, ohne technisches Know-how. Gratis starten, ab CHF 29 / Monat für mehr.',
     accent: '#a78bfa',
   },
 ]
@@ -678,10 +678,9 @@ function FeatureShowcase() {
 // Pläne, die man selbst buchen kann — Enterprise läuft über ein Gespräch
 // und wird darum separat dargestellt.
 const selfServeTiers = [
-  { tier: 'Free',     posts: '5',   preis: 'Gratis', einheit: '',    zielgruppe: 'SB-Hüsli, Einstieg' },
-  { tier: 'Starter',  posts: '30',  preis: 'CHF 15', einheit: '/Mt', zielgruppe: 'Hofladen, Käserei, Weingut' },
-  { tier: 'Pro',      posts: '100', preis: 'CHF 39', einheit: '/Mt', zielgruppe: 'Bäckerei, Metzgerei, Delikatessen' },
-  { tier: 'Business', posts: '300', preis: 'CHF 79', einheit: '/Mt', zielgruppe: 'Grosse Läden, Boutiquen' },
+  { tier: 'Free',    posts: '5',   preis: 'Gratis', einheit: '',    zielgruppe: 'Ausprobieren, SB-Hüsli' },
+  { tier: 'Starter', posts: '40',  preis: 'CHF 29', einheit: '/Mt', zielgruppe: 'Hofladen, Bäckerei, Boutique' },
+  { tier: 'Pro',     posts: '150', preis: 'CHF 59', einheit: '/Mt', zielgruppe: 'Grosses Sortiment, mehrere Abteilungen' },
 ]
 
 const enterpriseTier = {
@@ -936,7 +935,7 @@ export default function ComingSoonPage() {
 
             {/* Die Anzahl Posts ist der eigentliche Unterschied zwischen den
                 Plänen — deshalb steht sie gross im Vordergrund. */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {selfServeTiers.map((t, i) => {
                 const isFree = t.tier === 'Free'
                 return (
@@ -995,7 +994,7 @@ export default function ComingSoonPage() {
             </motion.div>
 
             <p className="text-white/30 text-xs font-light mt-5">
-              Alle Preise exkl. MwSt. Monatlich kündbar.
+              Alle Preise sind Endpreise in Schweizer Franken. Monatlich kündbar.
             </p>
           </motion.div>
 
