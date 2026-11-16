@@ -58,7 +58,7 @@ export default function ImpressumPage() {
           <section>
             <h2 className={h2}>Kontakt</h2>
             <p className={text}>
-              E-Mail: <a href="mailto:etienne.zogg@yahoo.com" className={link}>etienne.zogg@yahoo.com</a>
+              E-Mail: <a href="mailto:etiennezogg@gmail.com" className={link}>etiennezogg@gmail.com</a>
             </p>
           </section>
 
