@@ -1027,7 +1027,8 @@ export default function ComingSoonPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
               <div className="font-syne font-extrabold text-xl text-ink tracking-tight mb-1">Nearby</div>
-              <p className="text-xs text-gray-400">© 2025 Nearby · Zug, Schweiz</p>
+              <p className="text-xs text-gray-400">© 2026 Nearby · Cham, Schweiz</p>
+              <a href="/impressum" className="inline-block mt-2 text-xs text-gray-500 hover:text-ink underline-offset-2 hover:underline transition-colors">Impressum</a>
             </div>
             <div className="flex flex-col items-center md:items-end gap-2">
               <p className="text-xs uppercase tracking-widest text-gray-400">Kontakt</p>
