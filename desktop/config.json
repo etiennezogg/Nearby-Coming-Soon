@@ -1,0 +1,8 @@
+{
+  "startUrl": "https://nearby-launch.vercel.app/in-deiner-naehe",
+  "imFensterBleiben": [
+    "*.paypal.com",
+    "vercel.com",
+    "*.vercel.com"
+  ]
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keine Verbindung — Nearby</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: #0d0d0d; color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      background-image: radial-gradient(circle at 20% 0%, rgba(26,158,116,0.22), transparent 55%);
+    }
+    main { max-width: 440px; text-align: center; }
+    .zeichen { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; color: #22c55e; margin-bottom: 28px; }
+    h1 { font-size: 26px; line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.02em; }
+    p { margin: 0 0 28px; color: rgba(255,255,255,0.55); line-height: 1.6; font-size: 15px; }
+    button {
+      font: inherit; font-size: 14px; font-weight: 600; color: #0d0d0d; background: #22c55e;
+      border: 0; border-radius: 999px; padding: 13px 28px; cursor: pointer;
+    }
+    button:hover { opacity: 0.9; }
+    .klein { margin: 18px 0 0; font-size: 13px; color: rgba(255,255,255,0.35); }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="zeichen">Nearby</div>
+    <h1>Keine Verbindung</h1>
+    <p>Nearby zeigt Geschäfte und Produkte in deiner Nähe und braucht dafür Internet. Sobald du wieder online bist, geht es von selbst weiter.</p>
+    <button id="neu" type="button">Nochmals versuchen</button>
+    <p class="klein">Deine Anmeldung bleibt auf diesem Gerät gespeichert.</p>
+  </main>
+  <script>
+    (function () {
+      // Die Adresse, zu der es zurückgehen soll, gibt das Programm vor (main.js).
+      var ziel = new URLSearchParams(location.search).get('ziel') || '';
+      if (!/^https?:\/\//i.test(ziel)) ziel = '';
+      function los() { if (ziel) location.href = ziel; }
+      document.getElementById('neu').addEventListener('click', los);
+      window.addEventListener('online', los);
+      // Alle paar Sekunden still nachsehen, ob die Seite wieder antwortet.
+      setInterval(function () {
+        if (!ziel) return;
+        fetch(ziel, { mode: 'no-cors', cache: 'no-store' }).then(los).catch(function () {});
+      }, 8000);
+    })();
+  </script>
+</body>
+</html>

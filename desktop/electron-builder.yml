@@ -1,0 +1,52 @@
+# Baut die Installationsdateien von Nearby: Nearby-mac.dmg (Mac) und Nearby-Setup.exe (Windows).
+# Läuft nicht von Hand, sondern in GitHub Actions (.github/workflows/desktop.yml), weil das Mac-Paket
+# nur auf einem Mac und das Windows-Paket am besten auf Windows entsteht. Siehe desktop/README.md.
+
+appId: ch.nearby.desktop
+productName: Nearby
+copyright: © 2026 Nearby
+directories:
+  output: dist
+  buildResources: build
+files:
+  - main.js
+  - config.json
+  - offline.html
+  - build/icon-win.png
+  - package.json
+asar: true
+
+mac:
+  category: public.app-category.shopping
+  icon: build/icon.png
+  target:
+    - target: dmg
+      arch: universal        # eine Datei für Intel-Macs und Apple-Chips (M1 bis M4)
+  # Ohne Apple-Entwicklerkonto gibt es keine «echte» Signatur. Stattdessen setzt scripts/adhoc-signatur.js
+  # eine einfache (ad-hoc), damit die App auf Apple-Chips überhaupt startet. Mit Zertifikat (Secret
+  # MAC_CSC_LINK, siehe README) signiert electron-builder richtig.
+  extendInfo:
+    NSLocationUsageDescription: Nearby zeigt dir Geschäfte und Produkte in deiner Nähe.
+    NSLocationWhenInUseUsageDescription: Nearby zeigt dir Geschäfte und Produkte in deiner Nähe.
+    NSCameraUsageDescription: Die Kamera wird nur zum Scannen von Codes verwendet.
+dmg:
+  title: Nearby
+  artifactName: Nearby-mac.${ext}
+
+win:
+  icon: build/icon-win.png
+  target:
+    - target: nsis
+      arch: x64
+nsis:
+  oneClick: true
+  perMachine: false          # für den Benutzer, ohne Administratorrechte
+  runAfterFinish: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Nearby
+  deleteAppDataOnUninstall: false
+  artifactName: Nearby-Setup.${ext}
+
+# afterPack (nicht afterSign): afterSign läuft nur, wenn wirklich signiert wurde, und genau das ist hier ohne Zertifikat nicht der Fall.
+afterPack: scripts/adhoc-signatur.js

@@ -1,0 +1,22 @@
+{
+  "name": "nearby-desktop",
+  "productName": "Nearby",
+  "version": "1.0.0",
+  "description": "Nearby als Programm für Mac und Windows: die Webseite in einem eigenen Fenster.",
+  "author": {
+    "name": "Nearby"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --publish never",
+    "dist:mac": "electron-builder --mac --universal --publish never",
+    "dist:win": "electron-builder --win --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.4.1",
+    "electron-builder": "26.18.0"
+  }
+}

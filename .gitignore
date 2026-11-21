@@ -17,3 +17,6 @@ next-env.d.ts
 
 # OS
 .DS_Store
+
+# Desktop-App: die Installationsdateien entstehen in GitHub Actions
+/desktop/dist/

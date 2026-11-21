@@ -1,0 +1,126 @@
+# Baut die Desktop-App von Nearby (Mac und Windows) und legt die Installationsdateien als Release ab.
+#
+# Starten:  automatisch, wenn sich unter desktop/ am Programm etwas ändert und auf den Arbeitszweig oder main landet;
+#           oder von Hand: GitHub → Actions → «Desktop-App bauen» → «Run workflow»
+#           (oder einen Tag «desktop-v…» pushen)
+# Ergebnis: GitHub → Releases → «Nearby Desktop <Version>» mit
+#             Nearby-mac.dmg     (Mac, Intel und Apple-Chip)
+#             Nearby-Setup.exe   (Windows 10 und 11)
+#
+# Warum hier und nicht von Hand: Das Mac-Paket entsteht nur auf einem Mac, das Windows-Paket am
+# besten auf Windows. GitHub stellt beide Rechner zur Verfügung. Mehr in desktop/README.md.
+
+name: Desktop-App bauen
+
+on:
+  workflow_dispatch:
+  push:
+    # Neu bauen, sobald sich am Programm selbst etwas ändert (nicht bei Änderungen an der Webseite oder am README).
+    branches: [claude/practical-curie-ulpbfk, main]
+    paths:
+      - 'desktop/main.js'
+      - 'desktop/config.json'
+      - 'desktop/offline.html'
+      - 'desktop/electron-builder.yml'
+      - 'desktop/package.json'
+      - 'desktop/package-lock.json'
+      - 'desktop/build/**'
+      - 'desktop/scripts/**'
+      - '.github/workflows/desktop.yml'
+    tags: ['desktop-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  bauen:
+    name: Bauen (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Mac
+            os: macos-latest
+          - name: Windows
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - run: npm ci
+
+      # Ohne Zertifikat entstehen die Dateien unsigniert (Mac: einfache Signatur, siehe
+      # desktop/scripts/adhoc-signatur.js). Mit den Secrets aus desktop/README.md → «Signieren» wird richtig signiert.
+      # CSC_LINK darf nur gesetzt sein, wenn es ein Zertifikat gibt: leer gesetzt, liest electron-builder
+      # es als Dateipfad («not a file») und bricht ab. Darum die Abfrage in der Shell.
+      - name: Mac-Paket bauen
+        if: matrix.name == 'Mac'
+        shell: bash
+        env:
+          MAC_CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          MAC_CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+        run: |
+          if [ -n "$MAC_CSC_LINK" ]; then
+            export CSC_LINK="$MAC_CSC_LINK" CSC_KEY_PASSWORD="$MAC_CSC_KEY_PASSWORD"
+          else
+            export CSC_IDENTITY_AUTO_DISCOVERY=false
+          fi
+          npm run dist:mac
+
+      - name: Windows-Paket bauen
+        if: matrix.name == 'Windows'
+        shell: bash
+        env:
+          WIN_CSC_LINK_SECRET: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD_SECRET: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+        run: |
+          if [ -n "$WIN_CSC_LINK_SECRET" ]; then
+            export CSC_LINK="$WIN_CSC_LINK_SECRET" CSC_KEY_PASSWORD="$WIN_CSC_KEY_PASSWORD_SECRET"
+          else
+            export CSC_IDENTITY_AUTO_DISCOVERY=false
+          fi
+          npm run dist:win
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Nearby-${{ matrix.name }}
+          path: |
+            desktop/dist/Nearby-mac.dmg
+            desktop/dist/Nearby-Setup.exe
+          if-no-files-found: error
+
+  veroeffentlichen:
+    name: Release anlegen
+    needs: bauen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dateien
+          merge-multiple: true
+
+      - name: Release anlegen oder ergänzen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -p "require('./desktop/package.json').version")
+          TAG="desktop-v$VERSION"
+          ls -la dateien
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" dateien/* --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" dateien/* --repo "$GITHUB_REPOSITORY" --latest --target "$GITHUB_SHA" \
+              --title "Nearby Desktop $VERSION" \
+              --notes "Installationsdateien: Nearby-mac.dmg (Mac, Intel und Apple-Chip) und Nearby-Setup.exe (Windows 10 und 11)."
+          fi
