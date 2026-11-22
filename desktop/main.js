@@ -112,7 +112,8 @@ function rechteSetzen(sitzung) {
 
 /* ── Grösse und Ort des Fensters merken ─────────────────────────────────── */
 
-const ZUSTAND = () => path.join(app.getPath('userData'), 'fenster.json')
+// «-v2»: Mit Version 1.0.1 ist das Fenster am Anfang grösser. Eine alte Grösse aus fenster.json soll das nicht überstimmen.
+const ZUSTAND = () => path.join(app.getPath('userData'), 'fenster-v2.json')
 
 function zustandLesen() {
   try {
@@ -142,11 +143,19 @@ function laden(win, pfad) {
   if (win && !win.isDestroyed()) win.loadURL(new URL(pfad, START.origin).toString()).catch(() => {})
 }
 
+/* Am Anfang ein grosses Fenster: fast der ganze Bildschirm, höchstens 1600 × 1000. Danach merkt sich das Programm,
+   was die Person daraus macht (fenster-v2.json). */
+function standardGroesse() {
+  const f = screen.getPrimaryDisplay().workArea
+  return { width: Math.min(1600, Math.round(f.width * 0.9)), height: Math.min(1000, Math.round(f.height * 0.92)) }
+}
+
 function fensterErstellen() {
   const z = zustandLesen()
+  const g = standardGroesse()
   const win = new BrowserWindow({
-    width: z.width || 1280,
-    height: z.height || 860,
+    width: z.width || g.width,
+    height: z.height || g.height,
     x: z.x,
     y: z.y,
     minWidth: 900,
@@ -227,6 +236,7 @@ function menuErstellen() {
     {
       label: 'Ansicht',
       submenu: [
+        { label: 'Zur Startseite', accelerator: 'CmdOrCtrl+Shift+H', click: () => laden(fenster(), '/') },
         { label: 'Zur Karte', accelerator: 'CmdOrCtrl+Shift+K', click: () => laden(fenster(), '/in-deiner-naehe') },
         { label: 'Neu laden', accelerator: 'CmdOrCtrl+R', click: () => { const w = fenster(); if (w) w.webContents.reload() } },
         { type: 'separator' },

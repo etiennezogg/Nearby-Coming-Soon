@@ -7,8 +7,10 @@
 
 Ein richtiges Programm zum Herunterladen: `Nearby-mac.dmg` (Mac) und `Nearby-Setup.exe` (Windows).
 Es öffnet Nearby in einem eigenen Fenster, mit Symbol im Dock bzw. auf dem Desktop und im Startmenü.
-Die Seiten selbst lädt es live von der Webseite (`config.json` → `startUrl`). Darum ist es immer
-aktuell, und darum braucht es, wie die Webseite, Internet.
+Die Seiten selbst lädt es live von der Webseite (`config.json` → `startUrl`, seit 1.0.1 die Startseite `/` mit dem Rahmen
+und der Karte, nicht mehr die Vollbild-Karte). Darum ist es immer aktuell, und darum braucht es, wie die Webseite, Internet.
+Gespeicherte Geschäfte, die zuletzt angesehenen, die Sprache und die Tipps stehen im lokalen Speicher des Programms
+(`/datenschutz` 3.5), nicht im Programm selbst.
 
 ## Was auf dem Gerät gespeichert wird
 
@@ -18,7 +20,7 @@ Im Programmordner des Benutzers, wie bei einem Browser:
   `NearbyDesktop/<Version>` im User-Agent und behält die Anmeldung dann auch nach dem Beenden
   (`src/lib/app-installation.ts` → `alsAppGeoeffnet`).
 - Zwischenspeicher für Bilder, Skripte und Schriften (schnellerer Start).
-- Grösse und Ort des Fensters (`fenster.json`).
+- Grösse und Ort des Fensters (`fenster-v2.json`). Am Anfang ist das Fenster fast so gross wie der Bildschirm (höchstens 1600 × 1000).
 
 Geschäfte, Produkte und Öffnungszeiten werden **nicht** gespeichert, sie ändern sich laufend.
 Ohne Verbindung zeigt das Programm eine Hinweisseite und lädt Nearby von selbst, sobald es wieder geht.
@@ -47,7 +49,7 @@ Für Tests lässt sich die Adresse überschreiben: `NEARBY_START_URL=http://loca
 
 ## Adresse ändern (z. B. zum Start auf der eigenen Domain)
 
-`config.json` → `startUrl`, dann neu bauen. Solange die Seite hinter dem Vercel-Login liegt, muss man sich
+`config.json` → `startUrl` (mit `/` am Ende, also die Startseite), dann neu bauen. Solange die Seite hinter dem Vercel-Login liegt, muss man sich
 im Programmfenster einmal bei Vercel anmelden (`imFensterBleiben` erlaubt dafür `vercel.com`). Auf einer
 eigenen Domain ohne Login entfällt das.
 
@@ -75,7 +77,7 @@ Der Arbeitsablauf `.github/workflows/desktop.yml` nimmt die Secrets automatisch,
 
 | Datei | Zweck |
 |---|---|
-| `main.js` | Fenster, Menü, Links, Rechte, Offline-Seite, Fenstergrösse merken, nur ein Programm gleichzeitig |
+| `main.js` | Fenster (Anfangsgrösse `standardGroesse()`), Menü, Links, Rechte, Offline-Seite, Fenstergrösse merken, nur ein Programm gleichzeitig |
 | `offline.html` | Hinweisseite ohne Verbindung |
 | `config.json` | Adresse, die geöffnet wird, und Seiten, die im Fenster bleiben dürfen (PayPal, Vercel-Login) |
 | `electron-builder.yml` | Pakete: `.dmg` (universal) und `.exe` (NSIS, pro Benutzer, ohne Administratorrechte) |
