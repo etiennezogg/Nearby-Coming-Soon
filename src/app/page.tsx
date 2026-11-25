@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useRef, useState, useEffect, useCallback, ReactNode } from 'react'
+import Zogg from '@/components/Zogg'
 
 const kantone = [
   'Aargau','Appenzell Ausserrhoden','Appenzell Innerrhoden','Basel-Landschaft','Basel-Stadt',
@@ -772,7 +773,7 @@ export default function ComingSoonPage() {
     <div className="bg-white">
       {/* NAVBAR */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-4 bg-white/70 backdrop-blur-xl border-b border-gray-100/50">
-        <div className="font-syne font-extrabold text-2xl text-ink tracking-tight">Nearby</div>
+        <div className="relative font-syne font-extrabold text-2xl text-ink tracking-tight">Nearby<Zogg /></div>
         <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
           <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
           Coming Soon
@@ -796,7 +797,7 @@ export default function ComingSoonPage() {
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-16" style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
-            Nearby.
+            <span className="relative inline-block" style={{ ['--zogg-groesse' as string]: 'clamp(0.85rem, 2.2vw, 1.7rem)', ['--zogg-versatz' as string]: '1.2em' }}>Nearby.<Zogg /></span>
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
             className="text-white/90 font-semibold leading-snug max-w-3xl mx-auto mb-5" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 2rem)' }}>
@@ -1026,7 +1027,7 @@ export default function ComingSoonPage() {
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="text-center md:text-left">
-              <div className="font-syne font-extrabold text-xl text-ink tracking-tight mb-1">Nearby</div>
+              <div className="relative w-fit mx-auto md:mx-0 font-syne font-extrabold text-xl text-ink tracking-tight mb-4">Nearby<Zogg /></div>
               <p className="text-xs text-gray-400">© 2026 Nearby · Cham, Schweiz</p>
               <a href="/impressum" className="inline-block mt-2 text-xs text-gray-500 hover:text-ink underline-offset-2 hover:underline transition-colors">Impressum</a>
             </div>
