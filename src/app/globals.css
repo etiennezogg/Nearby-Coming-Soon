@@ -27,13 +27,14 @@ body {
 }
 
 /* Wortmarke: «Nearby» bleibt, wie sie ist. Unten rechts steht klein «ZOGG» — gleiche Schrift, nur Grossbuchstaben —, weil ein
-   Einzelunternehmen den Familiennamen in der Firma trägt (Etienne). Der Zusatz (components/Zogg.tsx) hängt frei an der Wortmarke
-   und verschiebt nichts: Deren Behälter braucht «relative» und die Breite des Textes. Grösse über --zogg-groesse, sonst 40 %
-   der Schrift, mindestens 8 px. Abstand nach oben über --zogg-versatz (Vorgabe -0.3em = dicht unter der Grundlinie); bei sehr
-   grosser Schrift mit tief reichenden Buchstaben («y») grösser wählen, damit der Zusatz unter dem Auslauf steht. */
+   Einzelunternehmen den Familiennamen in der Firma trägt (Etienne). Der Zusatz (components/Zogg.tsx) hängt an der Grundlinie des
+   Textes und verschiebt nichts: Ein Anker ohne Grösse sitzt direkt hinter dem Wort (am rechten Ende des Textes) auf der
+   Grundlinie, egal welche Zeilenhöhe der Behälter hat. Er wird um die Tiefe des «y» (0.24em der Wortmarke) nach unten gerückt;
+   darunter hängt «ZOGG» mit etwa 0.3 seiner Höhe Abstand. Grösse über --zogg-groesse, sonst 40 % der Schrift, mindestens 8 px. */
+.zogg-anker { position: relative; top: 0.24em; display: inline-block; width: 0; height: 0; }
 .zogg {
-  position: absolute; right: 0; top: 100%;
-  margin: var(--zogg-versatz, -0.3em) -0.2em 0 0;   /* rechts: gleicht den Buchstabenabstand nach dem letzten Zeichen aus */
+  position: absolute; right: 0; top: 0;
+  margin: 0.16em -0.2em 0 0;   /* oben: Abstand zum «y» (0.3em) minus die Leere über den Grossbuchstaben (0.14em); rechts: gleicht den Buchstabenabstand nach dem letzten Zeichen aus */
   font-size: var(--zogg-groesse, max(0.4em, 8px));
   font-weight: 700; letter-spacing: 0.2em; line-height: 1;
   text-transform: uppercase; white-space: nowrap; pointer-events: none;

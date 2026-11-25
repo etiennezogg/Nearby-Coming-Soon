@@ -797,7 +797,7 @@ export default function ComingSoonPage() {
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="font-syne font-extrabold text-ink tracking-tight leading-[0.92] mb-16" style={{ fontSize: 'clamp(6rem, 18vw, 14rem)' }}>
-            <span className="relative inline-block" style={{ ['--zogg-groesse' as string]: 'clamp(0.85rem, 2.2vw, 1.7rem)', ['--zogg-versatz' as string]: '1.2em' }}>Nearby.<Zogg /></span>
+            <span className="relative inline-block" style={{ ['--zogg-groesse' as string]: 'clamp(0.85rem, 2.2vw, 1.7rem)' }}>Nearby.<Zogg /></span>
           </motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
             className="text-white/90 font-semibold leading-snug max-w-3xl mx-auto mb-5" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 2rem)' }}>

@@ -15,9 +15,9 @@
     }
     main { max-width: 440px; text-align: center; }
     .zeichen { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; color: #22c55e; margin-bottom: 28px; }
-    /* Zusatz «ZOGG» unten rechts an der Wortmarke (siehe components/Zogg.tsx in den Nearby-Repositories) */
-    .zeichen .wort { position: relative; display: inline-block; }
-    .zogg { position: absolute; right: 0; top: 100%; margin: -0.3em -0.2em 0 0; font-size: max(0.4em, 8px); font-weight: 700; letter-spacing: 0.2em; line-height: 1; text-transform: uppercase; white-space: nowrap; }
+    /* Zusatz «ZOGG» unten rechts an der Wortmarke, siehe components/Zogg.tsx und globals.css */
+    .zogg-anker { position: relative; top: 0.24em; display: inline-block; width: 0; height: 0; }
+    .zogg { position: absolute; right: 0; top: 0; margin: 0.16em -0.2em 0 0; font-size: max(0.4em, 8px); font-weight: 700; letter-spacing: 0.2em; line-height: 1; text-transform: uppercase; white-space: nowrap; }
     h1 { font-size: 26px; line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.02em; }
     p { margin: 0 0 28px; color: rgba(255,255,255,0.55); line-height: 1.6; font-size: 15px; }
     button {
@@ -30,7 +30,7 @@
 </head>
 <body>
   <main>
-    <div class="zeichen"><span class="wort">Nearby<span class="zogg">Zogg</span></span></div>
+    <div class="zeichen">Nearby<span class="zogg-anker"><span class="zogg">Zogg</span></span></div>
     <h1>Keine Verbindung</h1>
     <p>Nearby zeigt Geschäfte und Produkte in deiner Nähe und braucht dafür Internet. Sobald du wieder online bist, geht es von selbst weiter.</p>
     <button id="neu" type="button">Nochmals versuchen</button>
